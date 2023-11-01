@@ -1,16 +1,17 @@
-package com.bluepig.alarm
+package com.bluepig.alarm.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.bluepig.alarm.databinding.ActivityMainBinding
+import com.bluepig.alarm.util.viewBinding
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var _binding: ActivityMainBinding
+    private val _binding: ActivityMainBinding by viewBinding(ActivityMainBinding::inflate)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        _binding = ActivityMainBinding.inflate(layoutInflater)
+
         setContentView(_binding.root)
     }
 }
