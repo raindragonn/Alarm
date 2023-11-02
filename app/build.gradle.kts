@@ -37,9 +37,11 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
-    viewBinding {
-        enable = true
+    buildFeatures {
+        viewBinding = true
+        buildConfig = true
     }
+
     /**
      *  Hilt Allow references to generated code
      */
