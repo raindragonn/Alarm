@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.google.ksp)
     alias(libs.plugins.google.hilt)
+    kotlin("kapt")
 }
 
 android {
@@ -33,6 +34,13 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+
+    /**
+     *  Hilt Allow references to generated code
+     */
+    kapt {
+        correctErrorTypes = true
+    }
 }
 
 dependencies {
@@ -49,7 +57,7 @@ dependencies {
 
     // hilt
     implementation(libs.google.hilt)
-    ksp(libs.google.hilt.compiler)
+    kapt(libs.google.hilt.compiler)
 
 
     testImplementation(libs.junit)

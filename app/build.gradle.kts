@@ -5,6 +5,7 @@ plugins {
 
     alias(libs.plugins.google.hilt)
     alias(libs.plugins.google.ksp)
+    kotlin("kapt")
 }
 
 android {
@@ -41,6 +42,13 @@ android {
         viewBinding = true
         buildConfig = true
     }
+
+    /**
+     *  Hilt Allow references to generated code
+     */
+    kapt {
+        correctErrorTypes = true
+    }
 }
 
 dependencies {
@@ -53,7 +61,7 @@ dependencies {
 
     implementation(libs.google.material)
     implementation(libs.google.hilt)
-    ksp(libs.google.hilt.compiler)
+    kapt(libs.google.hilt.compiler)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
