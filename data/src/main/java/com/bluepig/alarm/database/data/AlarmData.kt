@@ -6,8 +6,8 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "alarm")
 data class AlarmData(
-    @PrimaryKey val id: Int? = null,
-    @ColumnInfo(name = "timeInMillis") val date: Long,
+    @PrimaryKey val id: Long? = null,
+    @ColumnInfo(name = "timeInMillis") val timeInMillis: Long,
     @ColumnInfo(name = "isActive") val isActive: Boolean,
     @ColumnInfo(name = "songName") val songName: String,
-)
+): BaseData
