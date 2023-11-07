@@ -1,6 +1,6 @@
 package com.bluepig.alarm.domain.repository
 
-import com.bluepig.alarm.domain.entity.Alarm
+import com.bluepig.alarm.domain.entity.alarm.Alarm
 
 interface AlarmRepository {
     suspend fun getAllAlarms(): List<Alarm>

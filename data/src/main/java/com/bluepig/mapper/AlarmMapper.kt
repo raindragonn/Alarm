@@ -1,7 +1,7 @@
 package com.bluepig.mapper
 
 import com.bluepig.alarm.database.data.AlarmData
-import com.bluepig.alarm.domain.entity.Alarm
+import com.bluepig.alarm.domain.entity.alarm.Alarm
 
 object AlarmMapper : BaseMapper<AlarmData, Alarm> {
     override fun mapToEntity(data: AlarmData): Alarm =

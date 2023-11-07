@@ -2,7 +2,7 @@ package com.bluepig.repository
 
 import com.bluepig.alarm.database.dao.AlarmDao
 import com.bluepig.alarm.domain.di.IoDispatcher
-import com.bluepig.alarm.domain.entity.Alarm
+import com.bluepig.alarm.domain.entity.alarm.Alarm
 import com.bluepig.alarm.domain.repository.AlarmRepository
 import com.bluepig.mapper.AlarmMapper
 import kotlinx.coroutines.CoroutineDispatcher
