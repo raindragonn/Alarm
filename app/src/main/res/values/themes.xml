@@ -1,15 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.Alarm" parent="Theme.AppCompat.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
-        <item name="colorPrimary">@color/primary_900</item>
-        <item name="colorPrimaryVariant">@color/primary_700</item>
-        <item name="colorOnPrimary">@color/white</item>
-        <item name="colorSecondary">@color/mono_200</item>
-        <item name="colorSecondaryVariant">@color/primary_700</item>
-        <item name="colorOnSecondary">@color/black</item>
-
+    <style name="Base.Theme.Alarm" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="android:statusBarColor">@color/white</item>
         <item name="android:windowLightStatusBar">true</item>
 
@@ -18,6 +9,4 @@
 
         <item name="android:textColorPrimary">@color/black</item>
     </style>
-
-    <style name="Theme.Alarm" parent="Base.Theme.Alarm" />
 </resources>
