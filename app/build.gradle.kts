@@ -5,6 +5,8 @@ plugins {
 
     alias(libs.plugins.google.hilt)
     alias(libs.plugins.google.ksp)
+
+    alias(libs.plugins.androidx.navigation.safeargs)
     kotlin("kapt")
 }
 
@@ -62,6 +64,9 @@ dependencies {
     implementation(libs.google.material)
     implementation(libs.google.hilt)
     kapt(libs.google.hilt.compiler)
+
+    implementation(libs.androidx.navigation.fragment.ktx)
+    implementation(libs.androidx.navigation.ui.ktx)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
