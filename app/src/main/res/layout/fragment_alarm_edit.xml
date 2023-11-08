@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".ui.edit.AlarmEditFragment">
 
-    <TextView
+    <Button
         android:id="@+id/btn"
         style="@style/TextAppearance.Alarm.HeadLine2"
         android:layout_width="match_parent"

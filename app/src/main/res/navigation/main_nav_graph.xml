@@ -10,28 +10,38 @@
         android:name="com.bluepig.alarm.ui.list.AlarmListFragment"
         android:label="fragment_alarm_list"
         tools:layout="@layout/fragment_alarm_list">
+
         <action
-            android:id="@+id/action_alarmListFragment_to_searchDialogFragment"
-            app:destination="@id/searchDialogFragment" />
+            android:id="@+id/action_alarmListFragment_to_searchFragment"
+            app:destination="@id/searchFragment" />
+
         <action
             android:id="@+id/action_alarmListFragment_to_alarmEditFragment"
             app:destination="@id/alarmEditFragment" />
     </fragment>
 
-    <dialog
-        android:id="@+id/searchDialogFragment"
-        android:name="com.bluepig.alarm.ui.search.SearchDialogFragment"
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.bluepig.alarm.ui.search.SearchFragment"
         android:label="dialog_fragment_search"
-        tools:layout="@layout/dialog_fragment_search" >
+        tools:layout="@layout/fragment_search">
+
         <action
-            android:id="@+id/action_searchDialogFragment_to_alarmEditFragment"
+            android:id="@+id/action_searchFragment_to_alarmEditFragment"
             app:destination="@id/alarmEditFragment" />
-    </dialog>
+    </fragment>
 
     <fragment
         android:id="@+id/alarmEditFragment"
         android:name="com.bluepig.alarm.ui.edit.AlarmEditFragment"
         android:label="fragment_alarm_edit"
-        tools:layout="@layout/fragment_alarm_edit" />
+        tools:layout="@layout/fragment_alarm_edit">
+
+        <action
+            android:id="@+id/action_alarmEditFragment_to_alarmListFragment"
+            app:destination="@id/alarmListFragment"
+            app:popUpTo="@id/alarmListFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
 
 </navigation>

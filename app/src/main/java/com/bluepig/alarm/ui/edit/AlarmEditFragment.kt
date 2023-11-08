@@ -3,6 +3,7 @@ package com.bluepig.alarm.ui.edit
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.bluepig.alarm.R
 import com.bluepig.alarm.databinding.FragmentAlarmEditBinding
 import com.bluepig.alarm.util.viewBinding
@@ -19,6 +20,9 @@ class AlarmEditFragment : Fragment(R.layout.fragment_alarm_edit) {
     }
 
     private fun initViews() {
-
+        _binding.btn.setOnClickListener {
+            val action = AlarmEditFragmentDirections.actionAlarmEditFragmentToAlarmListFragment()
+            findNavController().navigate(action)
+        }
     }
 }
