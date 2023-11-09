@@ -13,6 +13,7 @@ androidx-constraintlayout = "2.1.4"
 androidx-room = "2.6.0"
 androidx-navigation = "2.7.5"
 androidx-fragment = "1.6.2"
+androidx-lifecycle = "2.6.2"
 
 # Google
 google-material = "1.10.0"
@@ -39,9 +40,11 @@ androidx-room-compiler = { group = "androidx.room", name = "room-compiler", vers
 androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "androidx-room" }
 androidx-navigation-fragment-ktx = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "androidx-navigation" }
 androidx-navigation-ui-ktx = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "androidx-navigation" }
+androidx-lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "androidx-lifecycle" }
+
 # ETC
 javax-inject = { group = "javax.inject", name = "javax.inject", version.ref = "javax-inject" }
-kotlinx-coroutine-core = {group = "org.jetbrains.kotlinx", name="kotlinx-coroutines-core", version.ref= "kotlinx-coroutines-core"}
+kotlinx-coroutine-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlinx-coroutines-core" }
 
 # Test
 junit = { group = "junit", name = "junit", version.ref = "junit" }
