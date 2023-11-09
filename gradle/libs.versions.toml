@@ -4,6 +4,7 @@ kotlin-android = "1.9.0"
 kotlin-jvm = "1.9.0"
 kotlin-ksp = "1.9.0-1.0.12"
 javax-inject = "1"
+kotlinx-coroutines-core = "1.7.3"
 
 # AndroidX
 androidx-core-ktx = "1.12.0"
@@ -40,6 +41,7 @@ androidx-navigation-fragment-ktx = { group = "androidx.navigation", name = "navi
 androidx-navigation-ui-ktx = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "androidx-navigation" }
 # ETC
 javax-inject = { group = "javax.inject", name = "javax.inject", version.ref = "javax-inject" }
+kotlinx-coroutine-core = {group = "org.jetbrains.kotlinx", name="kotlinx-coroutines-core", version.ref= "kotlinx-coroutines-core"}
 
 # Test
 junit = { group = "junit", name = "junit", version.ref = "junit" }
