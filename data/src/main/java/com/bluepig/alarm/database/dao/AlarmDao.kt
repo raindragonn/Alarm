@@ -6,6 +6,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.bluepig.alarm.database.data.AlarmData
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface AlarmDao {
@@ -19,8 +20,8 @@ interface AlarmDao {
     suspend fun deleteById(id: Long)
 
     @Query("SELECT * FROM alarm WHERE id = :id")
-    suspend fun getById(id: Long) : AlarmData?
+    suspend fun getById(id: Long): AlarmData?
 
     @Query("SELECT * FROM alarm")
-    suspend fun getAll() : List<AlarmData>
+    fun getAll(): Flow<List<AlarmData>>
 }

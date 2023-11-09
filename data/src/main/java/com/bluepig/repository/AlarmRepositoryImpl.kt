@@ -6,6 +6,8 @@ import com.bluepig.alarm.domain.entity.alarm.Alarm
 import com.bluepig.alarm.domain.repository.AlarmRepository
 import com.bluepig.mapper.AlarmMapper
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -15,10 +17,12 @@ class AlarmRepositoryImpl @Inject constructor(
     private val _dao: AlarmDao,
 ) : AlarmRepository {
 
-    override suspend fun getAllAlarms(): List<Alarm> =
+    override suspend fun getAllAlarms(): Flow<List<Alarm>> =
         withContext(_dispatcher) {
             _dao.getAll()
-                .map(AlarmMapper::mapToEntity)
+                .map { list ->
+                    list.map(AlarmMapper::mapToEntity)
+                }
         }
 
     override suspend fun insertAlarm(alarm: Alarm): Long =
@@ -27,7 +31,7 @@ class AlarmRepositoryImpl @Inject constructor(
             _dao.insert(data)
         }
 
-    override suspend fun updateAlarm(alarm: Alarm) =
+    override suspend fun updateAlarm(alarm: Alarm): Unit =
         withContext(_dispatcher) {
             val data = AlarmMapper.mapToData(alarm)
             _dao.update(data)
@@ -40,7 +44,7 @@ class AlarmRepositoryImpl @Inject constructor(
             }
         }
 
-    override suspend fun deleteById(id: Long) =
+    override suspend fun deleteById(id: Long): Unit =
         withContext(_dispatcher) {
             _dao.deleteById(id)
         }
