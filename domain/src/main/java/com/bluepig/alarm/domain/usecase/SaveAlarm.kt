@@ -10,11 +10,11 @@ import javax.inject.Inject
 class SaveAlarm @Inject constructor(
     @IoDispatcher
     private val _dispatcher: CoroutineDispatcher,
-    private val repository: AlarmRepository,
+    private val _repository: AlarmRepository,
 ) {
     suspend operator fun invoke(alarm: Alarm) =
         asyncResultWithContextOf(_dispatcher) {
-            val id = repository.insertAlarm(alarm)
-            repository.getById(id) ?: throw NullPointerException("Not Found Saved Alarm..id:$id")
+            val id = _repository.insertAlarm(alarm)
+            _repository.getById(id) ?: throw NullPointerException("Not Found Saved Alarm..id:$id")
         }
 }

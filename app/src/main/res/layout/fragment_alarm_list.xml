@@ -32,7 +32,7 @@
                     android:gravity="center"
                     android:minHeight="200dp"
                     android:padding="@dimen/base_spacing_2"
-                    android:text="알람을 추가해 주세요!"
+                    tools:text="알람을 추가해 주세요!"
                     app:layout_collapseMode="pin" />
 
             </com.google.android.material.appbar.CollapsingToolbarLayout>

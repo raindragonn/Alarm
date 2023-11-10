@@ -17,12 +17,16 @@ class AlarmRepositoryImpl @Inject constructor(
     private val _dao: AlarmDao,
 ) : AlarmRepository {
 
-    override suspend fun getAllAlarms(): Flow<List<Alarm>> =
+    override fun getAllAlarmFlow(): Flow<List<Alarm>> =
+        _dao.getAllFlow()
+            .map { list ->
+                list.map(AlarmMapper::mapToEntity)
+            }
+
+    override suspend fun getAllAlarms(): List<Alarm> =
         withContext(_dispatcher) {
-            _dao.getAll()
-                .map { list ->
-                    list.map(AlarmMapper::mapToEntity)
-                }
+            _dao.getAllAlarms()
+                .map(AlarmMapper::mapToEntity)
         }
 
     override suspend fun insertAlarm(alarm: Alarm): Long =

@@ -23,5 +23,8 @@ interface AlarmDao {
     suspend fun getById(id: Long): AlarmData?
 
     @Query("SELECT * FROM alarm")
-    fun getAll(): Flow<List<AlarmData>>
+    fun getAllFlow(): Flow<List<AlarmData>>
+
+    @Query("SELECT * FROM alarm")
+    fun getAllAlarms(): List<AlarmData>
 }

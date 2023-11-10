@@ -4,7 +4,7 @@ import com.bluepig.alarm.domain.repository.AlarmRepository
 import javax.inject.Inject
 
 class GetAllAlarms @Inject constructor(
-    private val repository: AlarmRepository,
+    private val _repository: AlarmRepository,
 ) {
-    suspend operator fun invoke() = repository.getAllAlarms()
+    operator fun invoke() = _repository.getAllAlarmFlow()
 }
