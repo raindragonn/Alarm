@@ -1,26 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
-    <color name="transparent">#00FFFFFF</color>
-    <color name="white_alpha_16">#29FFFFFF</color>
-    <color name="white_alpha_20">#33FFFFFF</color>
-    <color name="white_alpha_40">#66FFFFFF</color>
-    <color name="white_alpha_50">#80FFFFFF</color>
-    <color name="black_alpha_80">#CC000000</color>
+    <color name="base">#FFFFFF</color>
+    <color name="point">#000000</color>
 
-    <color name="mono_900">#000000</color>
-    <color name="mono_500">#595858</color>
-    <color name="mono_400">#595858</color>
-    <color name="mono_300">#DADADA</color>
-    <color name="mono_200">#E1E1E1</color>
-    <color name="mono_100">#F5F5F5</color>
-    <color name="mono_000">#FFFFFF</color>
+    <color name="transparent">#00000000</color>
 
-    <color name="primary_900">#946FFF</color>
-    <color name="primary_800">#AE92FF</color>
-    <color name="primary_700">#AC9EB9</color>
-    <color name="primary_600">#E5DDFB</color>
+    <color name="alpha_16">#29FFFFFF</color>
+    <color name="alpha_20">#33FFFFFF</color>
+    <color name="alpha_40">#66FFFFFF</color>
+    <color name="alpha_50">#80FFFFFF</color>
+    <color name="alpha_80">#CCFFFFFF</color>
+
+    <color name="mono_000">#000000</color>
+    <color name="mono_100">#262626</color>
+    <color name="mono_200">#434343</color>
+    <color name="mono_300">#555555</color>
+    <color name="mono_400">#7b7b7b</color>
+    <color name="mono_500">#9d9d9d</color>
+    <color name="mono_600">#c4c4c4</color>
+    <color name="mono_700">#d9d9d9</color>
+    <color name="mono_800">#e9e9e9</color>
+    <color name="mono_900">#f5f5f5</color>
+
+    <color name="primary_100">#C8E6C9</color>
+    <color name="primary_200">#A5D6A7</color>
+    <color name="primary_300">#81C784</color>
+    <color name="primary_400">#66BB6A</color>
+    <color name="primary_500">#4CAF50</color>
+    <color name="primary_600">#43A047</color>
+    <color name="primary_700">#388E3C</color>
+    <color name="primary_800">#2E7D32</color>
+    <color name="primary_900">#1B5E20</color>
 
     <color name="misc_300">#AAADB9</color>
     <color name="misc_050">#EB5757</color>
