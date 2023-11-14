@@ -1,4 +1,4 @@
-package com.bluepig.mapper
+package com.bluepig.alarm.mapper
 
 import com.bluepig.alarm.database.data.AlarmData
 import com.bluepig.alarm.domain.entity.alarm.Alarm

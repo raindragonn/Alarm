@@ -1,4 +1,4 @@
-package com.bluepig.mapper
+package com.bluepig.alarm.mapper
 
 interface BaseMapper<Data, Entity> {
     fun mapToEntity(data: Data): Entity

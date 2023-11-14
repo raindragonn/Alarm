@@ -1,4 +1,4 @@
-package com.bluepig.di
+package com.bluepig.alarm.di
 
 import android.content.Context
 import com.bluepig.alarm.database.AlarmDatabase

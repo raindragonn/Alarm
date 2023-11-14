@@ -1,4 +1,4 @@
-package com.bluepig.di
+package com.bluepig.alarm.di
 
 import com.bluepig.alarm.domain.di.DefaultDispatcher
 import com.bluepig.alarm.domain.di.IoDispatcher

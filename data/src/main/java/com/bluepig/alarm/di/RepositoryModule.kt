@@ -1,9 +1,9 @@
-package com.bluepig.di
+package com.bluepig.alarm.di
 
 import com.bluepig.alarm.database.dao.AlarmDao
 import com.bluepig.alarm.domain.di.IoDispatcher
 import com.bluepig.alarm.domain.repository.AlarmRepository
-import com.bluepig.repository.AlarmRepositoryImpl
+import com.bluepig.alarm.repository.AlarmRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
