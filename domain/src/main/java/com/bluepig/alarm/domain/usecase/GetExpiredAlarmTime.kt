@@ -5,10 +5,10 @@ import com.bluepig.alarm.domain.repository.AlarmRepository
 import com.bluepig.alarm.domain.result.NotFoundActiveAlarmException
 import com.bluepig.alarm.domain.result.NotFoundAlarmException
 import com.bluepig.alarm.domain.result.asyncResultWithContextOf
+import com.bluepig.alarm.domain.util.CalendarHelper
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flow
-import java.util.Calendar
 import javax.inject.Inject
 
 class GetExpiredAlarmTime @Inject constructor(
@@ -23,7 +23,7 @@ class GetExpiredAlarmTime @Inject constructor(
                 val alarmList = _repository.getAllAlarms()
                 if (alarmList.isEmpty()) throw NotFoundAlarmException
 
-                val now = Calendar.getInstance().timeInMillis
+                val now = CalendarHelper.now.timeInMillis
                 val expireTimeList = alarmList.filter { it.isActive }
                     .sortedBy { it.timeInMillis }
                     .map { it.timeInMillis - now }
