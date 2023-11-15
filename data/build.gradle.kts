@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.google.ksp)
     alias(libs.plugins.google.hilt)
+    alias(libs.plugins.kotlin.serialization)
     kotlin("kapt")
 }
 
@@ -49,6 +50,7 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.google.material)
+    implementation(libs.kotlinx.serialization.json)
 
     // room
     implementation(libs.androidx.room)
@@ -59,6 +61,10 @@ dependencies {
     implementation(libs.google.hilt)
     kapt(libs.google.hilt.compiler)
 
+    implementation(libs.retrofit2)
+    implementation(libs.retrofit2.serialization.converter)
+    implementation(libs.okhttp3)
+    implementation(libs.okhttp3.logging.intercepter)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)

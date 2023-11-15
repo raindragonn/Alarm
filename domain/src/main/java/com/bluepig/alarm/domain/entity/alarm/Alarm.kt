@@ -2,8 +2,10 @@ package com.bluepig.alarm.domain.entity.alarm
 
 import com.bluepig.alarm.domain.entity.base.BaseEntity
 import com.bluepig.alarm.domain.util.CalendarHelper
+import kotlinx.serialization.Serializable
 import java.util.Calendar
 
+@Serializable
 data class Alarm(
     val id: Long? = null,
     val timeInMillis: Long,
