@@ -3,6 +3,9 @@
     <color name="base">#FFFFFF</color>
     <color name="point">#000000</color>
 
+    <color name="text">@color/point</color>
+    <color name="icon">@color/point</color>
+
     <color name="transparent">#00000000</color>
 
     <color name="alpha_16">#29FFFFFF</color>
