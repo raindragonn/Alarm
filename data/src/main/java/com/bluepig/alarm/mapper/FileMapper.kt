@@ -7,7 +7,9 @@ object FileMapper : BaseMapper<FileResponse, File> {
     override fun mapToEntity(data: FileResponse): File =
         File(
             downloadPage = data.d1PageUrl,
-            id = data.fileId
+            id = data.fileId,
+            thumbnail = data.thumbnailUrl,
+            title = data.fileName
         )
 
     override fun mapToData(entity: File): FileResponse =

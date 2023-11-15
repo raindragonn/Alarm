@@ -72,6 +72,8 @@ dependencies {
 
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
 
+    implementation(libs.coil)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)

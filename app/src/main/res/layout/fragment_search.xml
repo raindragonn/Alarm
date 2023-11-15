@@ -6,16 +6,58 @@
     android:layout_height="match_parent"
     tools:context=".ui.search.SearchFragment">
 
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/et_search"
+        style="@style/TextAppearance.Alarm.Body6"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/transparent"
+        android:drawableStart="@drawable/ic_search"
+        android:drawablePadding="@dimen/base_spacing_2"
+        android:inputType="text"
+        android:maxLines="1"
+        android:padding="@dimen/base_spacing_2"
+        app:layout_constraintEnd_toStartOf="@id/btn_cancel"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="검색어" />
+
     <Button
-        android:id="@+id/btn"
+        android:id="@+id/btn_cancel"
+        style="@style/TextAppearance.Alarm.Body6"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:background="@drawable/ripple_point"
+        android:minWidth="0dp"
+        android:paddingHorizontal="@dimen/base_spacing_2"
+        android:text="취소"
+        app:layout_constraintBottom_toBottomOf="@id/et_search"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/point"
+        app:layout_constraintTop_toBottomOf="@id/et_search" />
+
+    <ProgressBar
+        android:id="@+id/pb_loading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="검색"
-        style="@style/TextAppearance.Alarm.HeadLine2"
-        app:layout_constraintStart_toStartOf="parent"
+        android:indeterminateTint="@color/primary_900"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_search"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/et_search"
+        tools:listitem="@layout/item_search" />
 </androidx.constraintlayout.widget.ConstraintLayout>

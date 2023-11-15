@@ -1,7 +1,6 @@
 package com.bluepig.alarm.ui.list
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -51,7 +50,6 @@ class AlarmListFragment : Fragment(R.layout.fragment_alarm_list) {
                 _vm.alarmList
                     .stateIn(this)
                     .collect { result ->
-                        Log.d("DEV_LOG", "$result")
                         result.onSuccess(_alarmAdapter::submitList)
                     }
             }
