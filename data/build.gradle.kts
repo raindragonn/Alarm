@@ -1,3 +1,5 @@
+import groovy.json.JsonSlurper
+
 @Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 plugins {
     alias(libs.plugins.com.android.library)
@@ -7,6 +9,8 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
     kotlin("kapt")
 }
+internal val jsonText = file("../key.stores/api.keys").readText()
+internal val apiJson = JsonSlurper().parseText(jsonText) as Map<String, String>
 
 android {
     namespace = "com.bluepig.alarm.data"
@@ -21,11 +25,16 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+        }
+        debug {
+            apiJson.entries.forEach {
+                buildConfigField("String", it.key, "\"${it.value}\"")
+            }
         }
     }
     compileOptions {
@@ -35,7 +44,9 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
-
+    buildFeatures {
+        buildConfig = true
+    }
     /**
      *  Hilt Allow references to generated code
      */

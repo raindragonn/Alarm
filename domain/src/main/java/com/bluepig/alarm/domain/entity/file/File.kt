@@ -1,5 +1,6 @@
 package com.bluepig.alarm.domain.entity.file
 
+import com.bluepig.alarm.domain.entity.base.BaseEntity
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -9,4 +10,4 @@ data class File(
     val downloadPage: String,
     @SerialName("id")
     val id: String,
-)
+) : BaseEntity

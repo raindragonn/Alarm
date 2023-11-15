@@ -3,7 +3,10 @@ package com.bluepig.alarm.di
 import com.bluepig.alarm.database.dao.AlarmDao
 import com.bluepig.alarm.domain.di.IoDispatcher
 import com.bluepig.alarm.domain.repository.AlarmRepository
+import com.bluepig.alarm.domain.repository.FileRepository
+import com.bluepig.alarm.network.api.SearchApi
 import com.bluepig.alarm.repository.AlarmRepositoryImpl
+import com.bluepig.alarm.repository.FileRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -24,6 +27,18 @@ object RepositoryModule {
         return AlarmRepositoryImpl(
             dispatcher,
             alarmDao
+        )
+    }
+
+    @Provides
+    @Singleton
+    fun providesFileRepository(
+        @IoDispatcher dispatcher: CoroutineDispatcher,
+        searchApi: SearchApi
+    ): FileRepository {
+        return FileRepositoryImpl(
+            dispatcher,
+            searchApi
         )
     }
 }
