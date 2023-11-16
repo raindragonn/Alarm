@@ -41,7 +41,16 @@ fun <T> resultOf(transform: () -> T): BpResult<T> {
     }
 }
 
+
+fun <T> BpResult<T>.isSuccess(): Boolean {
+    return this is BpResult.Success
+}
+
 fun <T> BpResult<T>.isFailure(): Boolean {
+    return this is BpResult.Failure
+}
+
+fun <T> BpResult<T>.isLoading(): Boolean {
     return this is BpResult.Failure
 }
 

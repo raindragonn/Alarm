@@ -7,4 +7,5 @@ object FailureException : Exception("BpResult is Failure")
 object NotFoundActiveAlarmException : Exception("Not Found Active Alarm")
 
 object NotFoundAlarmException : Exception("Not Found Alarm")
+
 object SearchQueryEmptyException : Exception("Search Query is Empty or blank")

@@ -76,6 +76,7 @@ dependencies {
     implementation(libs.retrofit2.serialization.converter)
     implementation(libs.okhttp3)
     implementation(libs.okhttp3.logging.intercepter)
+    implementation(libs.jsoup)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)

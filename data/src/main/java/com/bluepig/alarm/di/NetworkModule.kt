@@ -2,6 +2,8 @@ package com.bluepig.alarm.di
 
 import com.bluepig.alarm.data.BuildConfig
 import com.bluepig.alarm.network.api.SearchApi
+import com.bluepig.alarm.network.parser.FilePageParser
+import com.bluepig.alarm.network.parser.FilePageParserImpl
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides
@@ -55,6 +57,13 @@ object NetworkModule {
         retrofit: Retrofit,
     ): SearchApi {
         return retrofit.create(SearchApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun providesFilePageParser(
+    ): FilePageParser {
+        return FilePageParserImpl()
     }
 
 }

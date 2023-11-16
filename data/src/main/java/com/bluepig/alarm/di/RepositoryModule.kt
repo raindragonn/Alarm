@@ -5,6 +5,7 @@ import com.bluepig.alarm.domain.di.IoDispatcher
 import com.bluepig.alarm.domain.repository.AlarmRepository
 import com.bluepig.alarm.domain.repository.FileRepository
 import com.bluepig.alarm.network.api.SearchApi
+import com.bluepig.alarm.network.parser.FilePageParser
 import com.bluepig.alarm.repository.AlarmRepositoryImpl
 import com.bluepig.alarm.repository.FileRepositoryImpl
 import dagger.Module
@@ -34,11 +35,13 @@ object RepositoryModule {
     @Singleton
     fun providesFileRepository(
         @IoDispatcher dispatcher: CoroutineDispatcher,
-        searchApi: SearchApi
+        searchApi: SearchApi,
+        pageParser: FilePageParser,
     ): FileRepository {
         return FileRepositoryImpl(
             dispatcher,
-            searchApi
+            searchApi,
+            pageParser
         )
     }
 }
