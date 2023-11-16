@@ -1,9 +1,9 @@
 package com.bluepig.alarm.ui.search
 
 import androidx.recyclerview.widget.RecyclerView
-import coil.load
 import com.bluepig.alarm.databinding.ItemSearchBinding
 import com.bluepig.alarm.domain.entity.file.File
+import com.bluepig.alarm.util.ext.setThumbnail
 
 class SearchViewHolder private constructor(
     private val _binding: ItemSearchBinding,
@@ -11,9 +11,7 @@ class SearchViewHolder private constructor(
 
     fun bind(file: File) {
         _binding.apply {
-            ivThumbnail.load(file.thumbnail) {
-                crossfade(true)
-            }
+            ivThumbnail.setThumbnail(file.thumbnail)
             tvTitle.text = file.title
         }
     }

@@ -29,6 +29,9 @@
         <action
             android:id="@+id/action_searchFragment_to_alarmEditFragment"
             app:destination="@id/alarmEditFragment" />
+        <action
+            android:id="@+id/action_searchFragment_to_selectBottomSheetDialogFragment"
+            app:destination="@id/fileSelectBottomSheetDialogFragment" />
     </fragment>
 
     <fragment
@@ -43,5 +46,15 @@
             app:popUpTo="@id/alarmListFragment"
             app:popUpToInclusive="true" />
     </fragment>
+
+    <dialog
+        android:id="@+id/fileSelectBottomSheetDialogFragment"
+        android:name="com.bluepig.alarm.ui.search.select.FileSelectBottomSheetDialogFragment"
+        android:label="FileSelectBottomSheetDialogFragment"
+        tools:layout="@layout/fragment_file_select">
+        <argument
+            android:name="file"
+            app:argType="com.bluepig.alarm.domain.entity.file.File" />
+    </dialog>
 
 </navigation>

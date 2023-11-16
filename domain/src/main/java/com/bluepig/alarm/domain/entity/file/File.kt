@@ -9,4 +9,4 @@ data class File(
     val id: String,
     val thumbnail: String,
     val title: String,
-) : BaseEntity
+) : BaseEntity, java.io.Serializable

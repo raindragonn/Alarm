@@ -26,7 +26,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     private val _binding: FragmentSearchBinding by viewBinding(FragmentSearchBinding::bind)
     private val _vm: SearchViewModel by viewModels()
 
-    private val _adapter: SearchAdapter by lazy { SearchAdapter {} }
+    private val _adapter: SearchAdapter by lazy { SearchAdapter(::itemClick) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -61,6 +61,12 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         }.onLoading {
             changeLoadingState(true)
         }
+    }
+
+    private fun itemClick(file: File) {
+        val action =
+            SearchFragmentDirections.actionSearchFragmentToSelectBottomSheetDialogFragment(file)
+        findNavController().navigate(action)
     }
 
     private fun changeLoadingState(isVisible: Boolean) {

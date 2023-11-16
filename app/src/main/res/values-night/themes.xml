@@ -5,7 +5,7 @@
         <item name="android:windowLightStatusBar">false</item>
 
         <item name="android:windowAnimationStyle">@null</item>
-        <item name="android:windowBackground">@color/mono_800</item>
+        <item name="android:windowBackground">@color/surface</item>
 
         <item name="android:textColorPrimary">@color/point</item>
 

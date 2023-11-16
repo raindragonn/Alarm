@@ -2,10 +2,12 @@
 <resources>
     <color name="base">#FFFFFF</color>
     <color name="point">#000000</color>
+    <color name="surface">@color/base</color>
 
     <color name="text">@color/point</color>
-    <color name="icon">@color/point</color>
+    <color name="button_text">@color/base</color>
 
+    <color name="icon">@color/point</color>
     <color name="transparent">#00000000</color>
 
     <color name="alpha_16">#29FFFFFF</color>

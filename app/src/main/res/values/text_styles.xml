@@ -186,9 +186,18 @@
         <item name="android:lineHeight" tools:targetApi="p">18dp</item>
     </style>
 
-    <style name="TextAppearance.Alarm.Misc2" parent="TextAppearance.Alarm.Base.Misc">
-        <item name="android:textSize">10dp</item>
-        <item name="lineHeight">13dp</item>
-        <item name="android:lineHeight" tools:targetApi="p">13dp</item>
+    <style name="TextAppearance.Alarm.Button.Bold" parent="TextAppearance.Alarm.Base.Bold">
+        <item name="android:textColor">@color/button_text</item>
+        <item name="android:textSize">14dp</item>
+        <item name="lineHeight">18dp</item>
+        <item name="android:lineHeight" tools:targetApi="p">18dp</item>
     </style>
+
+    <style name="TextAppearance.Alarm.Button.SemiBold" parent="TextAppearance.Alarm.Base.SemiBold">
+        <item name="android:textColor">@color/button_text</item>
+        <item name="android:textSize">14dp</item>
+        <item name="lineHeight">18dp</item>
+        <item name="android:lineHeight" tools:targetApi="p">18dp</item>
+    </style>
+
 </resources>
