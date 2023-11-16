@@ -14,6 +14,7 @@ androidx-room = "2.6.0"
 androidx-navigation = "2.7.5"
 androidx-fragment = "1.6.2"
 androidx-lifecycle = "2.6.2"
+androidx-media3-exoplayer = "1.2.0"
 
 # Google
 google-material = "1.10.0"
@@ -21,7 +22,7 @@ google-hilt = "2.46"
 
 # ETC
 retrofit2 = "2.9.0"
-okhttp3 = "4.11.0"
+okhttp3 = "4.12.0"
 retrofit2-serialization-converter = "1.0.0"
 coil = "2.5.0"
 jsoup = "1.16.2"
@@ -48,6 +49,8 @@ androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = 
 androidx-navigation-fragment-ktx = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "androidx-navigation" }
 androidx-navigation-ui-ktx = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "androidx-navigation" }
 androidx-lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "androidx-lifecycle" }
+androidx-media3-exoplayer = { group = "androidx.media3", name = "media3-exoplayer", version.ref = "androidx-media3-exoplayer" }
+androidx-media3-exoplayer-ui = { group = "androidx.media3", name = "media3-ui", version.ref = "androidx-media3-exoplayer" }
 
 # ETC
 javax-inject = { group = "javax.inject", name = "javax.inject", version.ref = "javax-inject" }

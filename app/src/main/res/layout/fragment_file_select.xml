@@ -8,6 +8,26 @@
     android:padding="@dimen/base_spacing_2"
     tools:context=".ui.search.select.FileSelectBottomSheetDialogFragment">
 
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/group"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="iv_thumbnail, tv_title,btn_play,btn_select,player_view"
+        tools:visibility="visible" />
+
+    <ProgressBar
+        android:id="@+id/pb_loading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminateTint="@color/primary_900"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btn_close"
+        tools:visibility="gone" />
+
     <ImageButton
         android:id="@+id/btn_close"
         android:layout_width="wrap_content"
@@ -22,7 +42,7 @@
         android:id="@+id/iv_thumbnail"
         android:layout_width="@dimen/base_spacing_7"
         android:layout_height="@dimen/base_spacing_7"
-        app:layout_constraintBottom_toTopOf="@id/btn_switch"
+
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/btn_close"
         tools:src="@drawable/ic_image_place_holder" />
@@ -34,41 +54,55 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/base_spacing_2"
         android:layout_marginTop="@dimen/base_spacing_1"
-        android:text="Title"
+        tools:text="Title"
         app:layout_constraintBottom_toBottomOf="@id/barrier"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/iv_thumbnail"
         app:layout_constraintTop_toTopOf="@id/iv_thumbnail"
         app:layout_constraintVertical_bias="0" />
 
+    <androidx.media3.ui.PlayerControlView
+        android:id="@+id/player_view"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:controller_layout_id="@layout/player_progressbar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/barrier"
+        app:show_timeout="0" />
+
     <androidx.constraintlayout.widget.Barrier
         android:id="@+id/barrier"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:barrierDirection="bottom"
+        app:barrierMargin="@dimen/base_spacing_2"
         app:constraint_referenced_ids="tv_title, iv_thumbnail" />
 
-    <Button
-        android:id="@+id/btn_switch"
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_play"
         style="@style/TextAppearance.Alarm.Button.SemiBold"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/base_spacing_1"
-        android:text="재생"
+        android:layout_marginTop="@dimen/base_spacing_2"
+        android:layout_marginEnd="@dimen/base_spacing_1"
+        android:background="@drawable/selector_default_button_background"
+        app:layout_constraintTop_toBottomOf="@id/player_view"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/btn_select"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/barrier" />
+        tools:text="재생" />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_select"
         style="@style/TextAppearance.Alarm.Button.SemiBold"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:background="@drawable/selector_default_button_background"
         android:text="선택"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/btn_switch"
-        app:layout_constraintTop_toTopOf="@id/btn_switch" />
+        app:layout_constraintStart_toEndOf="@id/btn_play"
+        app:layout_constraintTop_toTopOf="@id/btn_play" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
