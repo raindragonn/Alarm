@@ -22,6 +22,7 @@
             <com.google.android.material.appbar.CollapsingToolbarLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                app:contentScrim="@color/transparent"
                 app:layout_scrollFlags="scroll|enterAlways">
 
                 <TextView
@@ -32,22 +33,22 @@
                     android:gravity="center"
                     android:minHeight="200dp"
                     android:padding="@dimen/base_spacing_2"
-                    tools:text="알람을 추가해 주세요!"
-                    app:layout_collapseMode="pin" />
+                    app:layout_collapseMode="pin"
+                    tools:text="알람을 추가해 주세요!" />
 
             </com.google.android.material.appbar.CollapsingToolbarLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingHorizontal="@dimen/base_spacing_2">
+                android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/tv_title"
                     style="@style/TextAppearance.Alarm.Body1"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:padding="@dimen/base_spacing_2"
                     android:text="@string/app_name"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@id/btn_search"
@@ -56,11 +57,12 @@
 
                 <ImageButton
                     android:id="@+id/btn_search"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
                     android:background="@drawable/ripple_point"
                     android:src="@drawable/ic_add"
                     app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintDimensionRatio="1"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
