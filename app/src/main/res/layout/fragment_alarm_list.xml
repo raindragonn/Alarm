@@ -17,6 +17,7 @@
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:elevation="0dp"
             android:background="@color/transparent">
 
             <com.google.android.material.appbar.CollapsingToolbarLayout
@@ -70,6 +71,7 @@
         </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.recyclerview.widget.RecyclerView
+            android:overScrollMode="never"
             android:id="@+id/rv_alarm"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
