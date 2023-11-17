@@ -1,4 +1,4 @@
-package com.bluepig.alarm.player
+package com.bluepig.alarm.manager.player
 
 import android.content.Context
 import androidx.lifecycle.Lifecycle

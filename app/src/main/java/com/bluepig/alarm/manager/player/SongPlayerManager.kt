@@ -1,4 +1,4 @@
-package com.bluepig.alarm.player
+package com.bluepig.alarm.manager.player
 
 import androidx.lifecycle.Lifecycle
 import androidx.media3.exoplayer.ExoPlayer

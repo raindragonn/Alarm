@@ -2,8 +2,8 @@ package com.bluepig.alarm.di
 
 import android.content.Context
 import androidx.media3.common.util.UnstableApi
-import com.bluepig.alarm.player.SongPlayerManager
-import com.bluepig.alarm.player.SongPlayerManagerImpl
+import com.bluepig.alarm.manager.player.SongPlayerManager
+import com.bluepig.alarm.manager.player.SongPlayerManagerImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
