@@ -26,6 +26,7 @@ okhttp3 = "4.12.0"
 retrofit2-serialization-converter = "1.0.0"
 coil = "2.5.0"
 jsoup = "1.16.2"
+timber = "5.0.1"
 
 # Test
 junit = "4.13.2"
@@ -62,6 +63,7 @@ okhttp3 = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okht
 okhttp3-logging-intercepter = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp3" }
 coil = { group = "io.coil-kt", name = "coil", version.ref = "coil" }
 jsoup = { group = "org.jsoup", name = "jsoup", version.ref = "jsoup" }
+timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
 
 # Test
 junit = { group = "junit", name = "junit", version.ref = "junit" }
