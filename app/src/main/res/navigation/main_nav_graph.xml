@@ -55,6 +55,10 @@
         <argument
             android:name="file"
             app:argType="com.bluepig.alarm.domain.entity.file.File" />
+
+        <argument
+            android:name="userAgent"
+            app:argType="string" />
     </dialog>
 
 </navigation>

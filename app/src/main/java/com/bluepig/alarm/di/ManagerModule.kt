@@ -2,6 +2,8 @@ package com.bluepig.alarm.di
 
 import android.content.Context
 import androidx.media3.common.util.UnstableApi
+import com.bluepig.alarm.manager.download.MediaDownloadManager
+import com.bluepig.alarm.manager.download.MediaDownloadManagerImpl
 import com.bluepig.alarm.manager.player.SongPlayerManager
 import com.bluepig.alarm.manager.player.SongPlayerManagerImpl
 import dagger.Module
@@ -19,8 +21,17 @@ object ManagerModule {
     @Provides
     @Singleton
     fun providesSongPlayerManager(
-        @ApplicationContext context: Context
+        @ApplicationContext context: Context,
+        mediaDownloadManager: MediaDownloadManager,
     ): SongPlayerManager {
-        return SongPlayerManagerImpl(context)
+        return SongPlayerManagerImpl(context, mediaDownloadManager)
+    }
+
+    @Provides
+    @Singleton
+    fun providesMediaDownloadManager(
+        @ApplicationContext context: Context
+    ): MediaDownloadManager {
+        return MediaDownloadManagerImpl(context)
     }
 }

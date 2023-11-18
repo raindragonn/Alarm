@@ -20,6 +20,9 @@ class FileSelectViewModel @Inject constructor(
     private val _file: File
         get() = _state.get<File>("file")
             ?: throw NullPointerException("Not Found File For NavArgs")
+    private val _userAgent: String
+        get() = _state.get<String>("userAgent")
+            ?: throw NullPointerException("Not Found userAgent For NavArgs")
 
     private val _fileUrlState: MutableStateFlow<BpResult<String>> =
         MutableStateFlow(BpResult.Loading)
@@ -30,7 +33,10 @@ class FileSelectViewModel @Inject constructor(
     }
 
     private fun getFileUrl() = viewModelScope.launch {
-        val result = _getFileUrl.invoke(_file.downloadPage)
+        val result = _getFileUrl.invoke(
+            _file.downloadPage,
+            _userAgent
+        )
         _fileUrlState.emit(result)
     }
 }

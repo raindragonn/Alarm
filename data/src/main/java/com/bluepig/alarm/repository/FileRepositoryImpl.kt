@@ -27,8 +27,8 @@ class FileRepositoryImpl @Inject constructor(
             response.fileResponses.map(FileMapper::mapToEntity)
         }
 
-    override suspend fun getFileUrl(pageUrl: String): String =
+    override suspend fun getFileUrl(pageUrl: String, userAgent: String): String =
         withContext(_dispatcher) {
-            _filePageParser.parse(pageUrl)
+            _filePageParser.parse(pageUrl, userAgent)
         }
 }

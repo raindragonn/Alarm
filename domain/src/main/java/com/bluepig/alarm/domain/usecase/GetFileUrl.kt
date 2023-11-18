@@ -11,8 +11,8 @@ class GetFileUrl @Inject constructor(
     private val _dispatcher: CoroutineDispatcher,
     private val _fileRepository: FileRepository,
 ) {
-    suspend operator fun invoke(pageUrl: String) =
+    suspend operator fun invoke(pageUrl: String, userAgent: String) =
         asyncResultWithContextOf(_dispatcher) {
-            _fileRepository.getFileUrl(pageUrl)
+            _fileRepository.getFileUrl(pageUrl, userAgent)
         }
 }

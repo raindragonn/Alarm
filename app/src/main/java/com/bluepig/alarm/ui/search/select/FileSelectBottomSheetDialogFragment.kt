@@ -6,12 +6,15 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.media3.common.util.UnstableApi
+import androidx.media3.exoplayer.offline.DownloadHelper
+import androidx.media3.exoplayer.offline.DownloadService
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bluepig.alarm.R
 import com.bluepig.alarm.databinding.FragmentFileSelectBinding
 import com.bluepig.alarm.domain.result.onSuccess
 import com.bluepig.alarm.manager.player.SongPlayerManager
+import com.bluepig.alarm.service.MediaDownloadService
 import com.bluepig.alarm.util.ext.setThumbnail
 import com.bluepig.alarm.util.ext.viewRepeatOnLifeCycle
 import com.bluepig.alarm.util.viewBinding
@@ -53,6 +56,30 @@ class FileSelectBottomSheetDialogFragment :
         ivThumbnail.setThumbnail(file.thumbnail)
         btnClose.setOnClickListener { findNavController().popBackStack() }
         btnPlay.setOnClickListener { playerManager.playEndPause() }
+        btnSelect.setOnClickListener {
+            downloadStart()
+        }
+    }
+
+    private fun downloadStart() {
+        val helper = DownloadHelper.forMediaItem(
+            requireContext(),
+            playerManager.getMediaItem()
+        )
+        val file = _navArgs.file
+
+        val request =
+            helper.getDownloadRequest(
+                file.title,
+                null
+            )
+
+        DownloadService.sendAddDownload(
+            requireContext(),
+            MediaDownloadService::class.java,
+            request,
+            true
+        )
     }
 
     /**

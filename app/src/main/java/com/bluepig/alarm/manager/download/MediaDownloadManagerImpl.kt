@@ -4,12 +4,15 @@ import android.content.Context
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.database.DatabaseProvider
 import androidx.media3.database.StandaloneDatabaseProvider
+import androidx.media3.datasource.DataSource
 import androidx.media3.datasource.DefaultHttpDataSource
 import androidx.media3.datasource.cache.Cache
 import androidx.media3.datasource.cache.CacheDataSource
 import androidx.media3.datasource.cache.NoOpCacheEvictor
 import androidx.media3.datasource.cache.SimpleCache
 import androidx.media3.exoplayer.offline.DownloadManager
+import androidx.media3.exoplayer.offline.DownloadNotificationHelper
+import com.bluepig.alarm.notification.NotificationType
 import java.io.File
 import java.util.concurrent.Executor
 import javax.inject.Inject
@@ -19,6 +22,9 @@ class MediaDownloadManagerImpl @Inject constructor(
     private val _context: Context
 ) : MediaDownloadManager {
 
+    private var _downloadCache: Cache? = null
+    private var _datasourceFactory: DataSource.Factory? = null
+
     override fun getDownloadManager(): DownloadManager {
         return DownloadManager(
             _context,
@@ -26,6 +32,13 @@ class MediaDownloadManagerImpl @Inject constructor(
             getDownloadCache(),
             getDataSourceFactory(),
             Executor(Runnable::run)
+        )
+    }
+
+    override fun getDownloadNotificationHelper(): DownloadNotificationHelper {
+        return DownloadNotificationHelper(
+            _context,
+            NotificationType.DOWNLOAD_NOTIFICATION.channelId
         )
     }
 
@@ -38,11 +51,13 @@ class MediaDownloadManagerImpl @Inject constructor(
             _context.getExternalFilesDir(null),
             MediaDownloadConst.DOWNLOAD_DIRECTORY
         )
-        return SimpleCache(
+        return _downloadCache ?: SimpleCache(
             downloadDirectory,
             NoOpCacheEvictor(),
             getDatabaseProvider()
-        )
+        ).also {
+            _downloadCache = it
+        }
     }
 
     /**
@@ -52,11 +67,12 @@ class MediaDownloadManagerImpl @Inject constructor(
      * 데이터가 캐시되지 않은 경우 HttpDataSource를 이용해 요청된다.
      *
      */
-    private fun getDataSourceFactory(): CacheDataSource.Factory {
-        return CacheDataSource.Factory()
+    override fun getDataSourceFactory(): DataSource.Factory {
+        return _datasourceFactory ?: CacheDataSource.Factory()
             .setCache(getDownloadCache())
             .setUpstreamDataSourceFactory(DefaultHttpDataSource.Factory())
             .setCacheWriteDataSinkFactory(null)
             .setFlags(CacheDataSource.FLAG_IGNORE_CACHE_ON_ERROR)
+            .also { _datasourceFactory = it }
     }
 }

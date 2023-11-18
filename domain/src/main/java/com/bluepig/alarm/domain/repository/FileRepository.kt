@@ -4,5 +4,5 @@ import com.bluepig.alarm.domain.entity.file.File
 
 interface FileRepository {
     suspend fun getFileList(query: String, offSet: Int): List<File>
-    suspend fun getFileUrl(pageUrl: String): String
+    suspend fun getFileUrl(pageUrl: String, userAgent: String): String
 }

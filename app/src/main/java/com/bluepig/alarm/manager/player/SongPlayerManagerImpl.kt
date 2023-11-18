@@ -7,21 +7,25 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
-import androidx.media3.datasource.DefaultHttpDataSource
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.source.ProgressiveMediaSource
+import com.bluepig.alarm.domain.result.NotFoundMediaItemException
 import com.bluepig.alarm.domain.result.NotFoundPlayerException
+import com.bluepig.alarm.manager.download.MediaDownloadManager
 import dagger.hilt.android.qualifiers.ApplicationContext
+import timber.log.Timber
 import javax.inject.Inject
 
 @UnstableApi
 class SongPlayerManagerImpl @Inject constructor(
     @ApplicationContext
-    private val _context: Context
+    private val _context: Context,
+    private val _downloadManager: MediaDownloadManager,
 ) : SongPlayerManager {
     private var _player: ExoPlayer? = null
     private var _eventObserver: EventObserver? = null
     private var _playListener: Player.Listener? = null
+    private var _mediaItem: MediaItem? = null
 
     override fun init(lifecycle: Lifecycle, callBack: (isPlaying: Boolean) -> Unit) {
         _player = ExoPlayer.Builder(_context).build().apply {
@@ -40,12 +44,15 @@ class SongPlayerManagerImpl @Inject constructor(
     }
 
     override fun setSongUrl(songUrl: String) {
-        val defaultHttpDataSourceFactory = DefaultHttpDataSource.Factory()
-        val mediaItem = ProgressiveMediaSource.Factory(defaultHttpDataSourceFactory)
-            .createMediaSource(MediaItem.fromUri(songUrl))
-
+        Timber.d(songUrl)
+        val mediaItem = MediaItem.fromUri(songUrl)
+            .also { _mediaItem = it }
+        val mediaSource =
+            ProgressiveMediaSource
+                .Factory(_downloadManager.getDataSourceFactory())
+                .createMediaSource(mediaItem)
         _player?.playWhenReady = true
-        _player?.addMediaSource(mediaItem)
+        _player?.addMediaSource(mediaSource)
         _player?.prepare()
     }
 
@@ -53,6 +60,9 @@ class SongPlayerManagerImpl @Inject constructor(
 
     override fun getPlayer(): ExoPlayer =
         _player ?: throw NotFoundPlayerException
+
+    override fun getMediaItem(): MediaItem =
+        _mediaItem ?: throw NotFoundMediaItemException
 
     override fun playEndPause() {
         _player?.let {

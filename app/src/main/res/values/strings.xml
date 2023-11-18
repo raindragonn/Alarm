@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Alarm</string>
+    <string name="chennel_name_media_download">미디어 다운로드</string>
+    <string name="chennel_description_media_download">인터넷 없이 재생을 위한 미디어 다운로드</string>
 </resources>

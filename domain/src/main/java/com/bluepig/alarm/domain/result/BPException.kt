@@ -12,3 +12,6 @@ object SearchQueryEmptyException : Exception("Search Query is Empty or blank")
 
 object NotFoundPlayerException :
     NullPointerException("Player is Not Found, Not initialized or a release")
+
+object NotFoundMediaItemException :
+    NullPointerException("MediaItem is Not Found")
