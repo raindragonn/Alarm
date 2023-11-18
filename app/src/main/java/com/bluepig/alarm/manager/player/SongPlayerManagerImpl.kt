@@ -22,18 +22,20 @@ class SongPlayerManagerImpl @Inject constructor(
     private var _player: ExoPlayer? = null
     private var _eventObserver: EventObserver? = null
     private var _playListener: Player.Listener? = null
+
     override fun init(lifecycle: Lifecycle, callBack: (isPlaying: Boolean) -> Unit) {
         _player = ExoPlayer.Builder(_context).build().apply {
             playWhenReady = true
             repeatMode = Player.REPEAT_MODE_ALL
+
+            PlayerListener(callBack).let {
+                _playListener = it
+                addListener(it)
+            }
         }
         EventObserver().let {
             _eventObserver = it
             lifecycle.addObserver(it)
-        }
-        PlayerListener(callBack).let {
-            _playListener = it
-            _player?.addListener(it)
         }
     }
 
