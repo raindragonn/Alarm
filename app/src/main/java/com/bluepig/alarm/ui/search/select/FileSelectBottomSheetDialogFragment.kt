@@ -11,7 +11,6 @@ import androidx.navigation.fragment.navArgs
 import com.bluepig.alarm.R
 import com.bluepig.alarm.databinding.FragmentFileSelectBinding
 import com.bluepig.alarm.domain.result.onSuccess
-import com.bluepig.alarm.manager.download.MediaDownloadManager
 import com.bluepig.alarm.manager.player.SongPlayerManager
 import com.bluepig.alarm.util.ext.setThumbnail
 import com.bluepig.alarm.util.ext.viewRepeatOnLifeCycle
@@ -32,9 +31,6 @@ class FileSelectBottomSheetDialogFragment :
 
     @Inject
     lateinit var playerManager: SongPlayerManager
-
-    @Inject
-    lateinit var downloadManager: MediaDownloadManager
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -58,13 +54,10 @@ class FileSelectBottomSheetDialogFragment :
         btnClose.setOnClickListener { findNavController().popBackStack() }
         btnPlay.setOnClickListener { playerManager.playEndPause() }
         btnSelect.setOnClickListener {
-            downloadStart()
+            val action =
+                FileSelectBottomSheetDialogFragmentDirections.actionFileSelectBottomSheetDialogFragmentToAlarmEditFragment()
+            findNavController().navigate(action)
         }
-    }
-
-    private fun downloadStart() {
-        val mediaItem = playerManager.getMediaItem()
-        downloadManager.startDownload(mediaItem, _navArgs.file)
     }
 
     /**

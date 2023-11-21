@@ -59,6 +59,10 @@
         <argument
             android:name="userAgent"
             app:argType="string" />
+
+        <action
+            android:id="@+id/action_fileSelectBottomSheetDialogFragment_to_alarmEditFragment"
+            app:destination="@id/alarmEditFragment" />
     </dialog>
 
 </navigation>
