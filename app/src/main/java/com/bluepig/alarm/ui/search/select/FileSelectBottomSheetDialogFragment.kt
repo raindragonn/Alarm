@@ -103,8 +103,10 @@ class FileSelectBottomSheetDialogFragment :
         viewRepeatOnLifeCycle(Lifecycle.State.STARTED) {
             _vm.fileUrlState
                 .stateIn(this)
-                .collect {
-                    it.onSuccess(playerManager::setSongUrl)
+                .collect { result ->
+                    result.onSuccess {
+                        playerManager.setSongUrl(it.first, it.second)
+                    }
                 }
         }
     }
