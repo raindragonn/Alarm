@@ -1,7 +1,9 @@
 package com.bluepig.alarm.manager.download
 
 import android.content.Context
+import androidx.media3.common.MediaItem
 import androidx.media3.common.util.UnstableApi
+import androidx.media3.common.util.Util
 import androidx.media3.database.DatabaseProvider
 import androidx.media3.database.StandaloneDatabaseProvider
 import androidx.media3.datasource.DataSource
@@ -10,29 +12,35 @@ import androidx.media3.datasource.cache.Cache
 import androidx.media3.datasource.cache.CacheDataSource
 import androidx.media3.datasource.cache.NoOpCacheEvictor
 import androidx.media3.datasource.cache.SimpleCache
+import androidx.media3.exoplayer.offline.DownloadHelper
 import androidx.media3.exoplayer.offline.DownloadManager
 import androidx.media3.exoplayer.offline.DownloadNotificationHelper
+import androidx.media3.exoplayer.offline.DownloadService
 import com.bluepig.alarm.notification.NotificationType
-import java.io.File
+import com.bluepig.alarm.service.MediaDownloadService
+import kotlinx.serialization.json.Json
+import timber.log.Timber
 import java.util.concurrent.Executor
 import javax.inject.Inject
+import com.bluepig.alarm.domain.entity.file.File as DomainFile
 
 @UnstableApi
 class MediaDownloadManagerImpl @Inject constructor(
     private val _context: Context
 ) : MediaDownloadManager {
 
+    private var _downloadManager: DownloadManager? = null
     private var _downloadCache: Cache? = null
     private var _datasourceFactory: DataSource.Factory? = null
 
     override fun getDownloadManager(): DownloadManager {
-        return DownloadManager(
+        return _downloadManager ?: DownloadManager(
             _context,
             getDatabaseProvider(),
             getDownloadCache(),
             getDataSourceFactory(),
             Executor(Runnable::run)
-        )
+        ).also { _downloadManager = it }
     }
 
     override fun getDownloadNotificationHelper(): DownloadNotificationHelper {
@@ -47,7 +55,7 @@ class MediaDownloadManagerImpl @Inject constructor(
     }
 
     private fun getDownloadCache(): Cache {
-        val downloadDirectory = File(
+        val downloadDirectory = java.io.File(
             _context.getExternalFilesDir(null),
             MediaDownloadConst.DOWNLOAD_DIRECTORY
         )
@@ -58,6 +66,39 @@ class MediaDownloadManagerImpl @Inject constructor(
         ).also {
             _downloadCache = it
         }
+    }
+
+    override fun getMediaItem(url: String, id: String): MediaItem {
+        val download = getDownloadManager().downloadIndex.getDownload(id)
+        val downloadedUri = download?.request?.uri
+        Timber.d("$downloadedUri")
+
+
+        return downloadedUri?.let {
+            MediaItem.fromUri(it)
+        } ?: MediaItem.fromUri(url)
+    }
+
+    override fun startDownload(mediaItem: MediaItem, file: DomainFile) {
+        val downloadHelper = DownloadHelper.forMediaItem(
+            _context,
+            mediaItem
+        )
+        val jsonString =
+            Json.encodeToString(DomainFile.serializer(), file)
+        val data = Util.getUtf8Bytes(jsonString)
+        val request =
+            downloadHelper.getDownloadRequest(
+                file.id,
+                data,
+            )
+
+        DownloadService.sendAddDownload(
+            _context,
+            MediaDownloadService::class.java,
+            request,
+            true
+        )
     }
 
     /**

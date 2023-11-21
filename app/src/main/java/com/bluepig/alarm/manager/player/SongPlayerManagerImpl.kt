@@ -13,7 +13,6 @@ import com.bluepig.alarm.domain.result.NotFoundMediaItemException
 import com.bluepig.alarm.domain.result.NotFoundPlayerException
 import com.bluepig.alarm.manager.download.MediaDownloadManager
 import dagger.hilt.android.qualifiers.ApplicationContext
-import timber.log.Timber
 import javax.inject.Inject
 
 @UnstableApi
@@ -43,14 +42,14 @@ class SongPlayerManagerImpl @Inject constructor(
         }
     }
 
-    override fun setSongUrl(songUrl: String) {
-        Timber.d(songUrl)
-        val mediaItem = MediaItem.fromUri(songUrl)
+    override fun setSongUrl(fileId: String, songUrl: String) {
+        val mediaItem = _downloadManager.getMediaItem(songUrl, fileId)
             .also { _mediaItem = it }
         val mediaSource =
             ProgressiveMediaSource
                 .Factory(_downloadManager.getDataSourceFactory())
                 .createMediaSource(mediaItem)
+
         _player?.playWhenReady = true
         _player?.addMediaSource(mediaSource)
         _player?.prepare()

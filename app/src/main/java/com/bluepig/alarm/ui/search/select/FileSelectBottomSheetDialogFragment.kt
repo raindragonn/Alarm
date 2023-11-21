@@ -6,15 +6,13 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.media3.common.util.UnstableApi
-import androidx.media3.exoplayer.offline.DownloadHelper
-import androidx.media3.exoplayer.offline.DownloadService
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bluepig.alarm.R
 import com.bluepig.alarm.databinding.FragmentFileSelectBinding
 import com.bluepig.alarm.domain.result.onSuccess
+import com.bluepig.alarm.manager.download.MediaDownloadManager
 import com.bluepig.alarm.manager.player.SongPlayerManager
-import com.bluepig.alarm.service.MediaDownloadService
 import com.bluepig.alarm.util.ext.setThumbnail
 import com.bluepig.alarm.util.ext.viewRepeatOnLifeCycle
 import com.bluepig.alarm.util.viewBinding
@@ -34,6 +32,9 @@ class FileSelectBottomSheetDialogFragment :
 
     @Inject
     lateinit var playerManager: SongPlayerManager
+
+    @Inject
+    lateinit var downloadManager: MediaDownloadManager
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -62,24 +63,8 @@ class FileSelectBottomSheetDialogFragment :
     }
 
     private fun downloadStart() {
-        val helper = DownloadHelper.forMediaItem(
-            requireContext(),
-            playerManager.getMediaItem()
-        )
-        val file = _navArgs.file
-
-        val request =
-            helper.getDownloadRequest(
-                file.title,
-                null
-            )
-
-        DownloadService.sendAddDownload(
-            requireContext(),
-            MediaDownloadService::class.java,
-            request,
-            true
-        )
+        val mediaItem = playerManager.getMediaItem()
+        downloadManager.startDownload(mediaItem, _navArgs.file)
     }
 
     /**
