@@ -28,7 +28,7 @@ class AlarmEditFragment : Fragment(R.layout.fragment_alarm_edit) {
 
     private fun initViews() {
         _binding.btnSave.setOnClickListener {
-            val title = _binding.textInput.text?.toString() ?: "설정 안함"
+            val title = _binding.etMemo.text?.toString() ?: "설정 안함"
             val currentTime = Calendar.getInstance().apply {
                 set(Calendar.HOUR_OF_DAY, _binding.timepicker.hour)
                 set(Calendar.MINUTE, _binding.timepicker.minute)

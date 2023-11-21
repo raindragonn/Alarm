@@ -12,6 +12,6 @@
         <item name="colorPrimary">@color/primary_600</item>
         <item name="colorPrimaryVariant">@color/primary_700</item>
         <item name="colorPrimaryDark">@color/primary_900</item>
-        <item name="colorOnPrimary">@color/mono_100</item>
+        <item name="colorOnPrimary">@color/point</item>
     </style>
 </resources>

@@ -24,21 +24,19 @@
 
     <Button
         android:id="@+id/btn_cancel"
-        style="@style/TextAppearance.Alarm.Body6"
+        style="@style/Alarm.Base.TextButton.SemiBold"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:background="@drawable/ripple_point"
         android:minWidth="0dp"
         android:paddingHorizontal="@dimen/base_spacing_2"
-        android:text="취소"
+        android:text="@string/cancel"
         app:layout_constraintBottom_toBottomOf="@id/et_search"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <View
+        style="@style/Divider"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/point"
         app:layout_constraintTop_toBottomOf="@id/et_search" />
 
     <ProgressBar

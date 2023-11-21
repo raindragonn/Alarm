@@ -1,13 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="SpUsage">
 
     <style name="TimePicker">
         <item name="android:includeFontPadding">false</item>
-
         <item name="fontFamily">@font/pretendard_regular</item>
         <item name="android:fontFamily">@font/pretendard_regular</item>
         <item name="android:textSize">30dp</item>
+        <item name="colorControlNormal">@color/mono_600</item>
         <item name="lineHeight">39dp</item>
         <item name="android:lineHeight" tools:targetApi="p">39dp</item>
+    </style>
+
+    <style name="Alarm.Base.ImageButton" parent="Widget.AppCompat.ImageButton">
+        <item name="android:background">@drawable/ripple_oval_point</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:padding">@dimen/base_spacing_2</item>
+    </style>
+
+    <style name="Alarm.Base.TextButton.Bold" parent="TextAppearance.Alarm.Button.Bold">
+        <item name="android:textColor">@color/point</item>
+        <item name="android:background">@drawable/ripple_oval_point</item>
+        <item name="android:minWidth">0dp</item>
+    </style>
+
+    <style name="Alarm.Base.TextButton.SemiBold" parent="TextAppearance.Alarm.Button.SemiBold">
+        <item name="android:textColor">@color/point</item>
+        <item name="android:background">@drawable/ripple_oval_point</item>
+        <item name="android:minWidth">0dp</item>
+    </style>
+
+    <style name="Alarm.Base.TextButton.Primary" parent="Alarm.Base.TextButton.SemiBold">
+        <item name="android:textColor">@color/button_text</item>
+        <item name="android:background">@drawable/selector_default_button_background</item>
+    </style>
+
+    <style name="Divider">
+        <item name="android:layout_height">2dp</item>
+        <item name="android:background">@color/point</item>
+    </style>
+
+    <style name="Alarm.Base.WeakButton" parent="Alarm.Base.TextButton.SemiBold">
+        <item name="android:textColor">@color/button_text</item>
+        <item name="android:background">@drawable/ripple_weak_selected</item>
+        <item name="android:clickable">true</item>
+        <item name="android:gravity">center</item>
+        <item name="android:padding">@dimen/base_spacing_2</item>
     </style>
 </resources>

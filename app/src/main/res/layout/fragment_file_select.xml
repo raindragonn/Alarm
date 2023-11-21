@@ -32,7 +32,7 @@
         android:id="@+id/btn_close"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/ripple_point"
+        android:background="@drawable/ripple_rectangle_point"
         android:padding="@dimen/base_spacing_1"
         android:src="@drawable/ic_close"
         app:layout_constraintEnd_toEndOf="parent"
@@ -42,7 +42,6 @@
         android:id="@+id/iv_thumbnail"
         android:layout_width="@dimen/base_spacing_7"
         android:layout_height="@dimen/base_spacing_7"
-
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/btn_close"
         tools:src="@drawable/ic_image_place_holder" />
@@ -81,12 +80,11 @@
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_play"
-        style="@style/TextAppearance.Alarm.Button.SemiBold"
+        style="@style/Alarm.Base.TextButton.Primary"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/base_spacing_2"
         android:layout_marginEnd="@dimen/base_spacing_1"
-        android:background="@drawable/selector_default_button_background"
         app:layout_constraintTop_toBottomOf="@id/player_view"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/btn_select"
@@ -95,11 +93,10 @@
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_select"
-        style="@style/TextAppearance.Alarm.Button.SemiBold"
+        style="@style/Alarm.Base.TextButton.Primary"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@drawable/selector_default_button_background"
-        android:text="선택"
+        android:text="@string/choice"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/btn_play"
         app:layout_constraintTop_toTopOf="@id/btn_play" />
