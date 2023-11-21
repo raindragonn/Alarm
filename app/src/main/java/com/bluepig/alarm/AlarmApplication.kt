@@ -1,6 +1,7 @@
 package com.bluepig.alarm
 
 import android.app.Application
+import com.bluepig.alarm.util.log.DebugTree
 import com.bluepig.alarm.util.log.ReleaseTree
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
@@ -14,7 +15,7 @@ class AlarmApplication : Application() {
 
     private fun setupTimber() {
         if (BuildConfig.DEBUG) {
-            Timber.plant(Timber.DebugTree())
+            Timber.plant(DebugTree())
         } else {
             Timber.plant(ReleaseTree())
         }
