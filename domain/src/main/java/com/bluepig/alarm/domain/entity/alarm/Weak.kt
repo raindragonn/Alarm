@@ -7,5 +7,20 @@ enum class Weak(val code: Int) {
     WEDNESDAY(4),
     THURSDAY(5),
     FRIDAY(6),
-    SATURDAY(7),
+    SATURDAY(7);
+
+    companion object {
+        fun fromCode(code: Int): Weak {
+            return when (code) {
+                SUNDAY.code -> SUNDAY
+                MONDAY.code -> MONDAY
+                TUESDAY.code -> TUESDAY
+                WEDNESDAY.code -> WEDNESDAY
+                THURSDAY.code -> THURSDAY
+                FRIDAY.code -> FRIDAY
+                SATURDAY.code -> SATURDAY
+                else -> throw IllegalArgumentException()
+            }
+        }
+    }
 }
