@@ -3,13 +3,14 @@ package com.bluepig.alarm.ui.list
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView
 import com.bluepig.alarm.databinding.ItemAlarmBinding
 import com.bluepig.alarm.domain.entity.alarm.Alarm
+import com.bluepig.alarm.util.ext.checkNoPosition
 import com.bluepig.alarm.util.ext.inflater
 
 class AlarmAdapter(
-    private val _clickListener: (Int) -> Unit
+    private val _itemClickListener: (Alarm) -> Unit,
+    private val _switchClickListener: (Alarm) -> Unit
 ) : ListAdapter<Alarm, AlarmViewHolder>(differ) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AlarmViewHolder {
@@ -19,9 +20,15 @@ class AlarmAdapter(
             false
         )
         return AlarmViewHolder.create(binding).apply {
+            binding.root.setOnClickListener {
+                checkNoPosition {
+                    _itemClickListener.invoke(getItem(bindingAdapterPosition))
+                }
+            }
+
             binding.switchOnOff.setOnClickListener {
-                if (bindingAdapterPosition != RecyclerView.NO_POSITION) {
-                    _clickListener.invoke(bindingAdapterPosition)
+                checkNoPosition {
+                    _switchClickListener.invoke(getItem(bindingAdapterPosition))
                 }
             }
         }

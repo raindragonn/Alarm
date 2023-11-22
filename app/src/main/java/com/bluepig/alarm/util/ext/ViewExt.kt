@@ -9,6 +9,7 @@ import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import coil.load
 import coil.transform.RoundedCornersTransformation
 import com.bluepig.alarm.R
@@ -66,5 +67,11 @@ fun ImageView.setThumbnail(data: Any) {
                 ?: return
         placeholder(loadingDrawable)
         error(errorDrawable)
+    }
+}
+
+fun ViewHolder.checkNoPosition(action: () -> Unit) {
+    if (bindingAdapterPosition != RecyclerView.NO_POSITION) {
+        action.invoke()
     }
 }
