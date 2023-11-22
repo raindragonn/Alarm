@@ -3,6 +3,7 @@ package com.bluepig.alarm.domain.usecase
 import com.bluepig.alarm.domain.di.IoDispatcher
 import com.bluepig.alarm.domain.entity.alarm.Alarm
 import com.bluepig.alarm.domain.repository.AlarmRepository
+import com.bluepig.alarm.domain.result.AlarmSaveFailedException
 import com.bluepig.alarm.domain.result.asyncResultWithContextOf
 import com.bluepig.alarm.domain.util.CalendarHelper
 import com.bluepig.alarm.domain.util.setTomorrow
@@ -27,7 +28,7 @@ class SaveAlarm @Inject constructor(
             val checkedAlarm = checkOverTimeAlarm(alarm)
 
             val id = _repository.insertAlarm(checkedAlarm)
-            _repository.getById(id) ?: throw NullPointerException("Not Found Saved Alarm..id:$id")
+            _repository.getById(id) ?: throw AlarmSaveFailedException(id)
         }
 
     /**

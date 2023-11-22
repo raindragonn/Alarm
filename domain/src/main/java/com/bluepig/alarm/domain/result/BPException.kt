@@ -15,3 +15,8 @@ object NotFoundPlayerException :
 
 object NotFoundMediaItemException :
     NullPointerException("MediaItem is Not Found")
+
+class AlarmSaveFailedException(id: Long) : NullPointerException("Not Found Saved Alarm..id:$id")
+
+class NotFoundArgumentException(argumentName: String) :
+    NullPointerException("Not Found $argumentName For NavArgs")

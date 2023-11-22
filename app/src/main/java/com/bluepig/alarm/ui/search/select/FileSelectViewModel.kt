@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bluepig.alarm.domain.entity.file.File
 import com.bluepig.alarm.domain.result.BpResult
+import com.bluepig.alarm.domain.result.NotFoundArgumentException
 import com.bluepig.alarm.domain.usecase.GetFileUrl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,10 +20,10 @@ class FileSelectViewModel @Inject constructor(
 ) : ViewModel() {
     private val _file: File
         get() = _state.get<File>("file")
-            ?: throw NullPointerException("Not Found File For NavArgs")
+            ?: throw NotFoundArgumentException("file")
     private val _userAgent: String
         get() = _state.get<String>("userAgent")
-            ?: throw NullPointerException("Not Found userAgent For NavArgs")
+            ?: throw NotFoundArgumentException("userAgent")
 
     private val _fileUrlState: MutableStateFlow<BpResult<Pair<String, String>>> =
         MutableStateFlow(BpResult.Loading)
