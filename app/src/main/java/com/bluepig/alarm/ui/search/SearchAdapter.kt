@@ -20,8 +20,8 @@ class SearchAdapter(
         )
         return SearchViewHolder.create(binding).apply {
             binding.root.setOnClickListener {
-                if (adapterPosition != RecyclerView.NO_POSITION) {
-                    _clickListener.invoke(currentList[adapterPosition])
+                if (bindingAdapterPosition != RecyclerView.NO_POSITION) {
+                    _clickListener.invoke(currentList[bindingAdapterPosition])
                 }
             }
         }

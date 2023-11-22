@@ -20,8 +20,8 @@ class AlarmAdapter(
         )
         return AlarmViewHolder.create(binding).apply {
             binding.switchOnOff.setOnClickListener {
-                if (adapterPosition != RecyclerView.NO_POSITION) {
-                    _clickListener.invoke(adapterPosition)
+                if (bindingAdapterPosition != RecyclerView.NO_POSITION) {
+                    _clickListener.invoke(bindingAdapterPosition)
                 }
             }
         }
@@ -40,7 +40,11 @@ class AlarmAdapter(
             override fun areContentsTheSame(oldItem: Alarm, newItem: Alarm): Boolean {
                 return oldItem.timeInMillis == newItem.timeInMillis
                         && oldItem.isActive == newItem.isActive
-                        && oldItem.songName == newItem.songName
+                        && oldItem.file == newItem.file
+                        && oldItem.repeatWeak == newItem.repeatWeak
+                        && oldItem.volume == newItem.volume
+                        && oldItem.hasVibration == newItem.hasVibration
+                        && oldItem.memo == newItem.memo
             }
         }
     }
