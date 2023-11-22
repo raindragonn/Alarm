@@ -13,6 +13,7 @@ import com.bluepig.alarm.domain.util.CalendarHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -21,32 +22,44 @@ class AlarmEditViewModel @Inject constructor(
     private val _saveAlarm: SaveAlarm,
     audioManager: AudioManager
 ) : ViewModel() {
-    val file: File
-        get() = _state.get<File>("file") ?: throw NotFoundArgumentException("file")
 
-    private val _timeInMillis = MutableStateFlow(CalendarHelper.now)
+    val file: File
+        get() = _state.get<File>("file")
+            ?: _state.get<Alarm>("alarm")?.file
+            ?: throw NotFoundArgumentException("file")
+    val alarm: Alarm?
+        get() = _state.get<Alarm>("alarm")
+
+    private val _timeInMillis =
+        MutableStateFlow(
+            alarm?.timeInMillis ?: CalendarHelper.now.timeInMillis
+        )
     val timeInMillis
         get() = _timeInMillis.asStateFlow()
 
-    private val _repeatWeak = MutableStateFlow(setOf<Weak>())
+    private val _repeatWeak =
+        MutableStateFlow(alarm?.repeatWeak ?: setOf())
     val repeatWeak
         get() = _repeatWeak.asStateFlow()
 
     private val _volume =
-        MutableStateFlow(audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC))
+        MutableStateFlow(
+            alarm?.volume ?: audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC)
+        )
     val volume
         get() = _volume.asStateFlow()
 
-    private val _vibration = MutableStateFlow(true)
+    private val _vibration =
+        MutableStateFlow(alarm?.hasVibration ?: true)
     val vibration
         get() = _vibration.asStateFlow()
 
-    private val _memo = MutableStateFlow("")
+    private val _memo = MutableStateFlow(alarm?.memo ?: "")
     val memo
         get() = _memo.asStateFlow()
 
     fun setTimeInMillis(hourOfDay: Int, minute: Int) {
-        _timeInMillis.value = CalendarHelper.fromHourAndMinute(hourOfDay, minute)
+        _timeInMillis.value = CalendarHelper.fromHourAndMinute(hourOfDay, minute).timeInMillis
     }
 
     fun setRepeatWeak(weak: Weak) {
@@ -72,17 +85,18 @@ class AlarmEditViewModel @Inject constructor(
         _memo.value = memo
     }
 
-
     suspend fun saveAlarm(): BpResult<Alarm> {
-        val alarm = Alarm(
-            timeInMillis = _timeInMillis.value.timeInMillis,
+        val saveAlarm = Alarm(
+            id = alarm?.id,
+            timeInMillis = _timeInMillis.value,
             file = file,
             repeatWeak = _repeatWeak.value,
             volume = _volume.value,
             hasVibration = _vibration.value,
             memo = _memo.value
         )
+        Timber.d(saveAlarm.toString())
 
-        return _saveAlarm.invoke(alarm)
+        return _saveAlarm.invoke(saveAlarm)
     }
 }

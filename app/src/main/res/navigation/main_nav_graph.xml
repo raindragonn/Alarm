@@ -42,6 +42,10 @@
             app:argType="com.bluepig.alarm.domain.entity.file.File"
             app:nullable="true" />
 
+        <argument
+            android:name="alarm"
+            app:argType="com.bluepig.alarm.domain.entity.alarm.Alarm"
+            app:nullable="true" />
 
         <action
             android:id="@+id/action_alarmEditFragment_to_alarmListFragment"

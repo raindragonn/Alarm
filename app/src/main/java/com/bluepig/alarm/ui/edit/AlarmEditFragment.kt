@@ -13,11 +13,15 @@ import com.bluepig.alarm.R
 import com.bluepig.alarm.databinding.FragmentAlarmEditBinding
 import com.bluepig.alarm.domain.entity.alarm.Weak
 import com.bluepig.alarm.domain.result.onSuccess
+import com.bluepig.alarm.domain.util.CalendarHelper
+import com.bluepig.alarm.domain.util.getHourOfDay
+import com.bluepig.alarm.domain.util.minute
 import com.bluepig.alarm.util.ext.setThumbnail
 import com.bluepig.alarm.util.ext.viewLifeCycleScope
 import com.bluepig.alarm.util.ext.viewRepeatOnLifeCycle
 import com.bluepig.alarm.util.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -37,25 +41,30 @@ class AlarmEditFragment : Fragment(R.layout.fragment_alarm_edit) {
     }
 
     private fun initViews() = with(_binding) {
+        btnBack.setOnClickListener {
+            findNavController().popBackStack()
+        }
+
+        bindTimePicker(_vm.timeInMillis.value)
         timepicker.setOnTimeChangedListener { _, hourOfDay, minute ->
             _vm.setTimeInMillis(hourOfDay, minute)
         }
 
-        btnSunday.setOnClickListener { _vm.setRepeatWeak(Weak.SUNDAY) }
-        btnMonday.setOnClickListener { _vm.setRepeatWeak(Weak.MONDAY) }
-        btnTuesday.setOnClickListener { _vm.setRepeatWeak(Weak.TUESDAY) }
-        btnWednesday.setOnClickListener { _vm.setRepeatWeak(Weak.WEDNESDAY) }
-        btnThursday.setOnClickListener { _vm.setRepeatWeak(Weak.THURSDAY) }
-        btnFriday.setOnClickListener { _vm.setRepeatWeak(Weak.FRIDAY) }
-        btnSaturday.setOnClickListener { _vm.setRepeatWeak(Weak.SATURDAY) }
+        btnSunday.setOnclickWeak(_vm::setRepeatWeak)
+        btnMonday.setOnclickWeak(_vm::setRepeatWeak)
+        btnTuesday.setOnclickWeak(_vm::setRepeatWeak)
+        btnWednesday.setOnclickWeak(_vm::setRepeatWeak)
+        btnThursday.setOnclickWeak(_vm::setRepeatWeak)
+        btnFriday.setOnclickWeak(_vm::setRepeatWeak)
+        btnSaturday.setOnclickWeak(_vm::setRepeatWeak)
 
         ivThumbnail
             .setThumbnail(_vm.file.thumbnail)
         tvFileTitle.text = _vm.file.title
 
+        bindVolume(_vm.volume.value)
         val maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC)
         seekbarVolume.max = maxVolume
-        seekbarVolume.progress = maxVolume
         seekbarVolume.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 _vm.setVolume(progress)
@@ -65,10 +74,12 @@ class AlarmEditFragment : Fragment(R.layout.fragment_alarm_edit) {
             override fun onStopTrackingTouch(seekBar: SeekBar?) {}
         })
 
+        bindVibration(_vm.vibration.value)
         switchVibration.setOnCheckedChangeListener { _, isChecked ->
             _vm.setVibration(isChecked)
         }
 
+        bindMemo(_vm.memo.value)
         etMemo.doAfterTextChanged {
             _vm.setMemo(it.toString())
         }
@@ -86,9 +97,49 @@ class AlarmEditFragment : Fragment(R.layout.fragment_alarm_edit) {
         }
     }
 
-    private fun observing() {
+    private fun observing() = with(_vm) {
         viewRepeatOnLifeCycle(Lifecycle.State.STARTED) {
-            // TODO: 알람 수정 기능 추가 시 작성
+            repeatWeak
+                .stateIn(this)
+                .collect(::bindWeak)
         }
+    }
+
+    private fun bindTimePicker(timeInMillis: Long) {
+        _binding.timepicker.hour = CalendarHelper.fromTimeInMillis(timeInMillis).getHourOfDay
+        _binding.timepicker.minute = CalendarHelper.fromTimeInMillis(timeInMillis).minute
+    }
+
+    private fun bindWeak(setWeak: Set<Weak>) {
+        val buttons = listOf(
+            _binding.btnSunday,
+            _binding.btnMonday,
+            _binding.btnTuesday,
+            _binding.btnWednesday,
+            _binding.btnThursday,
+            _binding.btnFriday,
+            _binding.btnSaturday,
+        )
+
+        buttons.forEach {
+            if (setWeak.contains(it.getWeak())) {
+                it.setSelected()
+            } else {
+                it.unSelected()
+            }
+        }
+    }
+
+    private fun bindVolume(volume: Int) {
+        _binding.seekbarVolume.progress = volume
+    }
+
+    private fun bindVibration(switch: Boolean) {
+        _binding.switchVibration.isChecked = switch
+        _binding.switchVibration.jumpDrawablesToCurrentState()
+    }
+
+    private fun bindMemo(memo: String) {
+        _binding.etMemo.setText(memo)
     }
 }

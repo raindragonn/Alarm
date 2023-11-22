@@ -56,7 +56,7 @@ class FileSelectBottomSheetDialogFragment :
         btnSelect.setOnClickListener {
             val action =
                 FileSelectBottomSheetDialogFragmentDirections.actionFileSelectBottomSheetDialogFragmentToAlarmEditFragment(
-                    file
+                    file, null
                 )
             findNavController().navigate(action)
         }

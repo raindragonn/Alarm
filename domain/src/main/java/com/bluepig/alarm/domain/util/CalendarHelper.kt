@@ -27,6 +27,10 @@ val Calendar.getYear: Int
     get() = get(Calendar.YEAR)
 val Calendar.getDayOfYear: Int
     get() = get(Calendar.DAY_OF_YEAR)
+val Calendar.getHourOfDay: Int
+    get() = get(Calendar.HOUR_OF_DAY)
+val Calendar.minute: Int
+    get() = get(Calendar.MINUTE)
 
 fun Calendar.setTomorrow(): Calendar {
     return apply {

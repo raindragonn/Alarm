@@ -16,7 +16,7 @@ data class Alarm(
     val volume: Int? = null,
     val hasVibration: Boolean = true,
     val memo: String = "",
-) : BaseEntity {
+) : BaseEntity, java.io.Serializable {
     fun getCalendar(): Calendar {
         return CalendarHelper.now.apply {
             timeInMillis = this@Alarm.timeInMillis

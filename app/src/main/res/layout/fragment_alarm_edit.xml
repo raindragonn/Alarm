@@ -94,79 +94,79 @@
                 app:layout_constraintStart_toStartOf="@id/guideline_start"
                 app:layout_constraintTop_toTopOf="@id/v_point_background" />
 
-            <TextView
+            <com.bluepig.alarm.ui.view.WeakButton
                 android:id="@+id/btn_sunday"
                 style="@style/Alarm.Base.WeakButton"
+                app:weak="SUNDAY"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/base_spacing_2"
-                android:text="@string/weak_sun"
                 app:layout_constraintDimensionRatio="1"
                 app:layout_constraintEnd_toStartOf="@id/btn_monday"
                 app:layout_constraintStart_toStartOf="@id/guideline_start"
                 app:layout_constraintTop_toBottomOf="@id/tv_repeat_guide" />
 
-            <TextView
+            <com.bluepig.alarm.ui.view.WeakButton
                 android:id="@+id/btn_monday"
                 style="@style/Alarm.Base.WeakButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@string/weak_mon"
+                app:weak="MONDAY"
                 app:layout_constraintDimensionRatio="1"
                 app:layout_constraintEnd_toStartOf="@id/btn_tuesday"
                 app:layout_constraintStart_toEndOf="@id/btn_sunday"
                 app:layout_constraintTop_toTopOf="@id/btn_sunday" />
 
-            <TextView
+            <com.bluepig.alarm.ui.view.WeakButton
                 android:id="@+id/btn_tuesday"
                 style="@style/Alarm.Base.WeakButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@string/weak_tues"
+                app:weak="TUESDAY"
                 app:layout_constraintDimensionRatio="1"
                 app:layout_constraintEnd_toStartOf="@id/btn_wednesday"
                 app:layout_constraintStart_toEndOf="@id/btn_monday"
                 app:layout_constraintTop_toTopOf="@id/btn_sunday" />
 
-            <TextView
+            <com.bluepig.alarm.ui.view.WeakButton
                 android:id="@+id/btn_wednesday"
                 style="@style/Alarm.Base.WeakButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@string/weak_wed"
+                app:weak="WEDNESDAY"
                 app:layout_constraintDimensionRatio="1"
                 app:layout_constraintEnd_toStartOf="@id/btn_thursday"
                 app:layout_constraintStart_toEndOf="@id/btn_tuesday"
                 app:layout_constraintTop_toTopOf="@id/btn_sunday" />
 
-            <TextView
+            <com.bluepig.alarm.ui.view.WeakButton
                 android:id="@+id/btn_thursday"
                 style="@style/Alarm.Base.WeakButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@string/weak_thu"
+                app:weak="THURSDAY"
                 app:layout_constraintDimensionRatio="1"
                 app:layout_constraintEnd_toStartOf="@id/btn_friday"
                 app:layout_constraintStart_toEndOf="@id/btn_wednesday"
                 app:layout_constraintTop_toTopOf="@id/btn_sunday" />
 
-            <TextView
+            <com.bluepig.alarm.ui.view.WeakButton
                 android:id="@+id/btn_friday"
                 style="@style/Alarm.Base.WeakButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@string/weak_fri"
+                app:weak="FRIDAY"
                 app:layout_constraintDimensionRatio="1"
                 app:layout_constraintEnd_toStartOf="@id/btn_saturday"
                 app:layout_constraintStart_toEndOf="@id/btn_thursday"
                 app:layout_constraintTop_toTopOf="@id/btn_sunday" />
 
-            <TextView
+            <com.bluepig.alarm.ui.view.WeakButton
                 android:id="@+id/btn_saturday"
                 style="@style/Alarm.Base.WeakButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@string/weak_sat"
+                app:weak="SATURDAY"
                 app:layout_constraintDimensionRatio="1"
                 app:layout_constraintEnd_toEndOf="@id/guideline_end"
                 app:layout_constraintStart_toEndOf="@id/btn_friday"

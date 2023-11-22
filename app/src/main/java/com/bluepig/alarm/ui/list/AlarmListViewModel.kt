@@ -44,7 +44,7 @@ class AlarmListViewModel @Inject constructor(
         }
     }
 
-    suspend fun saveAlarm(alarm: Alarm) =
+    suspend fun alarmActiveSwitching(alarm: Alarm) =
         _saveAlarm.invoke(alarm.copy(isActive = !alarm.isActive))
 
 }

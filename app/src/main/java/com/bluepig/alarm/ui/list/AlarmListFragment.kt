@@ -9,6 +9,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
 import com.bluepig.alarm.R
 import com.bluepig.alarm.databinding.FragmentAlarmListBinding
+import com.bluepig.alarm.domain.entity.alarm.Alarm
 import com.bluepig.alarm.domain.result.BpResult
 import com.bluepig.alarm.domain.result.NotFoundActiveAlarmException
 import com.bluepig.alarm.domain.result.NotFoundAlarmException
@@ -28,7 +29,12 @@ class AlarmListFragment : Fragment(R.layout.fragment_alarm_list) {
     private val _binding: FragmentAlarmListBinding by viewBinding(FragmentAlarmListBinding::bind)
     private val _vm: AlarmListViewModel by viewModels()
 
-    private val _alarmAdapter: AlarmAdapter by lazy { AlarmAdapter(::switchClick) }
+    private val _alarmAdapter: AlarmAdapter by lazy {
+        AlarmAdapter(
+            ::onItemClick,
+            ::onItemSwitchClick
+        )
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -75,11 +81,15 @@ class AlarmListFragment : Fragment(R.layout.fragment_alarm_list) {
             }
     }
 
+    private fun onItemClick(alarm: Alarm) {
+        val action =
+            AlarmListFragmentDirections.actionAlarmListFragmentToAlarmEditFragment(null, alarm)
+        findNavController().navigate(action)
+    }
 
-    private fun switchClick(position: Int) {
-        val alarm = _alarmAdapter.currentList[position]
+    private fun onItemSwitchClick(alarm: Alarm) {
         viewLifeCycleScope.launch {
-            _vm.saveAlarm(alarm)
+            _vm.alarmActiveSwitching(alarm)
                 .onSuccess {
                     val onOff = if (it.isActive) "켰습니다" else "껏습니다."
                     Toast.makeText(requireContext(), "알람을 $onOff", Toast.LENGTH_SHORT).show()
