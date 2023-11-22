@@ -9,7 +9,11 @@ object AlarmMapper : BaseMapper<AlarmData, Alarm> {
             id = data.id,
             timeInMillis = data.timeInMillis,
             isActive = data.isActive,
-            songName = data.songName,
+            file = data.file,
+            repeatWeak = data.repeatWeak,
+            volume = data.volume,
+            hasVibration = data.hasVibration,
+            memo = data.memo,
         )
 
     override fun mapToData(entity: Alarm): AlarmData =
@@ -17,6 +21,10 @@ object AlarmMapper : BaseMapper<AlarmData, Alarm> {
             id = entity.id,
             timeInMillis = entity.timeInMillis,
             isActive = entity.isActive,
-            songName = entity.songName,
+            repeatWeak = entity.repeatWeak,
+            volume = entity.volume,
+            hasVibration = entity.hasVibration,
+            memo = entity.memo,
+            file = entity.file
         )
 }
