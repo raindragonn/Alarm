@@ -192,6 +192,7 @@
                 tools:src="@drawable/ic_image_place_holder" />
 
             <TextView
+                android:id="@+id/tv_file_title"
                 style="@style/TextAppearance.Alarm.Body8"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"

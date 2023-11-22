@@ -17,7 +17,7 @@ class AlarmViewHolder private constructor(
         _binding.apply {
             tvTime.text = timeFormat.format(alarm.timeInMillis)
             tvMeridiem.text = meridiemFormat.format(alarm.timeInMillis)
-            tvTitle.text = alarm.songName
+            tvTitle.text = alarm.file.title
 
             switchOnOff.isChecked = alarm.isActive
         }

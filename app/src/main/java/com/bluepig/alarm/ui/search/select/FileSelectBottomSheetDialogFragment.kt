@@ -55,7 +55,9 @@ class FileSelectBottomSheetDialogFragment :
         btnPlay.setOnClickListener { playerManager.playEndPause() }
         btnSelect.setOnClickListener {
             val action =
-                FileSelectBottomSheetDialogFragmentDirections.actionFileSelectBottomSheetDialogFragmentToAlarmEditFragment()
+                FileSelectBottomSheetDialogFragmentDirections.actionFileSelectBottomSheetDialogFragmentToAlarmEditFragment(
+                    file
+                )
             findNavController().navigate(action)
         }
     }

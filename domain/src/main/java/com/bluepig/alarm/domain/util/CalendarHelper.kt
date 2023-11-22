@@ -5,11 +5,21 @@ import java.util.Calendar
 
 object CalendarHelper {
     val now: Calendar
-        get() = Calendar.getInstance()
+        get() = Calendar.getInstance().apply {
+            setZeroSecond()
+        }
 
-    fun forTimeInMillis(timeInMillis: Long): Calendar =
+    fun fromHourAndMinute(hourOfDay: Int, minute: Int): Calendar =
+        now.apply {
+            set(Calendar.HOUR_OF_DAY, hourOfDay)
+            set(Calendar.MINUTE, minute)
+            setZeroSecond()
+        }
+
+    fun fromTimeInMillis(timeInMillis: Long): Calendar =
         now.apply {
             setTimeInMillis(timeInMillis)
+            setZeroSecond()
         }
 }
 
