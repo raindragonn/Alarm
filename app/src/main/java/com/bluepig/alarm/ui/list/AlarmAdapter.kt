@@ -48,7 +48,7 @@ class AlarmAdapter(
                 return oldItem.timeInMillis == newItem.timeInMillis
                         && oldItem.isActive == newItem.isActive
                         && oldItem.file == newItem.file
-                        && oldItem.repeatWeak == newItem.repeatWeak
+                        && oldItem.repeatWeek == newItem.repeatWeek
                         && oldItem.volume == newItem.volume
                         && oldItem.hasVibration == newItem.hasVibration
                         && oldItem.memo == newItem.memo

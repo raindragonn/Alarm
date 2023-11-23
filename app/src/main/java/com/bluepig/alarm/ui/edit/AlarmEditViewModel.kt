@@ -4,7 +4,7 @@ import android.media.AudioManager
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.bluepig.alarm.domain.entity.alarm.Alarm
-import com.bluepig.alarm.domain.entity.alarm.Weak
+import com.bluepig.alarm.domain.entity.alarm.Week
 import com.bluepig.alarm.domain.entity.file.File
 import com.bluepig.alarm.domain.result.BpResult
 import com.bluepig.alarm.domain.result.NotFoundArgumentException
@@ -37,10 +37,10 @@ class AlarmEditViewModel @Inject constructor(
     val timeInMillis
         get() = _timeInMillis.asStateFlow()
 
-    private val _repeatWeak =
-        MutableStateFlow(alarm?.repeatWeak ?: setOf())
-    val repeatWeak
-        get() = _repeatWeak.asStateFlow()
+    private val _repeatWeek =
+        MutableStateFlow(alarm?.repeatWeek ?: setOf())
+    val repeatWeek
+        get() = _repeatWeek.asStateFlow()
 
     private val _volume =
         MutableStateFlow(
@@ -62,14 +62,14 @@ class AlarmEditViewModel @Inject constructor(
         _timeInMillis.value = CalendarHelper.fromHourAndMinute(hourOfDay, minute).timeInMillis
     }
 
-    fun setRepeatWeak(weak: Weak) {
-        val before = _repeatWeak.value.toMutableSet()
-        if (before.contains(weak)) {
-            before.remove(weak)
+    fun setRepeatWeek(week: Week) {
+        val before = _repeatWeek.value.toMutableSet()
+        if (before.contains(week)) {
+            before.remove(week)
         } else {
-            before.add(weak)
+            before.add(week)
         }
-        _repeatWeak.value = before
+        _repeatWeek.value = before
 
     }
 
@@ -90,7 +90,7 @@ class AlarmEditViewModel @Inject constructor(
             id = alarm?.id,
             timeInMillis = _timeInMillis.value,
             file = file,
-            repeatWeak = _repeatWeak.value,
+            repeatWeek = _repeatWeek.value,
             volume = _volume.value,
             hasVibration = _vibration.value,
             memo = _memo.value

@@ -7,12 +7,12 @@ import kotlinx.serialization.json.Json
 
 class FileTypeConverter {
     @TypeConverter
-    fun jsonStringToWeakSet(data: String): File {
+    fun jsonStringToWeekSet(data: String): File {
         return Json.decodeFromString(data)
     }
 
     @TypeConverter
-    fun weakSetToJsonString(data: File): String {
+    fun weekSetToJsonString(data: File): String {
         return Json.encodeToString(data)
     }
 }

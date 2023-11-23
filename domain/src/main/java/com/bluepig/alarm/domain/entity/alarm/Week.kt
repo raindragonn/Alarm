@@ -1,6 +1,6 @@
 package com.bluepig.alarm.domain.entity.alarm
 
-enum class Weak(val code: Int) {
+enum class Week(val code: Int) {
     SUNDAY(1),
     MONDAY(2),
     TUESDAY(3),
@@ -10,7 +10,7 @@ enum class Weak(val code: Int) {
     SATURDAY(7);
 
     companion object {
-        fun fromCode(code: Int): Weak {
+        fun fromCode(code: Int): Week {
             return when (code) {
                 SUNDAY.code -> SUNDAY
                 MONDAY.code -> MONDAY

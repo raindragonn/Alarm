@@ -12,7 +12,7 @@ data class Alarm(
     val timeInMillis: Long = CalendarHelper.now.timeInMillis,
     val isActive: Boolean = true,
     val file: File,
-    val repeatWeak: Set<Weak> = setOf(),
+    val repeatWeek: Set<Week> = setOf(),
     val volume: Int? = null,
     val hasVibration: Boolean = true,
     val memo: String = "",

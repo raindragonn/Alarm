@@ -11,7 +11,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
 import com.bluepig.alarm.R
 import com.bluepig.alarm.databinding.FragmentAlarmEditBinding
-import com.bluepig.alarm.domain.entity.alarm.Weak
+import com.bluepig.alarm.domain.entity.alarm.Week
 import com.bluepig.alarm.domain.result.onSuccess
 import com.bluepig.alarm.domain.util.CalendarHelper
 import com.bluepig.alarm.domain.util.getHourOfDay
@@ -50,13 +50,13 @@ class AlarmEditFragment : Fragment(R.layout.fragment_alarm_edit) {
             _vm.setTimeInMillis(hourOfDay, minute)
         }
 
-        btnSunday.setOnclickWeak(_vm::setRepeatWeak)
-        btnMonday.setOnclickWeak(_vm::setRepeatWeak)
-        btnTuesday.setOnclickWeak(_vm::setRepeatWeak)
-        btnWednesday.setOnclickWeak(_vm::setRepeatWeak)
-        btnThursday.setOnclickWeak(_vm::setRepeatWeak)
-        btnFriday.setOnclickWeak(_vm::setRepeatWeak)
-        btnSaturday.setOnclickWeak(_vm::setRepeatWeak)
+        btnSunday.setOnclickWeek(_vm::setRepeatWeek)
+        btnMonday.setOnclickWeek(_vm::setRepeatWeek)
+        btnTuesday.setOnclickWeek(_vm::setRepeatWeek)
+        btnWednesday.setOnclickWeek(_vm::setRepeatWeek)
+        btnThursday.setOnclickWeek(_vm::setRepeatWeek)
+        btnFriday.setOnclickWeek(_vm::setRepeatWeek)
+        btnSaturday.setOnclickWeek(_vm::setRepeatWeek)
 
         ivThumbnail
             .setThumbnail(_vm.file.thumbnail)
@@ -99,9 +99,9 @@ class AlarmEditFragment : Fragment(R.layout.fragment_alarm_edit) {
 
     private fun observing() = with(_vm) {
         viewRepeatOnLifeCycle(Lifecycle.State.STARTED) {
-            repeatWeak
+            repeatWeek
                 .stateIn(this)
-                .collect(::bindWeak)
+                .collect(::bindWeek)
         }
     }
 
@@ -110,7 +110,7 @@ class AlarmEditFragment : Fragment(R.layout.fragment_alarm_edit) {
         _binding.timepicker.minute = CalendarHelper.fromTimeInMillis(timeInMillis).minute
     }
 
-    private fun bindWeak(setWeak: Set<Weak>) {
+    private fun bindWeek(setWeek: Set<Week>) {
         val buttons = listOf(
             _binding.btnSunday,
             _binding.btnMonday,
@@ -122,7 +122,7 @@ class AlarmEditFragment : Fragment(R.layout.fragment_alarm_edit) {
         )
 
         buttons.forEach {
-            if (setWeak.contains(it.getWeak())) {
+            if (setWeek.contains(it.getWeek())) {
                 it.setSelected()
             } else {
                 it.unSelected()

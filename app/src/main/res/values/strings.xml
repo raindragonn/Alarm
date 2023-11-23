@@ -5,14 +5,14 @@
     <string name="alarm_preview">미리보기</string>
     <string name="cancel">취소</string>
 
-    <string name="weak_sun">일</string>
-    <string name="weak_mon">월</string>
-    <string name="weak_tues">화</string>
-    <string name="weak_wed">수</string>
-    <string name="weak_thu">목</string>
-    <string name="weak_fri">금</string>
-    <string name="weak_sat">토</string>
-    <string name="weak_no">한번만 울리기</string>
+    <string name="week_sun">일</string>
+    <string name="week_mon">월</string>
+    <string name="week_tues">화</string>
+    <string name="week_wed">수</string>
+    <string name="week_thu">목</string>
+    <string name="week_fri">금</string>
+    <string name="week_sat">토</string>
+    <string name="week_no">한번만 울리기</string>
     <string name="alarm_media_guide">알림음</string>
     <string name="memo">메모</string>
     <string name="memo_hint">메모를 입력해주세요.</string>

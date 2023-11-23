@@ -6,7 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.bluepig.alarm.database.converter.FileTypeConverter
-import com.bluepig.alarm.database.converter.WeakTypeConverter
+import com.bluepig.alarm.database.converter.WeekTypeConverter
 import com.bluepig.alarm.database.dao.AlarmDao
 import com.bluepig.alarm.database.data.AlarmData
 
@@ -16,7 +16,7 @@ import com.bluepig.alarm.database.data.AlarmData
     exportSchema = false,
 )
 @TypeConverters(
-    WeakTypeConverter::class, FileTypeConverter::class
+    WeekTypeConverter::class, FileTypeConverter::class
 )
 abstract class AlarmDatabase : RoomDatabase() {
     abstract fun alarmDao(): AlarmDao

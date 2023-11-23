@@ -40,9 +40,9 @@
         <item name="android:background">@color/point</item>
     </style>
 
-    <style name="Alarm.Base.WeakButton" parent="Alarm.Base.TextButton.SemiBold">
+    <style name="Alarm.Base.WeekButton" parent="Alarm.Base.TextButton.SemiBold">
         <item name="android:textColor">@color/button_text</item>
-        <item name="android:background">@drawable/ripple_weak_selected</item>
+        <item name="android:background">@drawable/ripple_week_selected</item>
         <item name="android:clickable">true</item>
         <item name="android:gravity">center</item>
         <item name="android:padding">@dimen/base_spacing_2</item>
