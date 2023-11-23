@@ -8,5 +8,7 @@ class GetAllAlarms @Inject constructor(
     private val _repository: AlarmRepository,
 ) {
     operator fun invoke() = _repository.getAllAlarmFlow()
-        .map { it.sortedByDescending { it.timeInMillis } }
+        .map { alarmList ->
+            alarmList.sortedByDescending { it.timeInMillis }
+        }
 }
