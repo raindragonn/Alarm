@@ -6,7 +6,7 @@ import com.bluepig.alarm.domain.repository.AlarmRepository
 import com.bluepig.alarm.domain.result.AlarmSaveFailedException
 import com.bluepig.alarm.domain.result.asyncResultWithContextOf
 import com.bluepig.alarm.domain.util.CalendarHelper
-import com.bluepig.alarm.domain.util.setTomorrow
+import com.bluepig.alarm.domain.util.setZeroSecond
 import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Inject
 
@@ -38,11 +38,13 @@ class SaveAlarm @Inject constructor(
      * @return 업데이트된 [Alarm] 을 반환
      */
     private fun checkOverTimeAlarm(alarm: Alarm): Alarm {
-        val alarmCalendar = alarm.getCalendar()
+        if (alarm.isActive.not()) return alarm
+
+        val alarmCalendar = alarm.getCalendar().setZeroSecond()
         val now = CalendarHelper.now
 
         return if (now.after(alarmCalendar)) {
-            val nextTime = alarm.getCalendar().setTomorrow().timeInMillis
+            val nextTime = CalendarHelper.setTomorrow(alarmCalendar).timeInMillis
             alarm.copy(
                 timeInMillis = nextTime
             )
