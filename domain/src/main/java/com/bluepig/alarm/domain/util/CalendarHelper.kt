@@ -1,26 +1,39 @@
+@file:Suppress("unused")
+
 package com.bluepig.alarm.domain.util
 
 import java.util.Calendar
+import java.util.Locale
 
 
 object CalendarHelper {
     val now: Calendar
-        get() = Calendar.getInstance().apply {
-            setZeroSecond()
-        }
+        get() = Calendar.getInstance(Locale.getDefault())
 
-    fun fromHourAndMinute(hourOfDay: Int, minute: Int): Calendar =
-        now.apply {
-            set(Calendar.HOUR_OF_DAY, hourOfDay)
-            set(Calendar.MINUTE, minute)
-            setZeroSecond()
-        }
+    fun fromHourAndMinute(hourOfDay: Int, minute: Int): Calendar = now.apply {
+        set(Calendar.HOUR_OF_DAY, hourOfDay)
+        set(Calendar.MINUTE, minute)
+    }
 
-    fun fromTimeInMillis(timeInMillis: Long): Calendar =
-        now.apply {
-            setTimeInMillis(timeInMillis)
-            setZeroSecond()
+    fun fromTimeInMillis(timeInMillis: Long): Calendar = now.apply {
+        setTimeInMillis(timeInMillis)
+    }
+
+    fun setTomorrow(calendar: Calendar): Calendar {
+        val newCalendar = now.apply {
+            timeInMillis = calendar.timeInMillis
         }
+        val now = CalendarHelper.now
+        val nowYear = now.getYear
+        val nowDayOfYear = now.getDayOfYear
+
+        if (now.after(newCalendar)) {
+            newCalendar.set(Calendar.YEAR, nowYear)
+            newCalendar.set(Calendar.DAY_OF_YEAR, nowDayOfYear)
+            newCalendar.add(Calendar.DAY_OF_YEAR, 1)
+        }
+        return newCalendar
+    }
 }
 
 val Calendar.getYear: Int
@@ -31,20 +44,10 @@ val Calendar.getHourOfDay: Int
     get() = get(Calendar.HOUR_OF_DAY)
 val Calendar.minute: Int
     get() = get(Calendar.MINUTE)
-
-fun Calendar.setTomorrow(): Calendar {
-    return apply {
-        val now = CalendarHelper.now
-        val nowYear = now.getYear
-        val nowDayOfYear = now.getDayOfYear
-
-        if (now.after(this)) {
-            set(Calendar.YEAR, nowYear)
-            set(Calendar.DAY_OF_YEAR, nowDayOfYear)
-            add(Calendar.DAY_OF_YEAR, 1)
-        }
-    }
-}
+val Calendar.second: Int
+    get() = get(Calendar.SECOND)
+val Calendar.milliSecond: Int
+    get() = get(Calendar.MILLISECOND)
 
 fun Calendar.setZeroSecond(): Calendar {
     return this.apply {
