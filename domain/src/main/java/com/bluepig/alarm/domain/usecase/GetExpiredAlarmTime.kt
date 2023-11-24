@@ -24,11 +24,16 @@ class GetExpiredAlarmTime @Inject constructor(
                 if (alarmList.isEmpty()) throw NotFoundAlarmException
 
                 val now = CalendarHelper.now.timeInMillis
-                val expireTimeList = alarmList.filter { it.isActive }
-                    .sortedBy { it.timeInMillis }
-                    .map { it.timeInMillis - now }
+                val remainingTimeList =
+                    alarmList
+                        .filter { it.isActive }
+                        .map { it.timeInMillis - now }
 
-                val filteredList = expireTimeList.filter { it > 0 }
+                val filteredList =
+                    remainingTimeList
+                        .filter { it > 0 }
+                        .sortedBy { it }
+
                 filteredList.firstOrNull() ?: throw NotFoundActiveAlarmException
             }
             emit(expireTime)
