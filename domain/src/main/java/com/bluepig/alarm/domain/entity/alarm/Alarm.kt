@@ -22,4 +22,5 @@ data class Alarm(
             timeInMillis = this@Alarm.timeInMillis
         }
     }
+    // TODO: Week 포함하는 경우 timeInMillis를 변경하는 것이 아닌 hour, minute을 통해 NextAlarmTimeInMillis를 구하는걸로 고려하기
 }
