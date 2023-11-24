@@ -21,8 +21,6 @@ import com.bluepig.alarm.util.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.util.Locale
 
 @AndroidEntryPoint
 class AlarmListFragment : Fragment(R.layout.fragment_alarm_list) {
@@ -67,11 +65,10 @@ class AlarmListFragment : Fragment(R.layout.fragment_alarm_list) {
         }
     }
 
-    private fun showTimeRemaining(result: BpResult<Long>) {
+    private fun showTimeRemaining(result: BpResult<String>) {
         result
-            .onSuccess { expireTime ->
-                val dateFormat = SimpleDateFormat("약 mm분 남았습니다.", Locale.getDefault())
-                _binding.tvAlarmState.text = dateFormat.format(expireTime)
+            .onSuccess { guideText ->
+                _binding.tvAlarmState.text = guideText
             }
             .onFailure {
                 when (it) {
