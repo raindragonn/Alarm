@@ -13,7 +13,6 @@ import com.bluepig.alarm.domain.util.CalendarHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -59,7 +58,7 @@ class AlarmEditViewModel @Inject constructor(
         get() = _memo.asStateFlow()
 
     fun setTimeInMillis(hourOfDay: Int, minute: Int) {
-        _timeInMillis.value = CalendarHelper.fromHourAndMinute(hourOfDay, minute).timeInMillis
+        _timeInMillis.value = CalendarHelper.todayFromHourAndMinute(hourOfDay, minute).timeInMillis
     }
 
     fun setRepeatWeek(week: Week) {
@@ -95,7 +94,6 @@ class AlarmEditViewModel @Inject constructor(
             hasVibration = _vibration.value,
             memo = _memo.value
         )
-        Timber.d(saveAlarm.toString())
 
         return _saveAlarm.invoke(saveAlarm)
     }

@@ -1,13 +1,15 @@
 package com.bluepig.alarm.domain.entity.alarm
 
+import java.util.Calendar
+
 enum class Week(val code: Int) {
-    SUNDAY(1),
-    MONDAY(2),
-    TUESDAY(3),
-    WEDNESDAY(4),
-    THURSDAY(5),
-    FRIDAY(6),
-    SATURDAY(7);
+    SUNDAY(Calendar.SUNDAY),
+    MONDAY(Calendar.MONDAY),
+    TUESDAY(Calendar.TUESDAY),
+    WEDNESDAY(Calendar.WEDNESDAY),
+    THURSDAY(Calendar.THURSDAY),
+    FRIDAY(Calendar.FRIDAY),
+    SATURDAY(Calendar.SATURDAY);
 
     companion object {
         fun fromCode(code: Int): Week {

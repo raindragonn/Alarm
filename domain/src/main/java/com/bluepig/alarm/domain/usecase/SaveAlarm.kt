@@ -5,14 +5,12 @@ import com.bluepig.alarm.domain.entity.alarm.Alarm
 import com.bluepig.alarm.domain.repository.AlarmRepository
 import com.bluepig.alarm.domain.result.AlarmSaveFailedException
 import com.bluepig.alarm.domain.result.asyncResultWithContextOf
-import com.bluepig.alarm.domain.util.CalendarHelper
-import com.bluepig.alarm.domain.util.setZeroSecond
 import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Inject
 
 /**
  * Save alarm
- * 알람 저장 - 이미 지난 시간의 경우 하루를 더한다.
+ * 알람 저장 - 지정된 요일에 따라 알람 시간을 계산한다. (지정된 요일까지 날짜 더하기 혹은 다음 날)
  * @property _dispatcher
  * @property _repository
  * @constructor Create empty Save alarm
@@ -25,31 +23,8 @@ class SaveAlarm @Inject constructor(
 
     suspend operator fun invoke(alarm: Alarm) =
         asyncResultWithContextOf(_dispatcher) {
-            val checkedAlarm = checkOverTimeAlarm(alarm)
-
+            val checkedAlarm = alarm.getNextTimeAlarm()
             val id = _repository.insertAlarm(checkedAlarm)
             _repository.getById(id) ?: throw AlarmSaveFailedException(id)
         }
-
-    /**
-     * Check over time alarm
-     * 현재 시간과 알람의 timeInMillis와 비교해서 이미 지난 알람의 경우 내일로 변경
-     * @param alarm 확인할 알람
-     * @return 업데이트된 [Alarm] 을 반환
-     */
-    private fun checkOverTimeAlarm(alarm: Alarm): Alarm {
-        if (alarm.isActive.not()) return alarm
-
-        val alarmCalendar = alarm.getCalendar().setZeroSecond()
-        val now = CalendarHelper.now
-
-        return if (now.after(alarmCalendar)) {
-            val nextTime = CalendarHelper.setTomorrow(alarmCalendar).timeInMillis
-            alarm.copy(
-                timeInMillis = nextTime
-            )
-        } else {
-            alarm
-        }
-    }
 }

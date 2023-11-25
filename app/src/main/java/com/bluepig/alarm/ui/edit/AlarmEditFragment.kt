@@ -14,7 +14,7 @@ import com.bluepig.alarm.databinding.FragmentAlarmEditBinding
 import com.bluepig.alarm.domain.entity.alarm.Week
 import com.bluepig.alarm.domain.result.onSuccess
 import com.bluepig.alarm.domain.util.CalendarHelper
-import com.bluepig.alarm.domain.util.getHourOfDay
+import com.bluepig.alarm.domain.util.hourOfDay
 import com.bluepig.alarm.domain.util.minute
 import com.bluepig.alarm.util.ext.setThumbnail
 import com.bluepig.alarm.util.ext.viewLifeCycleScope
@@ -106,7 +106,7 @@ class AlarmEditFragment : Fragment(R.layout.fragment_alarm_edit) {
     }
 
     private fun bindTimePicker(timeInMillis: Long) {
-        _binding.timepicker.hour = CalendarHelper.fromTimeInMillis(timeInMillis).getHourOfDay
+        _binding.timepicker.hour = CalendarHelper.fromTimeInMillis(timeInMillis).hourOfDay
         _binding.timepicker.minute = CalendarHelper.fromTimeInMillis(timeInMillis).minute
     }
 
