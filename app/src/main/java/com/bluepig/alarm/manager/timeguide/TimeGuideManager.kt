@@ -27,7 +27,11 @@ class TimeGuideManager @Inject constructor(
                 _context.getString(R.string.hour_remaining_guide, hoursGuide, minutesGuide)
             } else {
                 if (minutesGuide > 0) {
-                    _context.getString(R.string.minute_remaining_guide, minutesGuide)
+                    if (minutesGuide == 1L) {
+                        _context.getString(R.string.minute_remaining_guide, minutesGuide + 1)
+                    } else {
+                        _context.getString(R.string.minute_remaining_guide, minutesGuide)
+                    }
                 } else {
                     _context.getString(R.string.soon_remaining_guide)
                 }

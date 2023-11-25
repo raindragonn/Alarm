@@ -25,5 +25,5 @@
     <string name="day_remaining_guide">%d일 후에 알람이 울립니다.</string>
     <string name="hour_remaining_guide">%d시간 %d분 후에 알람이 울립니다.</string>
     <string name="minute_remaining_guide">%d분 후에 알람이 울립니다.</string>
-    <string name="soon_remaining_guide">1분 이내에 알람이 울립니다.</string>
+    <string name="soon_remaining_guide">알람이 곧 울립니다.</string>
 </resources>
