@@ -24,8 +24,8 @@ object CalendarHelper {
             timeInMillis = calendar.timeInMillis
         }
         val now = CalendarHelper.now
-        val nowYear = now.getYear
-        val nowDayOfYear = now.getDayOfYear
+        val nowYear = now.year
+        val nowDayOfYear = now.dayOfYear
 
         if (now.after(newCalendar)) {
             newCalendar.set(Calendar.YEAR, nowYear)
@@ -36,11 +36,13 @@ object CalendarHelper {
     }
 }
 
-val Calendar.getYear: Int
+val Calendar.year: Int
     get() = get(Calendar.YEAR)
-val Calendar.getDayOfYear: Int
+val Calendar.dayOfYear: Int
     get() = get(Calendar.DAY_OF_YEAR)
-val Calendar.getHourOfDay: Int
+val Calendar.dayOfWeek: Int
+    get() = get(Calendar.DAY_OF_WEEK)
+val Calendar.hourOfDay: Int
     get() = get(Calendar.HOUR_OF_DAY)
 val Calendar.minute: Int
     get() = get(Calendar.MINUTE)
