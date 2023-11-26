@@ -38,8 +38,8 @@
         tools:layout="@layout/fragment_alarm_edit">
 
         <argument
-            android:name="file"
-            app:argType="com.bluepig.alarm.domain.entity.file.File"
+            android:name="songFile"
+            app:argType="com.bluepig.alarm.domain.entity.file.SongFile"
             app:nullable="true" />
 
         <argument
@@ -60,12 +60,8 @@
         android:label="FileSelectBottomSheetDialogFragment"
         tools:layout="@layout/fragment_file_select">
         <argument
-            android:name="file"
-            app:argType="com.bluepig.alarm.domain.entity.file.File" />
-
-        <argument
-            android:name="userAgent"
-            app:argType="string" />
+            android:name="basicFile"
+            app:argType="com.bluepig.alarm.domain.entity.file.BasicFile" />
 
         <action
             android:id="@+id/action_fileSelectBottomSheetDialogFragment_to_alarmEditFragment"

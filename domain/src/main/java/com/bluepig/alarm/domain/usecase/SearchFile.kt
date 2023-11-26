@@ -1,7 +1,7 @@
 package com.bluepig.alarm.domain.usecase
 
 import com.bluepig.alarm.domain.di.IoDispatcher
-import com.bluepig.alarm.domain.entity.file.File
+import com.bluepig.alarm.domain.entity.file.BasicFile
 import com.bluepig.alarm.domain.repository.FileRepository
 import com.bluepig.alarm.domain.result.BpResult
 import com.bluepig.alarm.domain.result.SearchQueryEmptyException
@@ -17,8 +17,8 @@ class SearchFile @Inject constructor(
 ) {
     private var _lastQuery = ""
     private var _lastOffset = 0
-    private var _cachedList = mutableListOf<File>()
-    suspend operator fun invoke(query: String = ""): BpResult<List<File>> {
+    private var _cachedList = mutableListOf<BasicFile>()
+    suspend operator fun invoke(query: String = ""): BpResult<List<BasicFile>> {
         val checkedQuery = checkSameQuery(query)
 
         return asyncResultWithContextOf(_dispatcher) {

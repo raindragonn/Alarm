@@ -7,11 +7,10 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
-import androidx.media3.common.util.Util
 import androidx.navigation.fragment.findNavController
 import com.bluepig.alarm.R
 import com.bluepig.alarm.databinding.FragmentSearchBinding
-import com.bluepig.alarm.domain.entity.file.File
+import com.bluepig.alarm.domain.entity.file.BasicFile
 import com.bluepig.alarm.domain.result.BpResult
 import com.bluepig.alarm.domain.result.onFailure
 import com.bluepig.alarm.domain.result.onLoading
@@ -54,7 +53,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         }
     }
 
-    private fun searchListHandle(result: BpResult<List<File>>) {
+    private fun searchListHandle(result: BpResult<List<BasicFile>>) {
         result.onSuccess { list ->
             changeLoadingState(false)
             _adapter.submitList(list)
@@ -66,10 +65,10 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     }
 
     @SuppressLint("UnsafeOptInUsageError")
-    private fun itemClick(file: File) {
+    private fun itemClick(file: BasicFile) {
         val action =
             SearchFragmentDirections.actionSearchFragmentToSelectBottomSheetDialogFragment(
-                file, Util.getUserAgent(requireContext(), getString(R.string.app_name))
+                file
             )
         findNavController().navigate(action)
     }

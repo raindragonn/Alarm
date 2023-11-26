@@ -9,6 +9,7 @@ import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.source.ProgressiveMediaSource
+import com.bluepig.alarm.domain.entity.file.SongFile
 import com.bluepig.alarm.domain.result.NotFoundMediaItemException
 import com.bluepig.alarm.domain.result.NotFoundPlayerException
 import com.bluepig.alarm.manager.download.MediaDownloadManager
@@ -42,8 +43,8 @@ class SongPlayerManagerImpl @Inject constructor(
         }
     }
 
-    override fun setSongUrl(fileId: String, songUrl: String) {
-        val mediaItem = _downloadManager.getMediaItem(songUrl, fileId)
+    override fun setSongUrl(songFile: SongFile) {
+        val mediaItem = _downloadManager.getMediaItem(songFile.fileUrl, songFile.id)
             .also { _mediaItem = it }
         val mediaSource =
             ProgressiveMediaSource

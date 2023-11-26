@@ -1,7 +1,7 @@
 package com.bluepig.alarm.domain.entity.alarm
 
 import com.bluepig.alarm.domain.entity.base.BaseEntity
-import com.bluepig.alarm.domain.entity.file.File
+import com.bluepig.alarm.domain.entity.file.SongFile
 import com.bluepig.alarm.domain.util.CalendarHelper
 import com.bluepig.alarm.domain.util.dayOfWeek
 import com.bluepig.alarm.domain.util.hourOfDay
@@ -14,7 +14,7 @@ data class Alarm(
     val id: Long? = null,
     val timeInMillis: Long = CalendarHelper.now.timeInMillis,
     val isActive: Boolean = true,
-    val file: File,
+    val file: SongFile,
     val repeatWeek: Set<Week> = setOf(),
     val volume: Int? = null,
     val hasVibration: Boolean = true,

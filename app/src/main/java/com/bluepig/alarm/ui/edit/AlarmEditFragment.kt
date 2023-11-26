@@ -59,8 +59,8 @@ class AlarmEditFragment : Fragment(R.layout.fragment_alarm_edit) {
         btnSaturday.setOnclickWeek(_vm::setRepeatWeek)
 
         ivThumbnail
-            .setThumbnail(_vm.file.thumbnail)
-        tvFileTitle.text = _vm.file.title
+            .setThumbnail(_vm.songFile.thumbnail)
+        tvFileTitle.text = _vm.songFile.title
 
         bindVolume(_vm.volume.value)
         val maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC)

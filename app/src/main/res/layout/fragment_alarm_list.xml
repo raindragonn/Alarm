@@ -58,9 +58,9 @@
 
                 <ImageButton
                     android:id="@+id/btn_search"
+                    style="@style/Alarm.Base.ImageButton"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
-                    style="@style/Alarm.Base.ImageButton"
                     android:src="@drawable/ic_add"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintDimensionRatio="1"

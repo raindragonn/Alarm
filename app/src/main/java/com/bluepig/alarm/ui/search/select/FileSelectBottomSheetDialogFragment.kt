@@ -2,6 +2,7 @@ package com.bluepig.alarm.ui.search.select
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -10,9 +11,12 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bluepig.alarm.R
 import com.bluepig.alarm.databinding.FragmentFileSelectBinding
+import com.bluepig.alarm.domain.result.getOrNull
+import com.bluepig.alarm.domain.result.onFailure
 import com.bluepig.alarm.domain.result.onSuccess
 import com.bluepig.alarm.manager.player.SongPlayerManager
 import com.bluepig.alarm.util.ext.setThumbnail
+import com.bluepig.alarm.util.ext.userAgent
 import com.bluepig.alarm.util.ext.viewRepeatOnLifeCycle
 import com.bluepig.alarm.util.viewBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -36,7 +40,7 @@ class FileSelectBottomSheetDialogFragment :
         super.onViewCreated(view, savedInstanceState)
 
         playerManager.init(viewLifecycleOwner.lifecycle, ::onPlayingStateChange)
-
+        _vm.getFileUrl(requireContext().userAgent)
         initViews()
         observing()
     }
@@ -48,15 +52,18 @@ class FileSelectBottomSheetDialogFragment :
 
     private fun initViews() = with(_binding) {
         playerView.player = playerManager.getPlayer()
-        val file = _navArgs.file
+        val file = _navArgs.basicFile
         tvTitle.text = file.title
         ivThumbnail.setThumbnail(file.thumbnail)
         btnClose.setOnClickListener { findNavController().popBackStack() }
         btnPlay.setOnClickListener { playerManager.playEndPause() }
+
         btnSelect.setOnClickListener {
+            val songFile = _vm.songFile.value.getOrNull()
+            if (songFile == null) showError()
             val action =
                 FileSelectBottomSheetDialogFragmentDirections.actionFileSelectBottomSheetDialogFragmentToAlarmEditFragment(
-                    file, null
+                    songFile, null
                 )
             findNavController().navigate(action)
         }
@@ -81,13 +88,18 @@ class FileSelectBottomSheetDialogFragment :
 
     private fun observing() {
         viewRepeatOnLifeCycle(Lifecycle.State.STARTED) {
-            _vm.fileUrlState
-                .stateIn(this)
-                .collect { result ->
-                    result.onSuccess {
-                        playerManager.setSongUrl(it.first, it.second)
-                    }
+            _vm.songFile.stateIn(this).collect { result ->
+                result.onSuccess {
+                    playerManager.setSongUrl(it)
+                }.onFailure {
+                    showError()
                 }
+            }
         }
+    }
+
+    private fun showError() {
+        Toast.makeText(context, "문제가 발생했습니다.", Toast.LENGTH_SHORT).show()
+        findNavController().popBackStack()
     }
 }

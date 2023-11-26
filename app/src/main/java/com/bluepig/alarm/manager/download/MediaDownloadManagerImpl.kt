@@ -22,7 +22,7 @@ import kotlinx.serialization.json.Json
 import timber.log.Timber
 import java.util.concurrent.Executor
 import javax.inject.Inject
-import com.bluepig.alarm.domain.entity.file.File as DomainFile
+import com.bluepig.alarm.domain.entity.file.BasicFile as DomainFile
 
 @UnstableApi
 class MediaDownloadManagerImpl @Inject constructor(

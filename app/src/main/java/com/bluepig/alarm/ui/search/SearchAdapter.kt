@@ -4,13 +4,13 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.bluepig.alarm.databinding.ItemSearchBinding
-import com.bluepig.alarm.domain.entity.file.File
+import com.bluepig.alarm.domain.entity.file.BasicFile
 import com.bluepig.alarm.util.ext.checkNoPosition
 import com.bluepig.alarm.util.ext.inflater
 
 class SearchAdapter(
-    private val _clickListener: (File) -> Unit
-) : ListAdapter<File, SearchViewHolder>(differ) {
+    private val _clickListener: (BasicFile) -> Unit
+) : ListAdapter<BasicFile, SearchViewHolder>(differ) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchViewHolder {
         val binding = ItemSearchBinding.inflate(
@@ -32,12 +32,12 @@ class SearchAdapter(
     }
 
     companion object {
-        private val differ = object : DiffUtil.ItemCallback<File>() {
-            override fun areItemsTheSame(oldItem: File, newItem: File): Boolean {
+        private val differ = object : DiffUtil.ItemCallback<BasicFile>() {
+            override fun areItemsTheSame(oldItem: BasicFile, newItem: BasicFile): Boolean {
                 return oldItem.id == newItem.id
             }
 
-            override fun areContentsTheSame(oldItem: File, newItem: File): Boolean {
+            override fun areContentsTheSame(oldItem: BasicFile, newItem: BasicFile): Boolean {
                 return oldItem.downloadPage == newItem.downloadPage
                         && oldItem.thumbnail == newItem.thumbnail
             }

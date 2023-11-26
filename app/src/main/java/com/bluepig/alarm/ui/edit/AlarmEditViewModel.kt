@@ -5,7 +5,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.bluepig.alarm.domain.entity.alarm.Alarm
 import com.bluepig.alarm.domain.entity.alarm.Week
-import com.bluepig.alarm.domain.entity.file.File
+import com.bluepig.alarm.domain.entity.file.SongFile
 import com.bluepig.alarm.domain.result.BpResult
 import com.bluepig.alarm.domain.result.NotFoundArgumentException
 import com.bluepig.alarm.domain.usecase.SaveAlarm
@@ -22,10 +22,11 @@ class AlarmEditViewModel @Inject constructor(
     audioManager: AudioManager
 ) : ViewModel() {
 
-    val file: File
-        get() = _state.get<File>("file")
+    val songFile: SongFile
+        get() = _state.get<SongFile>("songFile")
             ?: _state.get<Alarm>("alarm")?.file
-            ?: throw NotFoundArgumentException("file")
+            ?: throw NotFoundArgumentException("songFile")
+
     val alarm: Alarm?
         get() = _state.get<Alarm>("alarm")
 
@@ -88,7 +89,7 @@ class AlarmEditViewModel @Inject constructor(
         val saveAlarm = Alarm(
             id = alarm?.id,
             timeInMillis = _timeInMillis.value,
-            file = file,
+            file = songFile,
             repeatWeek = _repeatWeek.value,
             volume = _volume.value,
             hasVibration = _vibration.value,
