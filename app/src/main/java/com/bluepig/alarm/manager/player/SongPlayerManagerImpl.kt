@@ -30,7 +30,7 @@ class SongPlayerManagerImpl @Inject constructor(
     override fun init(lifecycle: Lifecycle, callBack: (isPlaying: Boolean) -> Unit) {
         _player = ExoPlayer.Builder(_context).build().apply {
             playWhenReady = true
-            repeatMode = Player.REPEAT_MODE_ALL
+            repeatMode = Player.REPEAT_MODE_ONE
 
             PlayerListener(callBack).let {
                 _playListener = it
