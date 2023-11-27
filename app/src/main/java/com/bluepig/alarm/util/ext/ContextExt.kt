@@ -3,6 +3,7 @@ package com.bluepig.alarm.util.ext
 import android.app.AlarmManager
 import android.content.Context
 import android.media.AudioManager
+import android.os.Vibrator
 import android.view.LayoutInflater
 import android.view.inputmethod.InputMethodManager
 import androidx.media3.common.util.UnstableApi
@@ -20,6 +21,9 @@ val Context.audioManager: AudioManager
 
 val Context.inputMethodManager: InputMethodManager
     get() = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+
+val Context.vibrator: Vibrator
+    get() = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
 
 @get:UnstableApi
 val Context.userAgent

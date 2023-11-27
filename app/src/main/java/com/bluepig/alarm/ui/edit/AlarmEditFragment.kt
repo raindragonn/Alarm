@@ -16,6 +16,7 @@ import com.bluepig.alarm.domain.result.onSuccess
 import com.bluepig.alarm.domain.util.CalendarHelper
 import com.bluepig.alarm.domain.util.hourOfDay
 import com.bluepig.alarm.domain.util.minute
+import com.bluepig.alarm.ui.alarm.AlarmActivity
 import com.bluepig.alarm.util.ext.setThumbnail
 import com.bluepig.alarm.util.ext.viewLifeCycleScope
 import com.bluepig.alarm.util.ext.viewRepeatOnLifeCycle
@@ -86,6 +87,10 @@ class AlarmEditFragment : Fragment(R.layout.fragment_alarm_edit) {
 
         btnSave.setOnClickListener {
             saveAlarm()
+        }
+
+        btnPreview.setOnClickListener {
+            AlarmActivity.openPreView(requireContext(), _vm.getEditingAlarm())
         }
     }
 

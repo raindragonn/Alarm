@@ -26,4 +26,6 @@
     <string name="hour_remaining_guide">%d시간 %d분 후에 알람이 울립니다.</string>
     <string name="minute_remaining_guide">%d분 후에 알람이 울립니다.</string>
     <string name="soon_remaining_guide">알람이 곧 울립니다.</string>
+    <string name="alarm_end">알람 종료</string>
+    <string name="alarm_preview_end">미리보기 종료</string>
 </resources>
