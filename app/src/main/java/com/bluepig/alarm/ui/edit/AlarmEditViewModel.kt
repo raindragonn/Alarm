@@ -85,17 +85,18 @@ class AlarmEditViewModel @Inject constructor(
         _memo.value = memo
     }
 
-    suspend fun saveAlarm(): BpResult<Alarm> {
-        val saveAlarm = Alarm(
-            id = alarm?.id,
-            timeInMillis = _timeInMillis.value,
-            file = songFile,
-            repeatWeek = _repeatWeek.value,
-            volume = _volume.value,
-            hasVibration = _vibration.value,
-            memo = _memo.value
-        )
+    fun getEditingAlarm() = Alarm(
+        id = alarm?.id,
+        timeInMillis = _timeInMillis.value,
+        file = songFile,
+        repeatWeek = _repeatWeek.value,
+        volume = _volume.value,
+        hasVibration = _vibration.value,
+        memo = _memo.value
+    )
 
-        return _saveAlarm.invoke(saveAlarm)
+
+    suspend fun saveAlarm(): BpResult<Alarm> {
+        return _saveAlarm.invoke(getEditingAlarm())
     }
 }
