@@ -43,6 +43,7 @@ class AlarmActivity : AppCompatActivity() {
         setContentView(_binding.root)
 
         _vm.setAlarmState()
+        _defaultVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC)
         showOverLockscreen()
         disableBackButton()
         observing()
@@ -51,19 +52,33 @@ class AlarmActivity : AppCompatActivity() {
     private fun observing() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                _vm.alarmState
-                    .stateIn(this)
-                    .collect {
-                        it.onSuccess { alarm ->
-                            initViews(alarm)
-                            changeVolume(alarm)
-                            setUpAlarmSong(alarm)
-                            setVibration(alarm)
-                        }.onFailure { e ->
-                            Timber.w(e)
-                            finishAffinity()
+                launch {
+                    _vm.alarmState
+                        .stateIn(this)
+                        .collect {
+                            it.onSuccess { alarm ->
+                                initViews(alarm)
+                                _vm.startAutoIncreaseVolume(
+                                    alarm.volume
+                                        ?: audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC)
+                                )
+                                setUpAlarmSong(alarm)
+                                setVibration(alarm)
+                            }.onFailure { e ->
+                                Timber.w(e)
+                                finishAffinity()
+                            }
                         }
+                }
+                launch {
+                    repeatOnLifecycle(Lifecycle.State.STARTED) {
+                        _vm.volumeIncreaseState
+                            .stateIn(this)
+                            .collect { volume ->
+                                changeVolume(volume)
+                            }
                     }
+                }
             }
         }
     }
@@ -101,11 +116,12 @@ class AlarmActivity : AppCompatActivity() {
         }
     }
 
-    // TODO: 볼륨 서서히 높히기 기능 추가
-    private fun changeVolume(alarm: Alarm) {
-        _defaultVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC)
-        val volume = alarm.volume ?: audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC)
-        audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, volume, 0)
+    private fun changeVolume(volume: Int) {
+        audioManager.setStreamVolume(
+            AudioManager.STREAM_MUSIC,
+            volume,
+            0
+        )
     }
 
     @Suppress("DEPRECATION")
