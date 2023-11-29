@@ -18,3 +18,7 @@ fun Fragment.viewRepeatOnLifeCycle(
         viewLifecycleOwner.repeatOnLifecycle(state, block)
     }
 }
+
+fun Fragment.showErrorToast(throwable: Throwable? = null, moreAction: (() -> Unit)? = null) {
+    requireContext().showErrorToast(throwable, moreAction)
+}
