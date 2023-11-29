@@ -23,16 +23,35 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private val _binding: ActivityMainBinding by viewBinding(ActivityMainBinding::inflate)
+
+    @Inject
+    lateinit var getAllAlarms: GetAllAlarms
+
+    @Inject
+    lateinit var mediaDownloadManager: MediaDownloadManager
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(_binding.root)
         NotificationHelper.checkNotificationPermission(this)
         startDownloadService()
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.CREATED) {
+                getAllAlarms.invoke()
+                    .stateIn(this)
+                    .collect { list ->
+                        list.filter { it.isActive }
+                            .forEach {
+                                mediaDownloadManager.startDownload(it.file)
+                            }
+                    }
+            }
+        }
     }
 
     private fun startDownloadService() {
         kotlin.runCatching {
-
             DownloadService.start(
                 this,
                 MediaDownloadService::class.java,

@@ -21,6 +21,7 @@ import com.bluepig.alarm.domain.result.onSuccess
 import com.bluepig.alarm.manager.player.SongPlayerManager
 import com.bluepig.alarm.util.ext.audioManager
 import com.bluepig.alarm.util.ext.setThumbnail
+import com.bluepig.alarm.util.ext.showErrorToast
 import com.bluepig.alarm.util.ext.vibrator
 import com.bluepig.alarm.util.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -58,12 +59,12 @@ class AlarmActivity : AppCompatActivity() {
                         .collect {
                             it.onSuccess { alarm ->
                                 initViews(alarm)
+                                setUpAlarmSong(alarm)
+                                setVibration(alarm)
                                 _vm.startAutoIncreaseVolume(
                                     alarm.volume
                                         ?: audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC)
                                 )
-                                setUpAlarmSong(alarm)
-                                setVibration(alarm)
                             }.onFailure { e ->
                                 Timber.w(e)
                                 finishAffinity()
@@ -160,8 +161,16 @@ class AlarmActivity : AppCompatActivity() {
     }
 
     private fun setUpAlarmSong(alarm: Alarm) {
-        playerManager.init(lifecycle, ::onPlayingStateChanged)
-        playerManager.setSongUrl(alarm.file)
+        playerManager.init(
+            lifecycle,
+            stateChangeListener = ::onPlayingStateChanged,
+            errorListener = {
+                showErrorToast(it) {
+                    playerManager.playDefaultAlarm()
+                }
+            })
+
+        playerManager.playSong(alarm.file)
     }
 
     private fun onPlayingStateChanged(isPlaying: Boolean) {}

@@ -1,12 +1,15 @@
 package com.bluepig.alarm.manager.player
 
 import android.content.Context
+import android.media.RingtoneManager
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.media3.common.MediaItem
+import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
+import androidx.media3.datasource.DefaultDataSource
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.source.ProgressiveMediaSource
 import com.bluepig.alarm.domain.entity.file.SongFile
@@ -23,17 +26,28 @@ class SongPlayerManagerImpl @Inject constructor(
     private val _downloadManager: MediaDownloadManager,
 ) : SongPlayerManager {
     private var _player: ExoPlayer? = null
-    private var _eventObserver: EventObserver? = null
-    private var _playListener: Player.Listener? = null
+    private var _lifecycle: Lifecycle? = null
     private var _mediaItem: MediaItem? = null
 
-    override fun init(lifecycle: Lifecycle, callBack: (isPlaying: Boolean) -> Unit) {
+    private var _eventObserver: EventObserver? = null
+    private var _errorObserver: PlayerErrorListener? = null
+    private var _playListener: Player.Listener? = null
+
+    override fun init(
+        lifecycle: Lifecycle,
+        stateChangeListener: (isPlaying: Boolean) -> Unit,
+        errorListener: (Throwable?) -> Unit
+    ) {
         _player = ExoPlayer.Builder(_context).build().apply {
             playWhenReady = true
             repeatMode = Player.REPEAT_MODE_ONE
 
-            PlayerListener(callBack).let {
+            PlayerListener(stateChangeListener).let {
                 _playListener = it
+                addListener(it)
+            }
+            PlayerErrorListener(errorListener).let {
+                _errorObserver = it
                 addListener(it)
             }
         }
@@ -43,8 +57,8 @@ class SongPlayerManagerImpl @Inject constructor(
         }
     }
 
-    override fun setSongUrl(songFile: SongFile) {
-        val mediaItem = _downloadManager.getMediaItem(songFile.fileUrl, songFile.id)
+    override fun playSong(songFile: SongFile) {
+        val mediaItem = _downloadManager.getMediaItem(songFile)
             .also { _mediaItem = it }
         val mediaSource =
             ProgressiveMediaSource
@@ -52,7 +66,25 @@ class SongPlayerManagerImpl @Inject constructor(
                 .createMediaSource(mediaItem)
 
         _player?.playWhenReady = true
-        _player?.addMediaSource(mediaSource)
+        _player?.setMediaSource(mediaSource)
+        _player?.prepare()
+    }
+
+    override fun playDefaultAlarm() {
+        val mediaItem = MediaItem.fromUri(
+            RingtoneManager.getActualDefaultRingtoneUri(
+                _context,
+                RingtoneManager.TYPE_ALARM
+            ).toString()
+        ).also { _mediaItem = it }
+
+        val mediaSource =
+            ProgressiveMediaSource
+                .Factory(DefaultDataSource.Factory(_context))
+                .createMediaSource(mediaItem)
+
+        _player?.playWhenReady = true
+        _player?.setMediaSource(mediaSource)
         _player?.prepare()
     }
 
@@ -75,14 +107,23 @@ class SongPlayerManagerImpl @Inject constructor(
     }
 
     override fun release() {
-        if (_player != null) {
-            _player!!.release()
-            if (_playListener != null) {
-                _player!!.removeListener(_playListener!!)
-                _playListener = null
-            }
-            _player = null
+        _playListener?.let {
+            _player?.removeListener(it)
         }
+        _playListener = null
+
+        _eventObserver?.let {
+            _lifecycle?.removeObserver(_eventObserver!!)
+        }
+        _eventObserver = null
+
+        _errorObserver?.let {
+            _player?.removeListener(it)
+        }
+        _errorObserver = null
+
+        _player?.release()
+        _player = null
     }
 
     private class PlayerListener(
@@ -91,6 +132,15 @@ class SongPlayerManagerImpl @Inject constructor(
         override fun onIsPlayingChanged(isPlaying: Boolean) {
             super.onIsPlayingChanged(isPlaying)
             _callBack.invoke(isPlaying)
+        }
+    }
+
+    private class PlayerErrorListener(
+        private val _callBack: (error: Throwable) -> Unit
+    ) : Player.Listener {
+        override fun onPlayerError(error: PlaybackException) {
+            super.onPlayerError(error)
+            error.cause?.let(_callBack)
         }
     }
 
