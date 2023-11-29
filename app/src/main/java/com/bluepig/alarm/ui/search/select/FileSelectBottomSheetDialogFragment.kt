@@ -2,7 +2,6 @@ package com.bluepig.alarm.ui.search.select
 
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -16,6 +15,7 @@ import com.bluepig.alarm.domain.result.onFailure
 import com.bluepig.alarm.domain.result.onSuccess
 import com.bluepig.alarm.manager.player.SongPlayerManager
 import com.bluepig.alarm.util.ext.setThumbnail
+import com.bluepig.alarm.util.ext.showErrorToast
 import com.bluepig.alarm.util.ext.userAgent
 import com.bluepig.alarm.util.ext.viewRepeatOnLifeCycle
 import com.bluepig.alarm.util.viewBinding
@@ -39,7 +39,11 @@ class FileSelectBottomSheetDialogFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        playerManager.init(viewLifecycleOwner.lifecycle, ::onPlayingStateChange)
+        playerManager.init(
+            viewLifecycleOwner.lifecycle,
+            stateChangeListener = ::onPlayingStateChange,
+            errorListener = { showErrorToast(it) }
+        )
         _vm.getFileUrl(requireContext().userAgent)
         initViews()
         observing()
@@ -60,7 +64,7 @@ class FileSelectBottomSheetDialogFragment :
 
         btnSelect.setOnClickListener {
             val songFile = _vm.songFile.value.getOrNull()
-            if (songFile == null) showError()
+            if (songFile == null) showErrorToast(null)
             val action =
                 FileSelectBottomSheetDialogFragmentDirections.actionFileSelectBottomSheetDialogFragmentToAlarmEditFragment(
                     songFile, null
@@ -90,16 +94,13 @@ class FileSelectBottomSheetDialogFragment :
         viewRepeatOnLifeCycle(Lifecycle.State.STARTED) {
             _vm.songFile.stateIn(this).collect { result ->
                 result.onSuccess {
-                    playerManager.setSongUrl(it)
+                    playerManager.playSong(it)
                 }.onFailure {
-                    showError()
+                    showErrorToast(it) {
+                        findNavController().popBackStack()
+                    }
                 }
             }
         }
-    }
-
-    private fun showError() {
-        Toast.makeText(context, "문제가 발생했습니다.", Toast.LENGTH_SHORT).show()
-        findNavController().popBackStack()
     }
 }
