@@ -9,7 +9,6 @@ import androidx.media3.exoplayer.offline.DownloadService
 import androidx.media3.exoplayer.scheduler.PlatformScheduler
 import androidx.media3.exoplayer.scheduler.Scheduler
 import com.bluepig.alarm.R
-import com.bluepig.alarm.manager.download.MediaDownloadListener
 import com.bluepig.alarm.manager.download.MediaDownloadManager
 import com.bluepig.alarm.notification.NotificationType
 import dagger.hilt.android.AndroidEntryPoint
@@ -33,19 +32,7 @@ class MediaDownloadService : DownloadService(
     lateinit var mediaDownloadManager: MediaDownloadManager
 
     override fun getDownloadManager(): DownloadManager {
-        val downloadManager =
-            mediaDownloadManager.getDownloadManager()
-        val downloadNotificationHelper =
-            mediaDownloadManager.getDownloadNotificationHelper()
-        val downloadListener = MediaDownloadListener(
-            this.applicationContext,
-            downloadNotificationHelper,
-            FOREGROUND_NOTIFICATION_ID
-        )
-        downloadManager
-            .addListener(downloadListener)
-        return downloadManager
-
+        return mediaDownloadManager.getDownloadManager()
     }
 
     override fun getScheduler(): Scheduler? {
@@ -59,13 +46,12 @@ class MediaDownloadService : DownloadService(
         downloads: MutableList<Download>,
         notMetRequirements: Int
     ): Notification {
-
         return mediaDownloadManager.getDownloadNotificationHelper()
             .buildProgressNotification(
                 this,
                 R.drawable.ic_download,
                 null,
-                null,
+                getString(R.string.notification_message_media_downlaod),
                 downloads,
                 notMetRequirements
             )

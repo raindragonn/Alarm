@@ -17,6 +17,7 @@ import com.bluepig.alarm.domain.result.onLoading
 import com.bluepig.alarm.domain.result.onSuccess
 import com.bluepig.alarm.util.ext.setOnEnterListener
 import com.bluepig.alarm.util.ext.setOnLoadMore
+import com.bluepig.alarm.util.ext.showErrorToast
 import com.bluepig.alarm.util.ext.viewRepeatOnLifeCycle
 import com.bluepig.alarm.util.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -58,6 +59,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             changeLoadingState(false)
             _adapter.submitList(list)
         }.onFailure {
+            showErrorToast(it)
             changeLoadingState(false)
         }.onLoading {
             changeLoadingState(true)

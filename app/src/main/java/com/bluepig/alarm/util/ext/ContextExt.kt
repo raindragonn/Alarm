@@ -6,9 +6,15 @@ import android.media.AudioManager
 import android.os.Vibrator
 import android.view.LayoutInflater
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.common.util.Util
+import androidx.media3.datasource.HttpDataSource.HttpDataSourceException
 import com.bluepig.alarm.R
+import com.bluepig.alarm.domain.result.SearchQueryEmptyException
+import timber.log.Timber
+import java.net.SocketTimeoutException
+import java.net.UnknownHostException
 
 val Context.inflater: LayoutInflater
     get() = LayoutInflater.from(this)
@@ -28,3 +34,14 @@ val Context.vibrator: Vibrator
 @get:UnstableApi
 val Context.userAgent
     get() = Util.getUserAgent(this, getString(R.string.app_name))
+
+fun Context.showErrorToast(throwable: Throwable?, moreAction: (() -> Unit)? = null) {
+    Timber.w(throwable)
+    val errorTextId = when (throwable) {
+        is SearchQueryEmptyException -> R.string.toast_error_search_query_empty
+        is HttpDataSourceException, is SocketTimeoutException, is UnknownHostException -> R.string.toast_error_network
+        else -> R.string.toast_error_basic
+    }
+    Toast.makeText(this, getString(errorTextId), Toast.LENGTH_SHORT).show()
+    moreAction?.invoke()
+}

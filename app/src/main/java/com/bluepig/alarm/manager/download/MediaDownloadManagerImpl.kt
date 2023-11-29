@@ -16,13 +16,12 @@ import androidx.media3.exoplayer.offline.DownloadHelper
 import androidx.media3.exoplayer.offline.DownloadManager
 import androidx.media3.exoplayer.offline.DownloadNotificationHelper
 import androidx.media3.exoplayer.offline.DownloadService
+import com.bluepig.alarm.domain.entity.file.SongFile
 import com.bluepig.alarm.notification.NotificationType
 import com.bluepig.alarm.service.MediaDownloadService
 import kotlinx.serialization.json.Json
-import timber.log.Timber
 import java.util.concurrent.Executor
 import javax.inject.Inject
-import com.bluepig.alarm.domain.entity.file.BasicFile as DomainFile
 
 @UnstableApi
 class MediaDownloadManagerImpl @Inject constructor(
@@ -68,28 +67,30 @@ class MediaDownloadManagerImpl @Inject constructor(
         }
     }
 
-    override fun getMediaItem(url: String, id: String): MediaItem {
-        val download = getDownloadManager().downloadIndex.getDownload(id)
+    override fun getMediaItem(songFile: SongFile): MediaItem {
+        val download = getDownloadManager().downloadIndex.getDownload(songFile.id)
         val downloadedUri = download?.request?.uri
-        Timber.d("$downloadedUri")
-
 
         return downloadedUri?.let {
             MediaItem.fromUri(it)
-        } ?: MediaItem.fromUri(url)
+        } ?: MediaItem.fromUri(songFile.fileUrl)
     }
 
-    override fun startDownload(mediaItem: MediaItem, file: DomainFile) {
+    override fun startDownload(songFile: SongFile) {
+        val mediaItem = getMediaItem(songFile)
         val downloadHelper = DownloadHelper.forMediaItem(
             _context,
             mediaItem
         )
+
+        if (getDownloadManager().downloadIndex.getDownload(songFile.id) != null) return
+
         val jsonString =
-            Json.encodeToString(DomainFile.serializer(), file)
+            Json.encodeToString(SongFile.serializer(), songFile)
         val data = Util.getUtf8Bytes(jsonString)
         val request =
             downloadHelper.getDownloadRequest(
-                file.id,
+                songFile.id,
                 data,
             )
 
@@ -109,6 +110,7 @@ class MediaDownloadManagerImpl @Inject constructor(
      *
      */
     override fun getDataSourceFactory(): DataSource.Factory {
+
         return _datasourceFactory ?: CacheDataSource.Factory()
             .setCache(getDownloadCache())
             .setUpstreamDataSourceFactory(DefaultHttpDataSource.Factory())
