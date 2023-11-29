@@ -6,7 +6,6 @@ import android.content.Context
 import android.os.Build
 import androidx.annotation.StringRes
 import androidx.core.app.NotificationManagerCompat
-import androidx.media3.common.util.UnstableApi
 import com.bluepig.alarm.R
 
 enum class NotificationType(
@@ -20,7 +19,6 @@ enum class NotificationType(
         R.string.chennel_description_media_download
     );
 
-    @UnstableApi
     fun createChannel(
         context: Context
     ) {
