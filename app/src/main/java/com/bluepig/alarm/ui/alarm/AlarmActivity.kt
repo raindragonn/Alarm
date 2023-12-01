@@ -86,9 +86,14 @@ class AlarmActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+        release()
+    }
+
+    private fun release() {
         playerManager.release()
         audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, _defaultVolume ?: 7, 0)
         vibrator.cancel()
+        _vm.updateAlarmExpired()
     }
 
     private fun initViews(alarm: Alarm) = with(_binding) {
@@ -112,7 +117,7 @@ class AlarmActivity : AppCompatActivity() {
     private fun alarmSetting() {
         _binding.btnAlarmEnd.text = getString(R.string.alarm_end)
         _binding.btnAlarmEnd.setOnClickListener {
-            // TODO: alarm 삭제 혹은 다시 등록 등 처리 필요
+            _vm.updateAlarmExpired()
             finish()
         }
     }
