@@ -176,10 +176,18 @@ class AlarmActivity : AppCompatActivity() {
     private fun onPlayingStateChanged(isPlaying: Boolean) {}
 
     companion object {
-        const val EXTRA_ALARM_ALARM_ID = "EXTRA_ALARM"
+        const val EXTRA_ALARM_ID = "EXTRA_ALARM_ID"
         const val EXTRA_PREVIEW_ALARM = "EXTRA_IS_PREVIEW"
 
         private val VIBRATION_PATTERN = longArrayOf(500, 500)
+
+        fun getOpenIntent(context: Context, alarmId: Long): Intent {
+            return Intent(context, AlarmActivity::class.java).apply {
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                putExtra(EXTRA_ALARM_ID, alarmId)
+            }
+        }
+
 
         fun openPreView(context: Context, alarm: Alarm) {
             val intent = Intent(context, AlarmActivity::class.java).apply {
