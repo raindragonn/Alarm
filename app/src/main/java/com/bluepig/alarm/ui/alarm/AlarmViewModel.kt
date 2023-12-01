@@ -72,6 +72,7 @@ class AlarmViewModel @Inject constructor(
         }
 
     fun updateAlarmExpired() = viewModelScope.launch {
+        if (isPreview) return@launch
         val alarm = alarmState.value.getOrNull()
         _saveAlarm.invoke(alarm?.getActiveCheckedAlarm() ?: return@launch)
     }
