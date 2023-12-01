@@ -10,8 +10,9 @@ import androidx.media3.exoplayer.offline.DownloadService
 import com.bluepig.alarm.databinding.ActivityMainBinding
 import com.bluepig.alarm.domain.usecase.GetAllAlarms
 import com.bluepig.alarm.manager.download.MediaDownloadManager
-import com.bluepig.alarm.notification.NotificationHelper
+import com.bluepig.alarm.notification.NotificationType
 import com.bluepig.alarm.service.MediaDownloadService
+import com.bluepig.alarm.util.PermissionHelper
 import com.bluepig.alarm.util.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.stateIn
@@ -33,7 +34,12 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(_binding.root)
-        NotificationHelper.checkNotificationPermission(this)
+        PermissionHelper.checkNotificationPermission(this) {
+            NotificationType.DOWNLOAD_NOTIFICATION.createChannel(this)
+        }
+        PermissionHelper.checkSystemAlertPermission(this, _binding.root)
+        PermissionHelper.checkExactAlarmPermission(this, _binding.root)
+
         startDownloadService()
 
         lifecycleScope.launch {

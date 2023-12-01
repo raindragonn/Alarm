@@ -1,4 +1,4 @@
-package com.bluepig.alarm.notification
+package com.bluepig.alarm.util
 
 import android.Manifest
 import android.app.AlertDialog
@@ -8,6 +8,7 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.provider.Settings
+import android.view.View
 import androidx.activity.ComponentActivity
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.StringRes
@@ -17,27 +18,28 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.bluepig.alarm.R
+import com.bluepig.alarm.util.ext.alarmManager
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 
-object NotificationHelper {
+object PermissionHelper {
 
-    fun checkNotificationPermission(activity: ComponentActivity) {
+    fun checkNotificationPermission(activity: ComponentActivity, grantedAction: () -> Unit) {
         activity.apply {
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) return
             val requestPermissionLauncher =
                 registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
                     if (isGranted) {
-                        NotificationType.DOWNLOAD_NOTIFICATION.createChannel(activity)
+                        grantedAction.invoke()
                     } else {
                         activity.showOkButtonDialog(
-                            R.string.alert_permission_title_post_notification,
-                            R.string.alert_permission_text_post_notification,
+                            R.string.alert_request_permission_title,
+                            R.string.alert_request_permission_text_post_notification,
                         ) {
                             openAppNotificationSettings(activity)
                         }
                     }
                 }
-
 
             activity.lifecycleScope.launch {
                 repeatOnLifecycle(Lifecycle.State.RESUMED) {
@@ -46,15 +48,15 @@ object NotificationHelper {
                             this@apply,
                             Manifest.permission.POST_NOTIFICATIONS
                         ) == PackageManager.PERMISSION_GRANTED -> {
-                            NotificationType.DOWNLOAD_NOTIFICATION.createChannel(activity)
+                            grantedAction.invoke()
                         }
 
                         ActivityCompat.shouldShowRequestPermissionRationale(
                             this@apply, Manifest.permission.POST_NOTIFICATIONS
                         ) -> {
                             activity.showOkButtonDialog(
-                                R.string.alert_permission_title_post_notification,
-                                R.string.alert_permission_text_post_notification,
+                                R.string.alert_request_permission_title,
+                                R.string.alert_request_permission_text_post_notification,
                             ) {
                                 openAppNotificationSettings(activity)
                             }
@@ -69,7 +71,52 @@ object NotificationHelper {
                 }
             }
         }
+    }
 
+    fun checkSystemAlertPermission(activity: ComponentActivity, anchorView: View) {
+        activity.apply {
+            if (Settings.canDrawOverlays(this)) return
+
+            activity.lifecycleScope.launch {
+                repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                    if (!Settings.canDrawOverlays(activity)) {
+                        Snackbar.make(
+                            anchorView,
+                            R.string.alert_request_permission_text_system_alert_window,
+                            Snackbar.LENGTH_INDEFINITE
+                        ).apply {
+                            setAction(R.string.ok) {
+                                openSystemAlertWindow(activity)
+                            }
+                        }.show()
+                    }
+                }
+            }
+        }
+    }
+
+    fun checkExactAlarmPermission(activity: ComponentActivity, anchorView: View) {
+        activity.apply {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU || !alarmManager.canScheduleExactAlarms()) {
+                return
+            }
+
+            activity.lifecycleScope.launch {
+                repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && !alarmManager.canScheduleExactAlarms()) {
+                        Snackbar.make(
+                            anchorView,
+                            R.string.alert_request_permission_text_exact_alarm,
+                            Snackbar.LENGTH_INDEFINITE
+                        ).apply {
+                            setAction(R.string.ok) {
+                                openSystemAlertWindow(activity)
+                            }
+                        }.show()
+                    }
+                }
+            }
+        }
     }
 
     private fun Context.showOkButtonDialog(
@@ -100,6 +147,17 @@ object NotificationHelper {
                     data = Uri.parse("package:${context.packageName}")
                 }
             }
+        context.startActivity(intent)
+    }
+
+    private fun openSystemAlertWindow(context: Context) {
+        val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION).apply {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
+            } else {
+                data = Uri.parse("package:${context.packageName}")
+            }
+        }
         context.startActivity(intent)
     }
 }

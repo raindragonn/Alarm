@@ -2,12 +2,16 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
     <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
 
     <application
         android:name=".AlarmApplication"
@@ -25,10 +29,9 @@
             android:configChanges="orientation|screenSize|screenLayout"
             android:excludeFromRecents="true"
             android:exported="false"
-            android:launchMode="singleInstance"
-            android:showOnLockScreen="true"
+            android:launchMode="singleTask"
             android:noHistory="true"
-            android:taskAffinity="" />
+            android:showOnLockScreen="true" />
         <activity
             android:name=".ui.MainActivity"
             android:exported="true">
@@ -39,18 +42,7 @@
             </intent-filter>
         </activity>
 
-        <receiver
-            android:name=".receiver.AlarmReceiver"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="${applicationId}.ACTION_FIRED" />
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <action android:name="android.intent.action.TIME_SET" />
-                <action android:name="android.intent.action.TIMEZONE_CHANGED" />
-                <action android:name="android.intent.action.LOCALE_CHANGED" />
-                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
-            </intent-filter>
-        </receiver>
+        <receiver android:name=".receiver.AlarmReceiver" />
 
         <service
             android:name=".service.MediaDownloadService"
