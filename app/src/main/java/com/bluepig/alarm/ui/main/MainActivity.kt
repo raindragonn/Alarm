@@ -1,4 +1,4 @@
-package com.bluepig.alarm.ui
+package com.bluepig.alarm.ui.main
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
