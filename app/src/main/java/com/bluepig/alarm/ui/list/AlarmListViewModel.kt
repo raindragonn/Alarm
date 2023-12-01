@@ -8,6 +8,7 @@ import com.bluepig.alarm.domain.result.getOrThrow
 import com.bluepig.alarm.domain.result.resultOf
 import com.bluepig.alarm.domain.usecase.GetAllAlarms
 import com.bluepig.alarm.domain.usecase.GetExpiredAlarmTime
+import com.bluepig.alarm.domain.usecase.RefreshAlarms
 import com.bluepig.alarm.domain.usecase.SaveAlarm
 import com.bluepig.alarm.manager.timeguide.TimeGuideManager
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,7 +22,8 @@ class AlarmListViewModel @Inject constructor(
     private val _getAllAlarms: GetAllAlarms,
     private val _getExpiredAlarmTime: GetExpiredAlarmTime,
     private val _saveAlarm: SaveAlarm,
-    private val _timeGuideManager: TimeGuideManager
+    private val _timeGuideManager: TimeGuideManager,
+    private val _refreshAlarms: RefreshAlarms,
 ) : ViewModel() {
 
     private val _alarmList: MutableStateFlow<BpResult<List<Alarm>>> =
@@ -53,4 +55,7 @@ class AlarmListViewModel @Inject constructor(
     suspend fun alarmActiveSwitching(alarm: Alarm) =
         _saveAlarm.invoke(alarm.copy(isActive = !alarm.isActive))
 
+    fun refresh() = viewModelScope.launch {
+        _refreshAlarms.invoke()
+    }
 }
