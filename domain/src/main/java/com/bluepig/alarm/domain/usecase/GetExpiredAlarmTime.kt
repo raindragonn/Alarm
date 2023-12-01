@@ -16,7 +16,6 @@ class GetExpiredAlarmTime @Inject constructor(
     private val _dispatcher: CoroutineDispatcher,
     private val _repository: AlarmRepository,
 ) {
-    // TODO("실제 알람이 울린 이후 꺼짐 확인 및 요일 추가시 수정 필요")
     suspend operator fun invoke() = flow {
         while (true) {
             val expireTime = asyncResultWithContextOf(_dispatcher) {

@@ -30,8 +30,11 @@
     <string name="alarm_end">알람 종료</string>
     <string name="alarm_preview_end">미리보기 종료</string>
 
-    <string name="alert_permission_title_post_notification">알림 권한이 필요합니다!</string>
-    <string name="alert_permission_text_post_notification">원활한 알람을 위해 권한이 필요합니다.</string>
+    <string name="alert_request_permission_title">권한이 필요합니다!</string>
+
+    <string name="alert_request_permission_text_post_notification">원활한 알람을 위해 알림 권한이 필요합니다.</string>
+    <string name="alert_request_permission_text_system_alert_window">원활한 알람을 위해 다른앱 위에 표시 권한이 필요합니다.</string>
+    <string name="alert_request_permission_text_exact_alarm">원활한 알람을 위해 알람 및 리마인더 권한이 필요합니다.</string>
 
     <string name="notification_message_media_downlaod">인터넷 없이 알람을 위한 다운로드 중</string>
 

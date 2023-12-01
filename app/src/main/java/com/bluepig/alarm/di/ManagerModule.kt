@@ -3,6 +3,8 @@ package com.bluepig.alarm.di
 import android.content.Context
 import android.media.AudioManager
 import androidx.media3.common.util.UnstableApi
+import com.bluepig.alarm.domain.alarm.BpAlarmManager
+import com.bluepig.alarm.manager.alarm.BPAlarmManagerImpl
 import com.bluepig.alarm.manager.download.MediaDownloadManager
 import com.bluepig.alarm.manager.download.MediaDownloadManagerImpl
 import com.bluepig.alarm.manager.player.SongPlayerManager
@@ -43,5 +45,13 @@ object ManagerModule {
         @ApplicationContext context: Context
     ): AudioManager {
         return context.audioManager
+    }
+
+    @Provides
+    @Singleton
+    fun providesBPAlarmManager(
+        @ApplicationContext context: Context
+    ): BpAlarmManager {
+        return BPAlarmManagerImpl(context)
     }
 }

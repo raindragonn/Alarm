@@ -7,8 +7,11 @@ import com.bluepig.alarm.domain.entity.alarm.Alarm
 import com.bluepig.alarm.domain.result.BpResult
 import com.bluepig.alarm.domain.result.NotFoundPreViewAlarmException
 import com.bluepig.alarm.domain.result.asyncSuccess
+import com.bluepig.alarm.domain.result.getOrNull
 import com.bluepig.alarm.domain.result.isSuccess
 import com.bluepig.alarm.domain.result.resultOf
+import com.bluepig.alarm.domain.usecase.GetAlarmById
+import com.bluepig.alarm.domain.usecase.SaveAlarm
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,6 +22,8 @@ import javax.inject.Inject
 @HiltViewModel
 class AlarmViewModel @Inject constructor(
     private val _state: SavedStateHandle,
+    private val _getAlarmById: GetAlarmById,
+    private val _saveAlarm: SaveAlarm,
 ) : ViewModel() {
 
     private val _previewAlarm
@@ -29,7 +34,7 @@ class AlarmViewModel @Inject constructor(
 
     private val _alarmId
         get() = resultOf {
-            _state.get<Long>(AlarmActivity.EXTRA_ALARM_ALARM_ID) ?: throw NullPointerException()
+            _state.get<Long>(AlarmActivity.EXTRA_ALARM_ID) ?: throw NullPointerException()
         }
 
     val isPreview
@@ -45,7 +50,8 @@ class AlarmViewModel @Inject constructor(
 
     fun setAlarmState() = viewModelScope.launch {
         _alarmId.asyncSuccess {
-
+            val result = _getAlarmById.invoke(it)
+            _alarmState.emit(result)
         }
         _previewAlarm.asyncSuccess {
             _alarmState.emit(_previewAlarm)
@@ -64,6 +70,12 @@ class AlarmViewModel @Inject constructor(
                 delay(1000L)
             }
         }
+
+    fun updateAlarmExpired() = viewModelScope.launch {
+        if (isPreview) return@launch
+        val alarm = alarmState.value.getOrNull()
+        _saveAlarm.invoke(alarm?.getActiveCheckedAlarm() ?: return@launch)
+    }
 
     companion object {
         private const val MAX_DURATION = 15

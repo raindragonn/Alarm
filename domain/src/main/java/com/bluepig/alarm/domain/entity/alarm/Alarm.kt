@@ -26,6 +26,19 @@ data class Alarm(
         }
     }
 
+    fun getActiveCheckedAlarm(): Alarm {
+        if (isActive.not()) return this
+        val now = CalendarHelper.now
+        val hasExpired = now.after(CalendarHelper.fromTimeInMillis(timeInMillis))
+        val hasActive = repeatWeek.isNotEmpty() || !hasExpired
+
+        return if (hasActive) {
+            getNextTimeAlarm()
+        } else {
+            copy(isActive = false)
+        }
+    }
+
     /**
      * Get next time alarm
      * [repeatWeek]에 따라 [timeInMillis]를 새로 계산해서 반환한다.
@@ -43,10 +56,15 @@ data class Alarm(
         val week = Week.fromCode(todayWeek)
         val todayIndex = Week.entries.indexOf(week)
         // repeatWeek이 설정된 경우 1 ~ 7일 이후, 안된 경우 내일(1) 이거나 오늘(0)
-        val daysToAdd = (1..7).firstOrNull { dayCount ->
+        var daysToAdd = (1..7).firstOrNull { dayCount ->
             val dayIndex = (todayIndex + dayCount) % 7
             repeatWeek.contains(Week.entries[dayIndex])
         } ?: tomorrowOrToday
+
+        // 설정한 요일중 현재 요일을 포함하며 아직 시간이 지나지 않은 경우
+        if (repeatWeek.contains(week) && now.before(toDayCalendar)) {
+            daysToAdd = 0
+        }
 
         val newTimeInMillis = toDayCalendar.apply {
             add(Calendar.DAY_OF_YEAR, daysToAdd)

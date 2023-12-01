@@ -86,9 +86,14 @@ class AlarmActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+        release()
+    }
+
+    private fun release() {
         playerManager.release()
         audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, _defaultVolume ?: 7, 0)
         vibrator.cancel()
+        _vm.updateAlarmExpired()
     }
 
     private fun initViews(alarm: Alarm) = with(_binding) {
@@ -112,7 +117,7 @@ class AlarmActivity : AppCompatActivity() {
     private fun alarmSetting() {
         _binding.btnAlarmEnd.text = getString(R.string.alarm_end)
         _binding.btnAlarmEnd.setOnClickListener {
-            // TODO: alarm 삭제 혹은 다시 등록 등 처리 필요
+            _vm.updateAlarmExpired()
             finish()
         }
     }
@@ -176,10 +181,18 @@ class AlarmActivity : AppCompatActivity() {
     private fun onPlayingStateChanged(isPlaying: Boolean) {}
 
     companion object {
-        const val EXTRA_ALARM_ALARM_ID = "EXTRA_ALARM"
+        const val EXTRA_ALARM_ID = "EXTRA_ALARM_ID"
         const val EXTRA_PREVIEW_ALARM = "EXTRA_IS_PREVIEW"
 
         private val VIBRATION_PATTERN = longArrayOf(500, 500)
+
+        fun getOpenIntent(context: Context, alarmId: Long): Intent {
+            return Intent(context, AlarmActivity::class.java).apply {
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                putExtra(EXTRA_ALARM_ID, alarmId)
+            }
+        }
+
 
         fun openPreView(context: Context, alarm: Alarm) {
             val intent = Intent(context, AlarmActivity::class.java).apply {

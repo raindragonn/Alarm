@@ -2,7 +2,6 @@ package com.bluepig.alarm.ui.list
 
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -38,11 +37,20 @@ class AlarmListFragment : Fragment(R.layout.fragment_alarm_list) {
         super.onViewCreated(view, savedInstanceState)
 
         initViews()
+        observing()
+        _vm.refresh()
     }
 
     private fun initViews() {
         _binding.rvAlarm.adapter = _alarmAdapter
 
+        _binding.btnSearch.setOnClickListener {
+            val action = AlarmListFragmentDirections.actionAlarmListFragmentToSearchFragment()
+            findNavController().navigate(action)
+        }
+    }
+
+    private fun observing() {
         viewRepeatOnLifeCycle(Lifecycle.State.STARTED) {
             launch {
                 _vm.expireTime
@@ -57,11 +65,6 @@ class AlarmListFragment : Fragment(R.layout.fragment_alarm_list) {
                         result.onSuccess(_alarmAdapter::submitList)
                     }
             }
-        }
-
-        _binding.btnSearch.setOnClickListener {
-            val action = AlarmListFragmentDirections.actionAlarmListFragmentToSearchFragment()
-            findNavController().navigate(action)
         }
     }
 
@@ -87,10 +90,6 @@ class AlarmListFragment : Fragment(R.layout.fragment_alarm_list) {
     private fun onItemSwitchClick(alarm: Alarm) {
         viewLifeCycleScope.launch {
             _vm.alarmActiveSwitching(alarm)
-                .onSuccess {
-                    val onOff = if (it.isActive) "켰습니다" else "껏습니다."
-                    Toast.makeText(requireContext(), "알람을 $onOff", Toast.LENGTH_SHORT).show()
-                }
         }
     }
 }
