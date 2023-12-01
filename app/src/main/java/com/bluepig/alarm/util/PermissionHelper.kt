@@ -152,11 +152,7 @@ object PermissionHelper {
 
     private fun openSystemAlertWindow(context: Context) {
         val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION).apply {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
-            } else {
-                data = Uri.parse("package:${context.packageName}")
-            }
+            data = Uri.parse("package:${context.packageName}")
         }
         context.startActivity(intent)
     }
