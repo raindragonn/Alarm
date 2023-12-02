@@ -22,7 +22,7 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:text="검색어" />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_cancel"
         style="@style/Alarm.Base.TextButton.SemiBold"
         android:layout_width="wrap_content"

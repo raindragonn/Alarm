@@ -20,13 +20,13 @@
 
     <style name="Alarm.Base.TextButton.Bold" parent="TextAppearance.Alarm.Button.Bold">
         <item name="android:textColor">@color/point</item>
-        <item name="android:background">@drawable/ripple_oval_point</item>
+        <item name="android:background">@drawable/ripple_rectangle_point</item>
         <item name="android:minWidth">0dp</item>
     </style>
 
     <style name="Alarm.Base.TextButton.SemiBold" parent="TextAppearance.Alarm.Button.SemiBold">
         <item name="android:textColor">@color/point</item>
-        <item name="android:background">@drawable/ripple_oval_point</item>
+        <item name="android:background">@drawable/ripple_rectangle_point</item>
         <item name="android:minWidth">0dp</item>
     </style>
 

@@ -32,7 +32,7 @@
         android:id="@+id/btn_close"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/ripple_rectangle_point"
+        style="@style/Alarm.Base.ImageButton"
         android:padding="@dimen/base_spacing_1"
         android:src="@drawable/ic_close"
         app:layout_constraintEnd_toEndOf="parent"
