@@ -35,6 +35,11 @@
         <item name="android:background">@drawable/selector_default_button_background</item>
     </style>
 
+    <style name="Alarm.Base.TextButton.Remove" parent="Alarm.Base.TextButton.SemiBold">
+        <item name="android:textColor">@color/misc_050</item>
+        <item name="android:background">@drawable/selector_remove_button_background</item>
+    </style>
+
     <style name="Divider">
         <item name="android:layout_height">2dp</item>
         <item name="android:background">@color/point</item>
