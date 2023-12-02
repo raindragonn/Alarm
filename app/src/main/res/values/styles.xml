@@ -20,19 +20,24 @@
 
     <style name="Alarm.Base.TextButton.Bold" parent="TextAppearance.Alarm.Button.Bold">
         <item name="android:textColor">@color/point</item>
-        <item name="android:background">@drawable/ripple_oval_point</item>
+        <item name="android:background">@drawable/ripple_rectangle_point</item>
         <item name="android:minWidth">0dp</item>
     </style>
 
     <style name="Alarm.Base.TextButton.SemiBold" parent="TextAppearance.Alarm.Button.SemiBold">
         <item name="android:textColor">@color/point</item>
-        <item name="android:background">@drawable/ripple_oval_point</item>
+        <item name="android:background">@drawable/ripple_rectangle_point</item>
         <item name="android:minWidth">0dp</item>
     </style>
 
     <style name="Alarm.Base.TextButton.Primary" parent="Alarm.Base.TextButton.SemiBold">
         <item name="android:textColor">@color/button_text</item>
         <item name="android:background">@drawable/selector_default_button_background</item>
+    </style>
+
+    <style name="Alarm.Base.TextButton.Remove" parent="Alarm.Base.TextButton.SemiBold">
+        <item name="android:textColor">@color/misc_050</item>
+        <item name="android:background">@drawable/selector_remove_button_background</item>
     </style>
 
     <style name="Divider">

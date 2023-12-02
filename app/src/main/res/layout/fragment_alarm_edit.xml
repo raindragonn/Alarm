@@ -16,7 +16,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_preview"
         style="@style/Alarm.Base.TextButton.SemiBold"
         android:layout_width="wrap_content"
@@ -97,80 +97,80 @@
             <com.bluepig.alarm.ui.view.WeekButton
                 android:id="@+id/btn_sunday"
                 style="@style/Alarm.Base.WeekButton"
-                app:week="SUNDAY"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/base_spacing_2"
                 app:layout_constraintDimensionRatio="1"
                 app:layout_constraintEnd_toStartOf="@id/btn_monday"
                 app:layout_constraintStart_toStartOf="@id/guideline_start"
-                app:layout_constraintTop_toBottomOf="@id/tv_repeat_guide" />
+                app:layout_constraintTop_toBottomOf="@id/tv_repeat_guide"
+                app:week="SUNDAY" />
 
             <com.bluepig.alarm.ui.view.WeekButton
                 android:id="@+id/btn_monday"
                 style="@style/Alarm.Base.WeekButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                app:week="MONDAY"
                 app:layout_constraintDimensionRatio="1"
                 app:layout_constraintEnd_toStartOf="@id/btn_tuesday"
                 app:layout_constraintStart_toEndOf="@id/btn_sunday"
-                app:layout_constraintTop_toTopOf="@id/btn_sunday" />
+                app:layout_constraintTop_toTopOf="@id/btn_sunday"
+                app:week="MONDAY" />
 
             <com.bluepig.alarm.ui.view.WeekButton
                 android:id="@+id/btn_tuesday"
                 style="@style/Alarm.Base.WeekButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                app:week="TUESDAY"
                 app:layout_constraintDimensionRatio="1"
                 app:layout_constraintEnd_toStartOf="@id/btn_wednesday"
                 app:layout_constraintStart_toEndOf="@id/btn_monday"
-                app:layout_constraintTop_toTopOf="@id/btn_sunday" />
+                app:layout_constraintTop_toTopOf="@id/btn_sunday"
+                app:week="TUESDAY" />
 
             <com.bluepig.alarm.ui.view.WeekButton
                 android:id="@+id/btn_wednesday"
                 style="@style/Alarm.Base.WeekButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                app:week="WEDNESDAY"
                 app:layout_constraintDimensionRatio="1"
                 app:layout_constraintEnd_toStartOf="@id/btn_thursday"
                 app:layout_constraintStart_toEndOf="@id/btn_tuesday"
-                app:layout_constraintTop_toTopOf="@id/btn_sunday" />
+                app:layout_constraintTop_toTopOf="@id/btn_sunday"
+                app:week="WEDNESDAY" />
 
             <com.bluepig.alarm.ui.view.WeekButton
                 android:id="@+id/btn_thursday"
                 style="@style/Alarm.Base.WeekButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                app:week="THURSDAY"
                 app:layout_constraintDimensionRatio="1"
                 app:layout_constraintEnd_toStartOf="@id/btn_friday"
                 app:layout_constraintStart_toEndOf="@id/btn_wednesday"
-                app:layout_constraintTop_toTopOf="@id/btn_sunday" />
+                app:layout_constraintTop_toTopOf="@id/btn_sunday"
+                app:week="THURSDAY" />
 
             <com.bluepig.alarm.ui.view.WeekButton
                 android:id="@+id/btn_friday"
                 style="@style/Alarm.Base.WeekButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                app:week="FRIDAY"
                 app:layout_constraintDimensionRatio="1"
                 app:layout_constraintEnd_toStartOf="@id/btn_saturday"
                 app:layout_constraintStart_toEndOf="@id/btn_thursday"
-                app:layout_constraintTop_toTopOf="@id/btn_sunday" />
+                app:layout_constraintTop_toTopOf="@id/btn_sunday"
+                app:week="FRIDAY" />
 
             <com.bluepig.alarm.ui.view.WeekButton
                 android:id="@+id/btn_saturday"
                 style="@style/Alarm.Base.WeekButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                app:week="SATURDAY"
                 app:layout_constraintDimensionRatio="1"
                 app:layout_constraintEnd_toEndOf="@id/guideline_end"
                 app:layout_constraintStart_toEndOf="@id/btn_friday"
-                app:layout_constraintTop_toTopOf="@id/btn_sunday" />
+                app:layout_constraintTop_toTopOf="@id/btn_sunday"
+                app:week="SATURDAY" />
 
             <TextView
                 android:id="@+id/tv_media_guide"
@@ -279,9 +279,23 @@
                 app:layout_constraintStart_toStartOf="@id/et_memo"
                 app:layout_constraintTop_toBottomOf="@id/et_memo" />
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_remove"
+                style="@style/Alarm.Base.TextButton.Remove"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/base_spacing_3"
+                android:layout_marginBottom="@dimen/base_spacing_3"
+                android:text="@string/alarm_remove"
+                app:layout_constraintBottom_toTopOf="@id/btn_save"
+                app:layout_constraintEnd_toEndOf="@id/guideline_end"
+                app:layout_constraintStart_toStartOf="@id/guideline_start"
+                app:layout_constraintTop_toBottomOf="@id/memo_divider" />
+
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_save"
                 style="@style/Alarm.Base.TextButton.Primary"
+                app:backgroundTint="@null"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/base_spacing_3"
@@ -290,7 +304,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@id/guideline_end"
                 app:layout_constraintStart_toStartOf="@id/guideline_start"
-                app:layout_constraintTop_toBottomOf="@id/memo_divider"
+                app:layout_constraintTop_toBottomOf="@id/btn_remove"
                 app:layout_constraintVertical_bias="1" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

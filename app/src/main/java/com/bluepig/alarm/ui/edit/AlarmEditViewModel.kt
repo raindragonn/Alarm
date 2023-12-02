@@ -7,7 +7,9 @@ import com.bluepig.alarm.domain.entity.alarm.Alarm
 import com.bluepig.alarm.domain.entity.alarm.Week
 import com.bluepig.alarm.domain.entity.file.SongFile
 import com.bluepig.alarm.domain.result.BpResult
+import com.bluepig.alarm.domain.result.NotFoundAlarmException
 import com.bluepig.alarm.domain.result.NotFoundArgumentException
+import com.bluepig.alarm.domain.usecase.RemoveAlarm
 import com.bluepig.alarm.domain.usecase.SaveAlarm
 import com.bluepig.alarm.domain.util.CalendarHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,16 +21,20 @@ import javax.inject.Inject
 class AlarmEditViewModel @Inject constructor(
     private val _state: SavedStateHandle,
     private val _saveAlarm: SaveAlarm,
+    private val _removeAlarm: RemoveAlarm,
     audioManager: AudioManager
 ) : ViewModel() {
+
+    private val alarm: Alarm?
+        get() = _state.get<Alarm>("alarm")
 
     val songFile: SongFile
         get() = _state.get<SongFile>("songFile")
             ?: _state.get<Alarm>("alarm")?.file
             ?: throw NotFoundArgumentException("songFile")
 
-    val alarm: Alarm?
-        get() = _state.get<Alarm>("alarm")
+    val isEdit: Boolean
+        get() = alarm != null
 
     private val _timeInMillis =
         MutableStateFlow(
@@ -98,5 +104,9 @@ class AlarmEditViewModel @Inject constructor(
 
     suspend fun saveAlarm(): BpResult<Alarm> {
         return _saveAlarm.invoke(getEditingAlarm())
+    }
+
+    suspend fun removeAlarm(): BpResult<Unit> {
+        return _removeAlarm.invoke(alarm ?: return BpResult.Failure(NotFoundAlarmException))
     }
 }

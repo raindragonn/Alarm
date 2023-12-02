@@ -4,6 +4,7 @@ import android.media.AudioManager
 import android.os.Bundle
 import android.view.View
 import android.widget.SeekBar
+import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -85,12 +86,23 @@ class AlarmEditFragment : Fragment(R.layout.fragment_alarm_edit) {
             _vm.setMemo(it.toString())
         }
 
+        btnRemove.isVisible = _vm.isEdit
+        btnRemove.setOnClickListener {
+            removeAlarm()
+        }
+
         btnSave.setOnClickListener {
             saveAlarm()
         }
 
         btnPreview.setOnClickListener {
             AlarmActivity.openPreView(requireContext(), _vm.getEditingAlarm())
+        }
+    }
+
+    private fun removeAlarm() = viewLifeCycleScope.launch {
+        _vm.removeAlarm().onSuccess {
+            findNavController().popBackStack()
         }
     }
 
