@@ -11,5 +11,6 @@ interface MediaDownloadManager {
     fun getDownloadNotificationHelper(): DownloadNotificationHelper
     fun getDataSourceFactory(): DataSource.Factory
     fun startDownload(songFile: SongFile)
+    fun removeDownload(songFiles: List<SongFile>)
     fun getMediaItem(songFile: SongFile): MediaItem
 }
