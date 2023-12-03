@@ -12,6 +12,7 @@ import androidx.media3.datasource.cache.Cache
 import androidx.media3.datasource.cache.CacheDataSource
 import androidx.media3.datasource.cache.NoOpCacheEvictor
 import androidx.media3.datasource.cache.SimpleCache
+import androidx.media3.exoplayer.offline.Download
 import androidx.media3.exoplayer.offline.DownloadHelper
 import androidx.media3.exoplayer.offline.DownloadManager
 import androidx.media3.exoplayer.offline.DownloadNotificationHelper
@@ -20,6 +21,7 @@ import com.bluepig.alarm.domain.entity.file.SongFile
 import com.bluepig.alarm.notification.NotificationType
 import com.bluepig.alarm.service.MediaDownloadService
 import kotlinx.serialization.json.Json
+import timber.log.Timber
 import java.util.concurrent.Executor
 import javax.inject.Inject
 
@@ -100,6 +102,47 @@ class MediaDownloadManagerImpl @Inject constructor(
             request,
             true
         )
+    }
+
+    /**
+     * Get downloaded ids
+     *
+     * @return 현재 다운로드된 아이디 리스트를 반환한다.
+     */
+    private fun getDownloadedIds(): List<String> {
+        val downloads = mutableListOf<Download>()
+        getDownloadManager().downloadIndex
+            .getDownloads().use {
+                if (it.moveToFirst()) {
+                    do {
+                        downloads.add(it.download)
+                    } while (it.moveToNext())
+                }
+            }
+        return downloads.map { it.request.id }
+    }
+
+    /**
+     * Remove download
+     * [songFiles]를 포함하지 않는 파일은 제거한다.
+     *
+     * @param songFiles - 현재 알람음으로 지정된 파일 리스트
+     */
+    override fun removeDownload(songFiles: List<SongFile>) {
+        val downloadedIds = getDownloadedIds().toSet()
+        val filesIds = songFiles.map { it.id }.toSet()
+        downloadedIds.minus(filesIds)
+            .also {
+                Timber.d(it.toString())
+            }
+            .forEach {
+                DownloadService.sendRemoveDownload(
+                    _context,
+                    MediaDownloadService::class.java,
+                    it,
+                    false
+                )
+            }
     }
 
     /**
