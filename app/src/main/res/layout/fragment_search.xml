@@ -20,7 +20,7 @@
         app:layout_constraintEnd_toStartOf="@id/btn_cancel"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="검색어" />
+        android:hint="@string/hint_alarm_search" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_cancel"
