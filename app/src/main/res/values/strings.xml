@@ -31,6 +31,8 @@
     <string name="alarm_preview_end">미리보기 종료</string>
     <string name="alarm_remove">알람 삭제</string>
 
+    <string name="search_song_file">"검색    >"</string>
+
     <string name="alert_request_permission_title">권한이 필요합니다!</string>
 
     <string name="alert_request_permission_text_post_notification">원활한 알람을 위해 알림 권한이 필요합니다.</string>

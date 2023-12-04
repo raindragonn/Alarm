@@ -2,7 +2,9 @@ package com.bluepig.alarm.ui.search.select
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
+import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.media3.common.util.UnstableApi
@@ -14,6 +16,7 @@ import com.bluepig.alarm.domain.result.getOrNull
 import com.bluepig.alarm.domain.result.onFailure
 import com.bluepig.alarm.domain.result.onSuccess
 import com.bluepig.alarm.manager.player.SongPlayerManager
+import com.bluepig.alarm.ui.edit.AlarmEditFragment
 import com.bluepig.alarm.util.ext.setThumbnail
 import com.bluepig.alarm.util.ext.showErrorToast
 import com.bluepig.alarm.util.ext.userAgent
@@ -65,11 +68,13 @@ class FileSelectBottomSheetDialogFragment :
         btnSelect.setOnClickListener {
             val songFile = _vm.songFile.value.getOrNull()
             if (songFile == null) showErrorToast(null)
-            val action =
-                FileSelectBottomSheetDialogFragmentDirections.actionFileSelectBottomSheetDialogFragmentToAlarmEditFragment(
-                    songFile, null
-                )
-            findNavController().navigate(action)
+
+            setFragmentResult(
+                AlarmEditFragment.REQUEST_SONG_FILE,
+                bundleOf(AlarmEditFragment.KEY_SONG_FILE to songFile)
+            )
+            findNavController()
+                .popBackStack(R.id.alarmEditFragment, false)
         }
     }
 

@@ -182,6 +182,34 @@
                 app:layout_constraintStart_toStartOf="@id/guideline_start"
                 app:layout_constraintTop_toBottomOf="@id/btn_sunday" />
 
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_search"
+                style="@style/Alarm.Base.TextButton.Bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minHeight="0dp"
+                android:padding="@dimen/base_spacing_2"
+                android:text="@string/search_song_file"
+                app:layout_constraintBottom_toBottomOf="@id/tv_media_guide"
+                app:layout_constraintEnd_toEndOf="@id/guideline_end"
+                app:layout_constraintTop_toTopOf="@id/tv_media_guide"
+                tools:visibility="gone" />
+
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/group_media"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:constraint_referenced_ids="iv_thumbnail, tv_file_title"
+                tools:visibility="visible" />
+
+            <androidx.constraintlayout.widget.Barrier
+                android:id="@+id/barrier_media"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:barrierDirection="bottom"
+                app:constraint_referenced_ids="iv_thumbnail,tv_file_title,btn_search" />
+
             <ImageView
                 android:id="@+id/iv_thumbnail"
                 android:layout_width="@dimen/base_spacing_8"
@@ -243,7 +271,7 @@
                 android:scaleX="1"
                 android:scaleY="0.9"
                 app:layout_constraintEnd_toEndOf="@id/guideline_end"
-                app:layout_constraintTop_toBottomOf="@id/iv_thumbnail" />
+                app:layout_constraintTop_toBottomOf="@id/barrier_media" />
 
             <TextView
                 android:id="@+id/tv_memo_guide"
@@ -295,12 +323,12 @@
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_save"
                 style="@style/Alarm.Base.TextButton.Primary"
-                app:backgroundTint="@null"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/base_spacing_3"
                 android:layout_marginBottom="@dimen/base_spacing_3"
                 android:text="@string/save"
+                app:backgroundTint="@null"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@id/guideline_end"
                 app:layout_constraintStart_toStartOf="@id/guideline_start"
