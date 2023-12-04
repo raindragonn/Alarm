@@ -8,6 +8,8 @@ object NotFoundActiveAlarmException : Exception("Not Found Active Alarm")
 
 object NotFoundAlarmException : Exception("Not Found Alarm")
 
+object NotSelectSongFile : Exception("Not Found SongFile")
+
 object NotFoundPreViewAlarmException : Exception("Not Found Preview Alarm")
 
 object SearchQueryEmptyException : Exception("Search Query is Empty or blank")

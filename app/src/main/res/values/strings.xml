@@ -31,15 +31,19 @@
     <string name="alarm_preview_end">미리보기 종료</string>
     <string name="alarm_remove">알람 삭제</string>
 
-    <string name="alert_request_permission_title">권한이 필요합니다!</string>
+    <string name="search_song_file">"검색    >"</string>
 
+    <string name="alert_request_permission_title">권한이 필요합니다!</string>
     <string name="alert_request_permission_text_post_notification">원활한 알람을 위해 알림 권한이 필요합니다.</string>
     <string name="alert_request_permission_text_system_alert_window">원활한 알람을 위해 다른앱 위에 표시 권한이 필요합니다.</string>
     <string name="alert_request_permission_text_exact_alarm">원활한 알람을 위해 알람 및 리마인더 권한이 필요합니다.</string>
 
     <string name="notification_message_media_downlaod">인터넷 없이 알람을 위한 다운로드 중</string>
 
+    <string name="hint_alarm_search">노래 혹은 가수 명으로 검색해주세요.</string>
+
     <string name="toast_error_basic">문제가 발생했습니다! 다시 시도해주세요.</string>
     <string name="toast_error_search_query_empty">검색어를 입력해주세요.</string>
     <string name="toast_error_network">인터넷 연결을 확인해주세요.</string>
+    <string name="toast_error_not_select_songFile">알람음을 선택해주세요.</string>
 </resources>

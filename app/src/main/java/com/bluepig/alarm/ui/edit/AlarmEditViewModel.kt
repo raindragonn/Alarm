@@ -8,7 +8,8 @@ import com.bluepig.alarm.domain.entity.alarm.Week
 import com.bluepig.alarm.domain.entity.file.SongFile
 import com.bluepig.alarm.domain.result.BpResult
 import com.bluepig.alarm.domain.result.NotFoundAlarmException
-import com.bluepig.alarm.domain.result.NotFoundArgumentException
+import com.bluepig.alarm.domain.result.NotSelectSongFile
+import com.bluepig.alarm.domain.result.resultOf
 import com.bluepig.alarm.domain.usecase.RemoveAlarm
 import com.bluepig.alarm.domain.usecase.SaveAlarm
 import com.bluepig.alarm.domain.util.CalendarHelper
@@ -25,44 +26,44 @@ class AlarmEditViewModel @Inject constructor(
     audioManager: AudioManager
 ) : ViewModel() {
 
-    private val alarm: Alarm?
+    private val _alarm: Alarm?
         get() = _state.get<Alarm>("alarm")
 
-    val songFile: SongFile
-        get() = _state.get<SongFile>("songFile")
-            ?: _state.get<Alarm>("alarm")?.file
-            ?: throw NotFoundArgumentException("songFile")
-
     val isEdit: Boolean
-        get() = alarm != null
+        get() = _alarm != null
 
     private val _timeInMillis =
         MutableStateFlow(
-            alarm?.timeInMillis ?: CalendarHelper.now.timeInMillis
+            _alarm?.timeInMillis ?: CalendarHelper.now.timeInMillis
         )
     val timeInMillis
         get() = _timeInMillis.asStateFlow()
 
     private val _repeatWeek =
-        MutableStateFlow(alarm?.repeatWeek ?: setOf())
+        MutableStateFlow(_alarm?.repeatWeek ?: setOf())
     val repeatWeek
         get() = _repeatWeek.asStateFlow()
 
     private val _volume =
         MutableStateFlow(
-            alarm?.volume ?: audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC)
+            _alarm?.volume ?: audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC)
         )
     val volume
         get() = _volume.asStateFlow()
 
     private val _vibration =
-        MutableStateFlow(alarm?.hasVibration ?: true)
+        MutableStateFlow(_alarm?.hasVibration ?: true)
     val vibration
         get() = _vibration.asStateFlow()
 
-    private val _memo = MutableStateFlow(alarm?.memo ?: "")
+    private val _memo = MutableStateFlow(_alarm?.memo ?: "")
     val memo
         get() = _memo.asStateFlow()
+
+    private val _songFile = MutableStateFlow(_alarm?.file)
+    val songFile
+        get() = _songFile.asStateFlow()
+
 
     fun setTimeInMillis(hourOfDay: Int, minute: Int) {
         _timeInMillis.value = CalendarHelper.todayFromHourAndMinute(hourOfDay, minute).timeInMillis
@@ -91,22 +92,30 @@ class AlarmEditViewModel @Inject constructor(
         _memo.value = memo
     }
 
-    fun getEditingAlarm() = Alarm(
-        id = alarm?.id,
-        timeInMillis = _timeInMillis.value,
-        file = songFile,
-        repeatWeek = _repeatWeek.value,
-        volume = _volume.value,
-        hasVibration = _vibration.value,
-        memo = _memo.value
-    )
+    fun setSongFile(songFile: SongFile) {
+        _songFile.value = songFile
+    }
 
+    fun getEditingAlarm(): Alarm? {
+        return Alarm(
+            id = _alarm?.id,
+            timeInMillis = _timeInMillis.value,
+            file = _songFile.value ?: return null,
+            repeatWeek = _repeatWeek.value,
+            volume = _volume.value,
+            hasVibration = _vibration.value,
+            memo = _memo.value
+        )
+    }
 
     suspend fun saveAlarm(): BpResult<Alarm> {
-        return _saveAlarm.invoke(getEditingAlarm())
+        val editingAlarm = getEditingAlarm()
+        return _saveAlarm.invoke(editingAlarm ?: return resultOf {
+            throw NotSelectSongFile
+        })
     }
 
     suspend fun removeAlarm(): BpResult<Unit> {
-        return _removeAlarm.invoke(alarm ?: return BpResult.Failure(NotFoundAlarmException))
+        return _removeAlarm.invoke(_alarm ?: return BpResult.Failure(NotFoundAlarmException))
     }
 }
