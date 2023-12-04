@@ -45,7 +45,8 @@ class AlarmListFragment : Fragment(R.layout.fragment_alarm_list) {
         _binding.rvAlarm.adapter = _alarmAdapter
 
         _binding.btnSearch.setOnClickListener {
-            val action = AlarmListFragmentDirections.actionAlarmListFragmentToSearchFragment()
+            val action =
+                AlarmListFragmentDirections.actionAlarmListFragmentToAlarmEditFragment(null)
             findNavController().navigate(action)
         }
     }
@@ -83,7 +84,7 @@ class AlarmListFragment : Fragment(R.layout.fragment_alarm_list) {
 
     private fun onItemClick(alarm: Alarm) {
         val action =
-            AlarmListFragmentDirections.actionAlarmListFragmentToAlarmEditFragment(null, alarm)
+            AlarmListFragmentDirections.actionAlarmListFragmentToAlarmEditFragment(alarm)
         findNavController().navigate(action)
     }
 

@@ -12,10 +12,6 @@
         tools:layout="@layout/fragment_alarm_list">
 
         <action
-            android:id="@+id/action_alarmListFragment_to_searchFragment"
-            app:destination="@id/searchFragment" />
-
-        <action
             android:id="@+id/action_alarmListFragment_to_alarmEditFragment"
             app:destination="@id/alarmEditFragment" />
     </fragment>
@@ -38,11 +34,6 @@
         tools:layout="@layout/fragment_alarm_edit">
 
         <argument
-            android:name="songFile"
-            app:argType="com.bluepig.alarm.domain.entity.file.SongFile"
-            app:nullable="true" />
-
-        <argument
             android:name="alarm"
             app:argType="com.bluepig.alarm.domain.entity.alarm.Alarm"
             app:nullable="true" />
@@ -52,6 +43,12 @@
             app:destination="@id/alarmListFragment"
             app:popUpTo="@id/alarmListFragment"
             app:popUpToInclusive="true" />
+
+        <action
+            android:id="@+id/action_alarmEditFragment_to_searchFragment"
+            app:destination="@id/searchFragment"
+            app:popUpTo="@id/alarmEditFragment"
+            app:popUpToInclusive="false" />
     </fragment>
 
     <dialog
@@ -59,13 +56,10 @@
         android:name="com.bluepig.alarm.ui.search.select.FileSelectBottomSheetDialogFragment"
         android:label="FileSelectBottomSheetDialogFragment"
         tools:layout="@layout/fragment_file_select">
-        <argument
+
+    <argument
             android:name="basicFile"
             app:argType="com.bluepig.alarm.domain.entity.file.BasicFile" />
 
-        <action
-            android:id="@+id/action_fileSelectBottomSheetDialogFragment_to_alarmEditFragment"
-            app:destination="@id/alarmEditFragment" />
     </dialog>
-
 </navigation>
