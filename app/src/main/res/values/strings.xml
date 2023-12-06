@@ -18,7 +18,12 @@
     <string name="week_thu">목</string>
     <string name="week_fri">금</string>
     <string name="week_sat">토</string>
-    <string name="week_no">한번만 울리기</string>
+
+    <string name="week_not_select_guide">한번만 울리기</string>
+    <string name="week_weekend_guide">주말 반복</string>
+    <string name="week_weekday_guide">주중 반복</string>
+    <string name="week_everyday_guide">매일 반복</string>
+    <string name="week_guide">" 반복"</string>
 
     <string name="memo">메모</string>
     <string name="memo_hint">메모를 입력해주세요.</string>

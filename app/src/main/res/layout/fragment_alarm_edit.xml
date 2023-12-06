@@ -90,9 +90,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/base_spacing_3"
-                android:text="@string/week_no"
                 app:layout_constraintStart_toStartOf="@id/guideline_start"
-                app:layout_constraintTop_toTopOf="@id/v_point_background" />
+                app:layout_constraintTop_toTopOf="@id/v_point_background"
+                tools:text="@string/week_not_select_guide" />
 
             <com.bluepig.alarm.ui.view.WeekButton
                 android:id="@+id/btn_sunday"
