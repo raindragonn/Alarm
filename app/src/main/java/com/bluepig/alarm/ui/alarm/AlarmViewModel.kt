@@ -49,7 +49,7 @@ class AlarmViewModel @Inject constructor(
             val result = _getAlarmById.invoke(it)
             _alarmState.emit(result)
         }
-        _previewAlarm.onFailure {
+        _previewAlarm.onSuccess {
             _alarmState.emit(_previewAlarm)
         }
     }

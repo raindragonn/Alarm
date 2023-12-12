@@ -16,6 +16,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.bluepig.alarm.R
 import com.bluepig.alarm.databinding.ActivityAlarmBinding
 import com.bluepig.alarm.domain.entity.alarm.Alarm
+import com.bluepig.alarm.domain.result.onFailureWithoutLoading
 import com.bluepig.alarm.manager.player.SongPlayerManager
 import com.bluepig.alarm.util.ext.audioManager
 import com.bluepig.alarm.util.ext.setThumbnail
@@ -63,7 +64,7 @@ class AlarmActivity : AppCompatActivity() {
                                     alarm.volume
                                         ?: audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC)
                                 )
-                            }.onFailure { e ->
+                            }.onFailureWithoutLoading { e ->
                                 Timber.w(e)
                                 finishAffinity()
                             }
