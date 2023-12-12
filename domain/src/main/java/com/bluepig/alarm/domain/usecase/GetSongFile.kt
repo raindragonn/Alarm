@@ -4,8 +4,8 @@ import com.bluepig.alarm.domain.di.IoDispatcher
 import com.bluepig.alarm.domain.entity.file.BasicFile
 import com.bluepig.alarm.domain.entity.file.SongFile
 import com.bluepig.alarm.domain.repository.FileRepository
-import com.bluepig.alarm.domain.result.asyncResultWithContextOf
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 /**
@@ -23,15 +23,17 @@ class GetSongFile @Inject constructor(
     private val _fileRepository: FileRepository,
 ) {
     suspend operator fun invoke(file: BasicFile, userAgent: String) =
-        asyncResultWithContextOf(_dispatcher) {
-            val pageUrl = file.downloadPage
-            val fileUrl = _fileRepository.getFileUrl(pageUrl, userAgent)
-            SongFile(
-                downloadPage = file.downloadPage,
-                id = file.id,
-                thumbnail = file.thumbnail,
-                title = file.title,
-                fileUrl = fileUrl
-            )
+        kotlin.runCatching {
+            withContext(_dispatcher) {
+                val pageUrl = file.downloadPage
+                val fileUrl = _fileRepository.getFileUrl(pageUrl, userAgent)
+                SongFile(
+                    downloadPage = file.downloadPage,
+                    id = file.id,
+                    thumbnail = file.thumbnail,
+                    title = file.title,
+                    fileUrl = fileUrl
+                )
+            }
         }
 }

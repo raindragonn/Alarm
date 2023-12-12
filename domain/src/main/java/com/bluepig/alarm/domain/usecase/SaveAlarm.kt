@@ -5,9 +5,8 @@ import com.bluepig.alarm.domain.di.IoDispatcher
 import com.bluepig.alarm.domain.entity.alarm.Alarm
 import com.bluepig.alarm.domain.repository.AlarmRepository
 import com.bluepig.alarm.domain.result.AlarmSaveFailedException
-import com.bluepig.alarm.domain.result.asyncResultWithContextOf
-import com.bluepig.alarm.domain.result.onSuccess
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 /**
@@ -24,10 +23,12 @@ class SaveAlarm @Inject constructor(
     private val _alarmManager: BpAlarmManager,
 ) {
     suspend operator fun invoke(alarm: Alarm) =
-        asyncResultWithContextOf(_dispatcher) {
-            val checkedAlarm = alarm.getNextTimeAlarm()
-            val id = _repository.insertAlarm(checkedAlarm)
-            _repository.getById(id) ?: throw AlarmSaveFailedException(id)
+        kotlin.runCatching {
+            withContext(_dispatcher) {
+                val checkedAlarm = alarm.getNextTimeAlarm()
+                val id = _repository.insertAlarm(checkedAlarm)
+                _repository.getById(id) ?: throw AlarmSaveFailedException(id)
+            }
         }.onSuccess {
             if (it.isActive) {
                 _alarmManager.setupAlarm(it)
