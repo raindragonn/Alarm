@@ -6,10 +6,8 @@ import androidx.lifecycle.ViewModel
 import com.bluepig.alarm.domain.entity.alarm.Alarm
 import com.bluepig.alarm.domain.entity.alarm.Week
 import com.bluepig.alarm.domain.entity.file.SongFile
-import com.bluepig.alarm.domain.result.BpResult
 import com.bluepig.alarm.domain.result.NotFoundAlarmException
 import com.bluepig.alarm.domain.result.NotSelectSongFile
-import com.bluepig.alarm.domain.result.resultOf
 import com.bluepig.alarm.domain.usecase.RemoveAlarm
 import com.bluepig.alarm.domain.usecase.SaveAlarm
 import com.bluepig.alarm.domain.util.CalendarHelper
@@ -108,14 +106,17 @@ class AlarmEditViewModel @Inject constructor(
         )
     }
 
-    suspend fun saveAlarm(): BpResult<Alarm> {
-        val editingAlarm = getEditingAlarm()
-        return _saveAlarm.invoke(editingAlarm ?: return resultOf {
-            throw NotSelectSongFile
-        })
+    suspend fun saveAlarm(): Result<Alarm> {
+        return kotlin.runCatching {
+            val editingAlarm = getEditingAlarm() ?: throw NotSelectSongFile
+            _saveAlarm.invoke(editingAlarm).getOrThrow()
+        }
     }
 
-    suspend fun removeAlarm(): BpResult<Unit> {
-        return _removeAlarm.invoke(_alarm ?: return BpResult.Failure(NotFoundAlarmException))
+    suspend fun removeAlarm(): Result<Unit> {
+        return kotlin.runCatching {
+            val alarm = _alarm ?: throw NotFoundAlarmException
+            _removeAlarm.invoke(alarm).getOrThrow()
+        }
     }
 }

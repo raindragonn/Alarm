@@ -5,8 +5,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bluepig.alarm.domain.entity.file.BasicFile
 import com.bluepig.alarm.domain.entity.file.SongFile
-import com.bluepig.alarm.domain.result.BpResult
 import com.bluepig.alarm.domain.result.NotFoundArgumentException
+import com.bluepig.alarm.domain.result.resultLoading
 import com.bluepig.alarm.domain.usecase.GetSongFile
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,8 +23,8 @@ class FileSelectViewModel @Inject constructor(
         get() = _state.get<BasicFile>("basicFile")
             ?: throw NotFoundArgumentException("basicFile")
 
-    private val _songFile: MutableStateFlow<BpResult<SongFile>> =
-        MutableStateFlow(BpResult.Loading)
+    private val _songFile: MutableStateFlow<Result<SongFile>> =
+        MutableStateFlow(resultLoading())
     val songFile = _songFile.asStateFlow()
 
     fun getFileUrl(userAgent: String) =

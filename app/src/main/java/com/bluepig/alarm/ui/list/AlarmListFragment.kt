@@ -9,11 +9,8 @@ import androidx.navigation.fragment.findNavController
 import com.bluepig.alarm.R
 import com.bluepig.alarm.databinding.FragmentAlarmListBinding
 import com.bluepig.alarm.domain.entity.alarm.Alarm
-import com.bluepig.alarm.domain.result.BpResult
 import com.bluepig.alarm.domain.result.NotFoundActiveAlarmException
 import com.bluepig.alarm.domain.result.NotFoundAlarmException
-import com.bluepig.alarm.domain.result.onFailure
-import com.bluepig.alarm.domain.result.onSuccess
 import com.bluepig.alarm.util.ext.viewLifeCycleScope
 import com.bluepig.alarm.util.ext.viewRepeatOnLifeCycle
 import com.bluepig.alarm.util.viewBinding
@@ -69,7 +66,7 @@ class AlarmListFragment : Fragment(R.layout.fragment_alarm_list) {
         }
     }
 
-    private fun showTimeRemaining(result: BpResult<String>) {
+    private fun showTimeRemaining(result: Result<String>) {
         result
             .onSuccess { guideText ->
                 _binding.tvAlarmState.text = guideText

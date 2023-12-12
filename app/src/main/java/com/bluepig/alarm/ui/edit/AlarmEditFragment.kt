@@ -17,9 +17,6 @@ import com.bluepig.alarm.databinding.FragmentAlarmEditBinding
 import com.bluepig.alarm.domain.entity.alarm.Week
 import com.bluepig.alarm.domain.entity.file.SongFile
 import com.bluepig.alarm.domain.result.NotSelectSongFile
-import com.bluepig.alarm.domain.result.onFailure
-import com.bluepig.alarm.domain.result.onSuccess
-import com.bluepig.alarm.domain.result.resultOf
 import com.bluepig.alarm.domain.util.CalendarHelper
 import com.bluepig.alarm.domain.util.hourOfDay
 import com.bluepig.alarm.domain.util.minute
@@ -104,7 +101,7 @@ class AlarmEditFragment : Fragment(R.layout.fragment_alarm_edit) {
         }
 
         btnPreview.setOnClickListener {
-            resultOf {
+            kotlin.runCatching {
                 _vm.getEditingAlarm() ?: throw NotSelectSongFile
             }.onSuccess { alarm ->
                 AlarmActivity.openPreView(requireContext(), alarm)
