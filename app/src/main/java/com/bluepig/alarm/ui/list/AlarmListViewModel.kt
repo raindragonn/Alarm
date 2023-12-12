@@ -3,9 +3,7 @@ package com.bluepig.alarm.ui.list
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bluepig.alarm.domain.entity.alarm.Alarm
-import com.bluepig.alarm.domain.result.BpResult
-import com.bluepig.alarm.domain.result.getOrThrow
-import com.bluepig.alarm.domain.result.resultOf
+import com.bluepig.alarm.domain.result.resultLoading
 import com.bluepig.alarm.domain.usecase.GetAllAlarms
 import com.bluepig.alarm.domain.usecase.GetExpiredAlarmTime
 import com.bluepig.alarm.domain.usecase.RefreshAlarms
@@ -26,25 +24,25 @@ class AlarmListViewModel @Inject constructor(
     private val _refreshAlarms: RefreshAlarms,
 ) : ViewModel() {
 
-    private val _alarmList: MutableStateFlow<BpResult<List<Alarm>>> =
-        MutableStateFlow(BpResult.Loading)
+    private val _alarmList: MutableStateFlow<Result<List<Alarm>>> =
+        MutableStateFlow(resultLoading())
     val alarmList = _alarmList.asStateFlow()
 
-    private val _expireTime: MutableStateFlow<BpResult<String>> =
-        MutableStateFlow(BpResult.Loading)
+    private val _expireTime: MutableStateFlow<Result<String>> =
+        MutableStateFlow(resultLoading())
     val expireTime = _expireTime.asStateFlow()
 
     init {
         viewModelScope.launch {
             _getAllAlarms.invoke()
                 .collect {
-                    _alarmList.emit(resultOf { it })
+                    _alarmList.emit(kotlin.runCatching { it })
                 }
         }
         viewModelScope.launch {
             _getExpiredAlarmTime.invoke()
                 .collect {
-                    val result = resultOf {
+                    val result = kotlin.runCatching {
                         _timeGuideManager.getRemainingTimeGuide(it.getOrThrow())
                     }
                     _expireTime.emit(result)

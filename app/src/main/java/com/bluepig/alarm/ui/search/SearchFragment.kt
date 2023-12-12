@@ -11,10 +11,8 @@ import androidx.navigation.fragment.findNavController
 import com.bluepig.alarm.R
 import com.bluepig.alarm.databinding.FragmentSearchBinding
 import com.bluepig.alarm.domain.entity.file.BasicFile
-import com.bluepig.alarm.domain.result.BpResult
-import com.bluepig.alarm.domain.result.onFailure
+import com.bluepig.alarm.domain.result.onFailureWithoutLoading
 import com.bluepig.alarm.domain.result.onLoading
-import com.bluepig.alarm.domain.result.onSuccess
 import com.bluepig.alarm.util.ext.setOnEnterListener
 import com.bluepig.alarm.util.ext.setOnLoadMore
 import com.bluepig.alarm.util.ext.showErrorToast
@@ -54,11 +52,11 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         }
     }
 
-    private fun searchListHandle(result: BpResult<List<BasicFile>>) {
+    private fun searchListHandle(result: Result<List<BasicFile>>) {
         result.onSuccess { list ->
             changeLoadingState(false)
             _adapter.submitList(list)
-        }.onFailure {
+        }.onFailureWithoutLoading {
             showErrorToast(it)
             changeLoadingState(false)
         }.onLoading {

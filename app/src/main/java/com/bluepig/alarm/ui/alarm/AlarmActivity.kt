@@ -16,8 +16,6 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.bluepig.alarm.R
 import com.bluepig.alarm.databinding.ActivityAlarmBinding
 import com.bluepig.alarm.domain.entity.alarm.Alarm
-import com.bluepig.alarm.domain.result.onFailure
-import com.bluepig.alarm.domain.result.onSuccess
 import com.bluepig.alarm.manager.player.SongPlayerManager
 import com.bluepig.alarm.util.ext.audioManager
 import com.bluepig.alarm.util.ext.setThumbnail
