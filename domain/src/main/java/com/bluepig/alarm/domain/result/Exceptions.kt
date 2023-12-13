@@ -6,7 +6,7 @@ object NotFoundActiveAlarmException : Exception("Not Found Active Alarm")
 
 object NotFoundAlarmException : Exception("Not Found Alarm")
 
-object NotSelectSongFile : Exception("Not Found SongFile")
+object NotSelectAlarmMedia : Exception("Not Found SongFile")
 
 object NotFoundPreViewAlarmException : Exception("Not Found Preview Alarm")
 

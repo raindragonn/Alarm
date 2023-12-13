@@ -24,7 +24,7 @@
 
         <action
             android:id="@+id/action_searchFragment_to_selectBottomSheetDialogFragment"
-            app:destination="@id/fileSelectBottomSheetDialogFragment" />
+            app:destination="@id/MediaSelectBottomSheetDialogFragment" />
     </fragment>
 
     <fragment
@@ -52,14 +52,20 @@
     </fragment>
 
     <dialog
-        android:id="@+id/fileSelectBottomSheetDialogFragment"
-        android:name="com.bluepig.alarm.ui.search.select.FileSelectBottomSheetDialogFragment"
-        android:label="FileSelectBottomSheetDialogFragment"
-        tools:layout="@layout/fragment_file_select">
+        android:id="@+id/MediaSelectBottomSheetDialogFragment"
+        android:name="com.bluepig.alarm.ui.search.select.MediaSelectBottomSheetDialogFragment"
+        android:label="MediaSelectBottomSheetDialogFragment"
+        tools:layout="@layout/fragment_media_select">
 
         <argument
-            android:name="basicFile"
-            app:argType="com.bluepig.alarm.domain.entity.file.BasicFile" />
+            android:name="musicInfo"
+            app:argType="com.bluepig.alarm.domain.entity.music.MusicInfo"
+            app:nullable="true" />
+
+        <argument
+            android:name="alarmMedia"
+            app:argType="com.bluepig.alarm.domain.entity.alarm.media.AlarmMedia"
+            app:nullable="true" />
     </dialog>
 
     <fragment

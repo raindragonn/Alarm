@@ -30,7 +30,7 @@ class RingtoneRepositoryImpl @Inject constructor(
                             val id = cursor.getLong(RingtoneManager.ID_COLUMN_INDEX)
                             val title = cursor.getString(RingtoneManager.TITLE_COLUMN_INDEX)
                             val uri = cursor.getString(RingtoneManager.URI_COLUMN_INDEX)
-                            result.add(RingtoneMedia(id, title, uri))
+                            result.add(RingtoneMedia(id, title, "$uri/$id"))
                         } while (cursor.moveToNext())
                     }
                 }

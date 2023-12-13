@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:background="@drawable/shape_top_rounded_background"
     android:padding="@dimen/base_spacing_2"
-    tools:context=".ui.search.select.FileSelectBottomSheetDialogFragment">
+    tools:context=".ui.search.select.MediaSelectBottomSheetDialogFragment">
 
 
     <androidx.constraintlayout.widget.Group
@@ -30,9 +30,9 @@
 
     <ImageButton
         android:id="@+id/btn_close"
+        style="@style/Alarm.Base.ImageButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/Alarm.Base.ImageButton"
         android:padding="@dimen/base_spacing_1"
         android:src="@drawable/ic_close"
         app:layout_constraintEnd_toEndOf="parent"
@@ -53,12 +53,12 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/base_spacing_2"
         android:layout_marginTop="@dimen/base_spacing_1"
-        tools:text="Title"
         app:layout_constraintBottom_toBottomOf="@id/barrier"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/iv_thumbnail"
         app:layout_constraintTop_toTopOf="@id/iv_thumbnail"
-        app:layout_constraintVertical_bias="0" />
+        app:layout_constraintVertical_bias="0"
+        tools:text="Title" />
 
     <androidx.media3.ui.PlayerControlView
         android:id="@+id/player_view"
@@ -85,10 +85,10 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/base_spacing_2"
         android:layout_marginEnd="@dimen/base_spacing_1"
-        app:layout_constraintTop_toBottomOf="@id/player_view"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/btn_select"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/player_view"
         tools:text="재생" />
 
     <androidx.appcompat.widget.AppCompatButton

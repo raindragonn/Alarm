@@ -25,6 +25,8 @@ class RingtoneViewModel @Inject constructor(
         viewModelScope.launch {
             _ringtonesState.emit(_getRingtones.invoke().onSuccess {
                 Timber.d("size = ${it.size}")
+            }.onFailure {
+                Timber.w(it)
             })
         }
     }

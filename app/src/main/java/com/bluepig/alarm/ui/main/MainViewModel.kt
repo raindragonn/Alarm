@@ -3,6 +3,7 @@ package com.bluepig.alarm.ui.main
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bluepig.alarm.domain.entity.alarm.Alarm
+import com.bluepig.alarm.domain.entity.alarm.media.MusicMedia
 import com.bluepig.alarm.domain.usecase.GetAllAlarms
 import com.bluepig.alarm.manager.download.MediaDownloadManager
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -26,13 +27,16 @@ class MainViewModel @Inject constructor(
 
     private fun startDownloadFiles(list: List<Alarm>) {
         list.filter(Alarm::isActive)
+            .map { it.media }
+            .filterIsInstance<MusicMedia>()
             .forEach {
-                _mediaDownloadManager.startDownload(it.file)
+                _mediaDownloadManager.startDownload(it)
             }
     }
 
     private fun removeDownloadFiles(list: List<Alarm>) {
-        val files = list.map { it.file }
+        val files = list.map { it.media }
+            .filterIsInstance<MusicMedia>()
         _mediaDownloadManager.removeDownload(files)
     }
 }

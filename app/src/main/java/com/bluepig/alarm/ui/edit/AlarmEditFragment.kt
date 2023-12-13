@@ -5,6 +5,7 @@ import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.SeekBar
+import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
@@ -15,8 +16,8 @@ import androidx.navigation.fragment.findNavController
 import com.bluepig.alarm.R
 import com.bluepig.alarm.databinding.FragmentAlarmEditBinding
 import com.bluepig.alarm.domain.entity.alarm.Week
-import com.bluepig.alarm.domain.entity.file.SongFile
-import com.bluepig.alarm.domain.result.NotSelectSongFile
+import com.bluepig.alarm.domain.entity.alarm.media.AlarmMedia
+import com.bluepig.alarm.domain.result.NotSelectAlarmMedia
 import com.bluepig.alarm.domain.result.onFailureWitLoading
 import com.bluepig.alarm.domain.util.CalendarHelper
 import com.bluepig.alarm.domain.util.hourOfDay
@@ -103,7 +104,7 @@ class AlarmEditFragment : Fragment(R.layout.fragment_alarm_edit) {
 
         btnPreview.setOnClickListener {
             kotlin.runCatching {
-                _vm.getEditingAlarm() ?: throw NotSelectSongFile
+                _vm.getEditingAlarm() ?: throw NotSelectAlarmMedia
             }.onSuccess { alarm ->
                 AlarmActivity.openPreView(requireContext(), alarm)
             }.onFailureWitLoading {
@@ -141,20 +142,20 @@ class AlarmEditFragment : Fragment(R.layout.fragment_alarm_edit) {
                     .collect(::bindWeek)
             }
             launch {
-                songFile
+                alarmMedia
                     .stateIn(this)
-                    .collect(::bindSongFile)
+                    .collect(::bindAlarmMedia)
             }
         }
 
-        setFragmentResultListener(REQUEST_SONG_FILE) { _, bundle ->
-            val songFile = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                bundle.getSerializable(KEY_SONG_FILE, SongFile::class.java)
+        setFragmentResultListener(REQUEST_ALARM_MEDIA) { _, bundle ->
+            val alarmMedia = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                bundle.getSerializable(KEY_ALARM_MEDIA, AlarmMedia::class.java)
             } else {
                 @Suppress("DEPRECATION")
-                bundle.getSerializable(KEY_SONG_FILE) as SongFile
+                bundle.getSerializable(KEY_ALARM_MEDIA) as AlarmMedia
             }
-            setSongFile(songFile ?: return@setFragmentResultListener)
+            setAlarmMedia(alarmMedia ?: return@setFragmentResultListener)
         }
     }
 
@@ -203,12 +204,16 @@ class AlarmEditFragment : Fragment(R.layout.fragment_alarm_edit) {
         _binding.tvRepeatGuide.text = text
     }
 
-    private fun bindSongFile(songFile: SongFile?) {
-        _binding.groupMedia.isVisible = songFile != null
-        songFile ?: return
+    private fun bindAlarmMedia(alarmMedia: AlarmMedia?) {
+        _binding.groupMedia.isVisible = alarmMedia != null
 
-        _binding.ivThumbnail.setThumbnail(songFile.thumbnail)
-        _binding.tvFileTitle.text = songFile.title
+        alarmMedia?.onMusic {
+            _binding.ivThumbnail.setThumbnail(it.thumbnail)
+            _binding.tvFileTitle.text = it.title
+        }?.onRingtone {
+            _binding.ivThumbnail.isInvisible = true
+            _binding.tvFileTitle.text = it.title
+        }
     }
 
     private fun bindVolume(volume: Int) {
@@ -225,7 +230,7 @@ class AlarmEditFragment : Fragment(R.layout.fragment_alarm_edit) {
     }
 
     companion object {
-        const val REQUEST_SONG_FILE = "REQUEST_SONG_FILE"
-        const val KEY_SONG_FILE = "KEY_SONG_FILE"
+        const val REQUEST_ALARM_MEDIA = "REQUEST_ALARM_MEDIA"
+        const val KEY_ALARM_MEDIA = "KEY_ALARM_MEDIA"
     }
 }

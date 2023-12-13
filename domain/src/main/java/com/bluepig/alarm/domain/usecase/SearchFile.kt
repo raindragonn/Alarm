@@ -1,8 +1,8 @@
 package com.bluepig.alarm.domain.usecase
 
 import com.bluepig.alarm.domain.di.IoDispatcher
-import com.bluepig.alarm.domain.entity.file.BasicFile
-import com.bluepig.alarm.domain.repository.FileRepository
+import com.bluepig.alarm.domain.entity.music.MusicInfo
+import com.bluepig.alarm.domain.repository.MusicInfoRepository
 import com.bluepig.alarm.domain.result.SearchQueryEmptyException
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
@@ -11,12 +11,12 @@ import javax.inject.Inject
 class SearchFile @Inject constructor(
     @IoDispatcher
     private val _dispatcher: CoroutineDispatcher,
-    private val _repository: FileRepository
+    private val _repository: MusicInfoRepository
 ) {
     private var _lastQuery = ""
     private var _lastOffset = 0
-    private var _cachedList = mutableListOf<BasicFile>()
-    suspend operator fun invoke(query: String = ""): Result<List<BasicFile>> {
+    private var _cachedList = mutableListOf<MusicInfo>()
+    suspend operator fun invoke(query: String = ""): Result<List<MusicInfo>> {
         val checkedQuery = checkSameQuery(query)
 
         return kotlin.runCatching {

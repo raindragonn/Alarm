@@ -11,7 +11,7 @@ import androidx.media3.common.util.UnstableApi
 import androidx.media3.common.util.Util
 import androidx.media3.datasource.HttpDataSource.HttpDataSourceException
 import com.bluepig.alarm.R
-import com.bluepig.alarm.domain.result.NotSelectSongFile
+import com.bluepig.alarm.domain.result.NotSelectAlarmMedia
 import com.bluepig.alarm.domain.result.SearchQueryEmptyException
 import timber.log.Timber
 import java.net.SocketTimeoutException
@@ -41,7 +41,7 @@ fun Context.showErrorToast(throwable: Throwable?, moreAction: (() -> Unit)? = nu
     val errorTextId = when (throwable) {
         is SearchQueryEmptyException -> R.string.toast_error_search_query_empty
         is HttpDataSourceException, is SocketTimeoutException, is UnknownHostException -> R.string.toast_error_network
-        is NotSelectSongFile -> R.string.toast_error_not_select_songFile
+        is NotSelectAlarmMedia -> R.string.toast_error_not_select_alarm_media
         else -> R.string.toast_error_basic
     }
     Toast.makeText(this, getString(errorTextId), Toast.LENGTH_SHORT).show()

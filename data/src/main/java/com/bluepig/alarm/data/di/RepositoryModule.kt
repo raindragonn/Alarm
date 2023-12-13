@@ -3,13 +3,13 @@ package com.bluepig.alarm.data.di
 import android.content.Context
 import com.bluepig.alarm.data.database.dao.AlarmDao
 import com.bluepig.alarm.data.network.api.SearchApi
-import com.bluepig.alarm.data.network.parser.FilePageParser
+import com.bluepig.alarm.data.network.parser.MusicInfoPageParser
 import com.bluepig.alarm.data.repository.AlarmRepositoryImpl
-import com.bluepig.alarm.data.repository.FileRepositoryImpl
+import com.bluepig.alarm.data.repository.MusicInfoRepositoryImpl
 import com.bluepig.alarm.data.repository.RingtoneRepositoryImpl
 import com.bluepig.alarm.domain.di.IoDispatcher
 import com.bluepig.alarm.domain.repository.AlarmRepository
-import com.bluepig.alarm.domain.repository.FileRepository
+import com.bluepig.alarm.domain.repository.MusicInfoRepository
 import com.bluepig.alarm.domain.repository.RingtoneRepository
 import dagger.Module
 import dagger.Provides
@@ -37,12 +37,12 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun providesFileRepository(
+    fun providesMusicInfoRepository(
         @IoDispatcher dispatcher: CoroutineDispatcher,
         searchApi: SearchApi,
-        pageParser: FilePageParser,
-    ): FileRepository {
-        return FileRepositoryImpl(
+        pageParser: MusicInfoPageParser,
+    ): MusicInfoRepository {
+        return MusicInfoRepositoryImpl(
             dispatcher,
             searchApi,
             pageParser

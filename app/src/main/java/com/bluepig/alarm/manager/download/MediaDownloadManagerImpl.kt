@@ -17,7 +17,7 @@ import androidx.media3.exoplayer.offline.DownloadHelper
 import androidx.media3.exoplayer.offline.DownloadManager
 import androidx.media3.exoplayer.offline.DownloadNotificationHelper
 import androidx.media3.exoplayer.offline.DownloadService
-import com.bluepig.alarm.domain.entity.file.SongFile
+import com.bluepig.alarm.domain.entity.alarm.media.MusicMedia
 import com.bluepig.alarm.notification.NotificationType
 import com.bluepig.alarm.service.MediaDownloadService
 import kotlinx.serialization.json.Json
@@ -69,30 +69,30 @@ class MediaDownloadManagerImpl @Inject constructor(
         }
     }
 
-    override fun getMediaItem(songFile: SongFile): MediaItem {
-        val download = getDownloadManager().downloadIndex.getDownload(songFile.id)
+    override fun getMediaItem(musicMedia: MusicMedia): MediaItem {
+        val download = getDownloadManager().downloadIndex.getDownload(musicMedia.id)
         val downloadedUri = download?.request?.uri
 
         return downloadedUri?.let {
             MediaItem.fromUri(it)
-        } ?: MediaItem.fromUri(songFile.fileUrl)
+        } ?: MediaItem.fromUri(musicMedia.fileUrl)
     }
 
-    override fun startDownload(songFile: SongFile) {
-        val mediaItem = getMediaItem(songFile)
+    override fun startDownload(musicMedia: MusicMedia) {
+        val mediaItem = getMediaItem(musicMedia)
         val downloadHelper = DownloadHelper.forMediaItem(
             _context,
             mediaItem
         )
 
-        if (getDownloadManager().downloadIndex.getDownload(songFile.id) != null) return
+        if (getDownloadManager().downloadIndex.getDownload(musicMedia.id) != null) return
 
         val jsonString =
-            Json.encodeToString(SongFile.serializer(), songFile)
+            Json.encodeToString(MusicMedia.serializer(), musicMedia)
         val data = Util.getUtf8Bytes(jsonString)
         val request =
             downloadHelper.getDownloadRequest(
-                songFile.id,
+                musicMedia.id,
                 data,
             )
 
@@ -122,15 +122,9 @@ class MediaDownloadManagerImpl @Inject constructor(
         return downloads.map { it.request.id }
     }
 
-    /**
-     * Remove download
-     * [songFiles]를 포함하지 않는 파일은 제거한다.
-     *
-     * @param songFiles - 현재 알람음으로 지정된 파일 리스트
-     */
-    override fun removeDownload(songFiles: List<SongFile>) {
+    override fun removeDownload(musicMedias: List<MusicMedia>) {
         val downloadedIds = getDownloadedIds().toSet()
-        val filesIds = songFiles.map { it.id }.toSet()
+        val filesIds = musicMedias.map { it.id }.toSet()
         downloadedIds.minus(filesIds)
             .also {
                 Timber.d(it.toString())
@@ -145,15 +139,7 @@ class MediaDownloadManagerImpl @Inject constructor(
             }
     }
 
-    /**
-     * Get data source factory
-     *
-     * 캐시를 이용하는 데이터 소스 팩토리.
-     * 데이터가 캐시되지 않은 경우 HttpDataSource를 이용해 요청된다.
-     *
-     */
     override fun getDataSourceFactory(): DataSource.Factory {
-
         return _datasourceFactory ?: CacheDataSource.Factory()
             .setCache(getDownloadCache())
             .setUpstreamDataSourceFactory(DefaultHttpDataSource.Factory())

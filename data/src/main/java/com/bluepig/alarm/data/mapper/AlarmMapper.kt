@@ -9,7 +9,7 @@ object AlarmMapper : BaseMapper<AlarmData, Alarm> {
             id = data.id,
             timeInMillis = data.timeInMillis,
             isActive = data.isActive,
-            file = data.file,
+            media = data.alarmMedia,
             repeatWeek = data.repeatWeek,
             volume = data.volume,
             hasVibration = data.hasVibration,
@@ -25,6 +25,6 @@ object AlarmMapper : BaseMapper<AlarmData, Alarm> {
             volume = entity.volume,
             hasVibration = entity.hasVibration,
             memo = entity.memo,
-            file = entity.file
+            alarmMedia = entity.media
         )
 }

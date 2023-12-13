@@ -4,8 +4,9 @@ import com.bluepig.alarm.domain.entity.base.BaseEntity
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class RingtoneMedia(
-    val id: Long,
+data class MusicMedia(
     override val title: String,
-    val uri: String,
+    val id: String,
+    val thumbnail: String,
+    val fileUrl: String
 ) : BaseEntity, AlarmMedia, java.io.Serializable

@@ -9,10 +9,14 @@ import androidx.media3.common.MediaItem
 import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
+import androidx.media3.datasource.DataSource
 import androidx.media3.datasource.DefaultDataSource
 import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.exoplayer.source.MediaSource
 import androidx.media3.exoplayer.source.ProgressiveMediaSource
-import com.bluepig.alarm.domain.entity.file.SongFile
+import com.bluepig.alarm.domain.entity.alarm.media.AlarmMedia
+import com.bluepig.alarm.domain.entity.alarm.media.MusicMedia
+import com.bluepig.alarm.domain.entity.alarm.media.RingtoneMedia
 import com.bluepig.alarm.domain.result.NotFoundMediaItemException
 import com.bluepig.alarm.domain.result.NotFoundPlayerException
 import com.bluepig.alarm.manager.download.MediaDownloadManager
@@ -57,17 +61,29 @@ class SongPlayerManagerImpl @Inject constructor(
         }
     }
 
-    override fun playSong(songFile: SongFile) {
-        val mediaItem = _downloadManager.getMediaItem(songFile)
+    override fun play(alarmMedia: AlarmMedia) {
+        when (alarmMedia) {
+            is MusicMedia -> playMusic(alarmMedia)
+            is RingtoneMedia -> playRingtone(alarmMedia)
+        }
+    }
+
+    private fun playMusic(musicMedia: MusicMedia) {
+        val mediaItem = _downloadManager.getMediaItem(musicMedia)
             .also { _mediaItem = it }
         val mediaSource =
-            ProgressiveMediaSource
-                .Factory(_downloadManager.getDataSourceFactory())
-                .createMediaSource(mediaItem)
+            getMediaSource(_downloadManager.getDataSourceFactory(), mediaItem)
+        setMediaSource(mediaSource)
+    }
 
-        _player?.playWhenReady = true
-        _player?.setMediaSource(mediaSource)
-        _player?.prepare()
+    private fun playRingtone(ringtoneMedia: RingtoneMedia) {
+        val mediaItem = MediaItem.fromUri(
+            ringtoneMedia.uri
+        ).also { _mediaItem = it }
+
+        val mediaSource =
+            getMediaSource(DefaultDataSource.Factory(_context), mediaItem)
+        setMediaSource(mediaSource)
     }
 
     override fun playDefaultAlarm() {
@@ -79,10 +95,16 @@ class SongPlayerManagerImpl @Inject constructor(
         ).also { _mediaItem = it }
 
         val mediaSource =
-            ProgressiveMediaSource
-                .Factory(DefaultDataSource.Factory(_context))
-                .createMediaSource(mediaItem)
+            getMediaSource(DefaultDataSource.Factory(_context), mediaItem)
+        setMediaSource(mediaSource)
+    }
 
+    private fun getMediaSource(factory: DataSource.Factory, mediaItem: MediaItem) =
+        ProgressiveMediaSource
+            .Factory(factory)
+            .createMediaSource(mediaItem)
+
+    private fun setMediaSource(mediaSource: MediaSource) {
         _player?.playWhenReady = true
         _player?.setMediaSource(mediaSource)
         _player?.prepare()

@@ -3,7 +3,7 @@ package com.bluepig.alarm.manager.player
 import androidx.lifecycle.Lifecycle
 import androidx.media3.common.MediaItem
 import androidx.media3.exoplayer.ExoPlayer
-import com.bluepig.alarm.domain.entity.file.SongFile
+import com.bluepig.alarm.domain.entity.alarm.media.AlarmMedia
 
 interface SongPlayerManager {
     fun init(
@@ -12,7 +12,7 @@ interface SongPlayerManager {
         errorListener: (Throwable?) -> Unit
     )
 
-    fun playSong(songFile: SongFile)
+    fun play(alarmMedia: AlarmMedia)
     fun playDefaultAlarm()
     fun getPlayer(): ExoPlayer
     fun getMediaItem(): MediaItem

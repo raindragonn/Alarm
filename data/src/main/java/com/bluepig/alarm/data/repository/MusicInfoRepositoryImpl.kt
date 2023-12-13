@@ -1,34 +1,34 @@
 package com.bluepig.alarm.data.repository
 
-import com.bluepig.alarm.data.mapper.FileMapper
+import com.bluepig.alarm.data.mapper.MusicInfoMapper
 import com.bluepig.alarm.data.network.api.SearchApi
-import com.bluepig.alarm.data.network.parser.FilePageParser
+import com.bluepig.alarm.data.network.parser.MusicInfoPageParser
 import com.bluepig.alarm.domain.di.IoDispatcher
-import com.bluepig.alarm.domain.entity.file.BasicFile
-import com.bluepig.alarm.domain.repository.FileRepository
+import com.bluepig.alarm.domain.entity.music.MusicInfo
+import com.bluepig.alarm.domain.repository.MusicInfoRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 
-class FileRepositoryImpl @Inject constructor(
+class MusicInfoRepositoryImpl @Inject constructor(
     @IoDispatcher
     private val _dispatcher: CoroutineDispatcher,
     private val _searchApi: SearchApi,
-    private val _filePageParser: FilePageParser
-) : FileRepository {
-    override suspend fun getFileList(query: String, offSet: Int): List<BasicFile> =
+    private val _musicInfoPageParser: MusicInfoPageParser
+) : MusicInfoRepository {
+    override suspend fun getFileList(query: String, offSet: Int): List<MusicInfo> =
         withContext(_dispatcher) {
             val response = _searchApi.getSongList(
                 query = query,
                 offset = offSet,
             )
 
-            response.fileResponses.map(FileMapper::mapToEntity)
+            response.musicInfoRespons.map(MusicInfoMapper::mapToEntity)
         }
 
     override suspend fun getFileUrl(pageUrl: String, userAgent: String): String =
         withContext(_dispatcher) {
-            _filePageParser.parse(pageUrl, userAgent)
+            _musicInfoPageParser.parse(pageUrl, userAgent)
         }
 }
