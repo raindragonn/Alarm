@@ -1,18 +1,18 @@
 package com.bluepig.alarm.data.database.converter
 
 import androidx.room.TypeConverter
-import com.bluepig.alarm.domain.entity.file.SongFile
+import com.bluepig.alarm.domain.entity.alarm.media.AlarmMedia
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
-class SongFileTypeConverter {
+class AlarmMediaTypeConverter {
     @TypeConverter
-    fun jsonStringToSongFile(data: String): SongFile {
+    fun jsonStringToAlarmMedia(data: String): AlarmMedia {
         return Json.decodeFromString(data)
     }
 
     @TypeConverter
-    fun songFileToJsonString(data: SongFile): String {
+    fun alarmMediaToJsonString(data: AlarmMedia): String {
         return Json.encodeToString(data)
     }
 }

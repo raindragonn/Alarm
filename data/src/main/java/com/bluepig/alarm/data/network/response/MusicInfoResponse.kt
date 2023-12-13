@@ -8,7 +8,7 @@ import kotlinx.serialization.Serializable
 
 @Keep
 @Serializable
-data class FileResponse(
+data class MusicInfoResponse(
     @SerialName("category")
     val category: Int,
     @SerialName("d1PageUrl")

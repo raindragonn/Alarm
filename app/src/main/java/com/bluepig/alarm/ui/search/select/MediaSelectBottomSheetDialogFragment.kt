@@ -2,6 +2,7 @@ package com.bluepig.alarm.ui.search.select
 
 import android.os.Bundle
 import android.view.View
+import androidx.annotation.OptIn
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.setFragmentResult
@@ -9,15 +10,14 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.media3.common.util.UnstableApi
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import com.bluepig.alarm.R
-import com.bluepig.alarm.databinding.FragmentFileSelectBinding
+import com.bluepig.alarm.databinding.DialogFragmentMediaSelectBinding
+import com.bluepig.alarm.domain.entity.alarm.media.AlarmMedia
 import com.bluepig.alarm.domain.result.onFailureWitLoading
 import com.bluepig.alarm.manager.player.SongPlayerManager
 import com.bluepig.alarm.ui.edit.AlarmEditFragment
 import com.bluepig.alarm.util.ext.setThumbnail
 import com.bluepig.alarm.util.ext.showErrorToast
-import com.bluepig.alarm.util.ext.userAgent
 import com.bluepig.alarm.util.ext.viewRepeatOnLifeCycle
 import com.bluepig.alarm.util.viewBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -25,14 +25,14 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
-@UnstableApi // TODO: Media3 향후 stable version으로 업데이트 필요
 @AndroidEntryPoint
-class FileSelectBottomSheetDialogFragment :
-    BottomSheetDialogFragment(R.layout.fragment_file_select) {
+class MediaSelectBottomSheetDialogFragment :
+    BottomSheetDialogFragment(R.layout.dialog_fragment_media_select) {
 
-    private val _binding: FragmentFileSelectBinding by viewBinding(FragmentFileSelectBinding::bind)
-    private val _vm: FileSelectViewModel by viewModels()
-    private val _navArgs: FileSelectBottomSheetDialogFragmentArgs by navArgs()
+    private val _binding: DialogFragmentMediaSelectBinding by viewBinding(
+        DialogFragmentMediaSelectBinding::bind
+    )
+    private val _vm: MediaSelectViewModel by viewModels()
 
     @Inject
     lateinit var playerManager: SongPlayerManager
@@ -45,7 +45,7 @@ class FileSelectBottomSheetDialogFragment :
             stateChangeListener = ::onPlayingStateChange,
             errorListener = { showErrorToast(it) }
         )
-        _vm.getFileUrl(requireContext().userAgent)
+
         initViews()
         observing()
     }
@@ -55,21 +55,18 @@ class FileSelectBottomSheetDialogFragment :
         playerManager.release()
     }
 
+    @OptIn(UnstableApi::class)
     private fun initViews() = with(_binding) {
         playerView.player = playerManager.getPlayer()
-        val file = _navArgs.basicFile
-        tvTitle.text = file.title
-        ivThumbnail.setThumbnail(file.thumbnail)
         btnClose.setOnClickListener { findNavController().popBackStack() }
         btnPlay.setOnClickListener { playerManager.playEndPause() }
-
         btnSelect.setOnClickListener {
-            val songFile = _vm.songFile.value.getOrNull()
-            if (songFile == null) showErrorToast(null)
+            val alarmMedia = _vm.musicMedia.value.getOrNull()
+            if (alarmMedia == null) showErrorToast(null)
 
             setFragmentResult(
-                AlarmEditFragment.REQUEST_SONG_FILE,
-                bundleOf(AlarmEditFragment.KEY_SONG_FILE to songFile)
+                AlarmEditFragment.REQUEST_ALARM_MEDIA,
+                bundleOf(AlarmEditFragment.KEY_ALARM_MEDIA to alarmMedia)
             )
             findNavController()
                 .popBackStack(R.id.alarmEditFragment, false)
@@ -95,15 +92,35 @@ class FileSelectBottomSheetDialogFragment :
 
     private fun observing() {
         viewRepeatOnLifeCycle(Lifecycle.State.STARTED) {
-            _vm.songFile.stateIn(this).collect { result ->
-                result.onSuccess {
-                    playerManager.playSong(it)
-                }.onFailureWitLoading {
-                    showErrorToast(it) {
-                        findNavController().popBackStack()
+            _vm.musicMedia
+                .stateIn(this)
+                .collect { result ->
+                    result.onSuccess {
+                        bindMedia(it)
+                        playerManager.play(it)
+                    }.onFailureWitLoading {
+                        showErrorToast(it) {
+                            findNavController().popBackStack()
+                        }
                     }
                 }
-            }
         }
+    }
+
+    private fun bindMedia(alarmMedia: AlarmMedia) {
+        _binding.tvTitle.text = alarmMedia.title
+
+        alarmMedia
+            .onMusic { music ->
+                _binding.ivThumbnail.setThumbnail(music.thumbnail)
+            }
+            .onRingtone {
+                _binding.ivThumbnail.isVisible = false
+            }
+    }
+
+    companion object {
+        const val KEY_ARGS_MUSIC_INFO = "musicInfo"
+        const val KEY_ARGS_ALARM_MEDIA = "alarmMedia"
     }
 }

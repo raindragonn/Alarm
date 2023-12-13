@@ -3,7 +3,7 @@ package com.bluepig.alarm.data.network.parser
 import com.bluepig.alarm.data.BuildConfig
 import org.jsoup.Jsoup
 
-class FilePageParserImpl : FilePageParser {
+class MusicInfoPageParserImpl : MusicInfoPageParser {
     override suspend fun parse(url: String, userAgent: String): String {
         val doc = Jsoup
             .connect(url)

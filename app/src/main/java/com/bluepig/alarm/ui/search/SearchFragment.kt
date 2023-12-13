@@ -3,6 +3,7 @@ package com.bluepig.alarm.ui.search
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -10,8 +11,9 @@ import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
 import com.bluepig.alarm.R
 import com.bluepig.alarm.databinding.FragmentSearchBinding
-import com.bluepig.alarm.domain.entity.file.BasicFile
+import com.bluepig.alarm.domain.entity.music.MusicInfo
 import com.bluepig.alarm.domain.result.onFailureWitLoading
+import com.bluepig.alarm.ui.search.select.MediaSelectBottomSheetDialogFragment
 import com.bluepig.alarm.util.ext.setOnEnterListener
 import com.bluepig.alarm.util.ext.setOnLoadMore
 import com.bluepig.alarm.util.ext.showErrorToast
@@ -51,7 +53,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         }
     }
 
-    private fun searchListHandle(result: Result<List<BasicFile>>) {
+    private fun searchListHandle(result: Result<List<MusicInfo>>) {
         result.onSuccess { list ->
             changeLoadingState(false)
             _adapter.submitList(list)
@@ -66,12 +68,13 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     }
 
     @SuppressLint("UnsafeOptInUsageError")
-    private fun itemClick(file: BasicFile) {
-        val action =
-            SearchFragmentDirections.actionSearchFragmentToSelectBottomSheetDialogFragment(
-                file
+    private fun itemClick(file: MusicInfo) {
+        findNavController().navigate(
+            R.id.MediaSelectBottomSheetDialogFragment,
+            bundleOf(
+                MediaSelectBottomSheetDialogFragment.KEY_ARGS_MUSIC_INFO to file
             )
-        findNavController().navigate(action)
+        )
     }
 
     private fun changeLoadingState(isVisible: Boolean) {

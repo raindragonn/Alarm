@@ -8,7 +8,7 @@ import androidx.media3.exoplayer.offline.Download
 import androidx.media3.exoplayer.offline.DownloadManager
 import androidx.media3.exoplayer.offline.DownloadNotificationHelper
 import com.bluepig.alarm.R
-import com.bluepig.alarm.domain.entity.file.SongFile
+import com.bluepig.alarm.domain.entity.alarm.media.MusicMedia
 import kotlinx.serialization.json.Json
 
 @UnstableApi
@@ -25,7 +25,7 @@ class MediaDownloadListener(
         val notification = when (download.state) {
             Download.STATE_COMPLETED, Download.STATE_FAILED -> {
                 val data = Json.decodeFromString(
-                    SongFile.serializer(),
+                    MusicMedia.serializer(),
                     Util.fromUtf8Bytes(download.request.data)
                 )
                 downloadNotificationHelper.buildDownloadCompletedNotification(

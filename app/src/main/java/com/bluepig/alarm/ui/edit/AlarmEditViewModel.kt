@@ -5,9 +5,9 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.bluepig.alarm.domain.entity.alarm.Alarm
 import com.bluepig.alarm.domain.entity.alarm.Week
-import com.bluepig.alarm.domain.entity.file.SongFile
+import com.bluepig.alarm.domain.entity.alarm.media.AlarmMedia
 import com.bluepig.alarm.domain.result.NotFoundAlarmException
-import com.bluepig.alarm.domain.result.NotSelectSongFile
+import com.bluepig.alarm.domain.result.NotSelectAlarmMedia
 import com.bluepig.alarm.domain.usecase.RemoveAlarm
 import com.bluepig.alarm.domain.usecase.SaveAlarm
 import com.bluepig.alarm.domain.util.CalendarHelper
@@ -58,9 +58,9 @@ class AlarmEditViewModel @Inject constructor(
     val memo
         get() = _memo.asStateFlow()
 
-    private val _songFile = MutableStateFlow(_alarm?.file)
-    val songFile
-        get() = _songFile.asStateFlow()
+    private val _alarmMedia = MutableStateFlow(_alarm?.media)
+    val alarmMedia
+        get() = _alarmMedia.asStateFlow()
 
 
     fun setTimeInMillis(hourOfDay: Int, minute: Int) {
@@ -90,15 +90,15 @@ class AlarmEditViewModel @Inject constructor(
         _memo.value = memo
     }
 
-    fun setSongFile(songFile: SongFile) {
-        _songFile.value = songFile
+    fun setAlarmMedia(alarmMedia: AlarmMedia) {
+        _alarmMedia.value = alarmMedia
     }
 
     fun getEditingAlarm(): Alarm? {
         return Alarm(
             id = _alarm?.id,
             timeInMillis = _timeInMillis.value,
-            file = _songFile.value ?: return null,
+            media = _alarmMedia.value ?: return null,
             repeatWeek = _repeatWeek.value,
             volume = _volume.value,
             hasVibration = _vibration.value,
@@ -108,7 +108,7 @@ class AlarmEditViewModel @Inject constructor(
 
     suspend fun saveAlarm(): Result<Alarm> {
         return kotlin.runCatching {
-            val editingAlarm = getEditingAlarm() ?: throw NotSelectSongFile
+            val editingAlarm = getEditingAlarm() ?: throw NotSelectAlarmMedia
             _saveAlarm.invoke(editingAlarm).getOrThrow()
         }
     }

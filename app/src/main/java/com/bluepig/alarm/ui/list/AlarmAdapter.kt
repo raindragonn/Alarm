@@ -47,7 +47,7 @@ class AlarmAdapter(
             override fun areContentsTheSame(oldItem: Alarm, newItem: Alarm): Boolean {
                 return oldItem.timeInMillis == newItem.timeInMillis
                         && oldItem.isActive == newItem.isActive
-                        && oldItem.file == newItem.file
+                        && oldItem.media == newItem.media
                         && oldItem.repeatWeek == newItem.repeatWeek
                         && oldItem.volume == newItem.volume
                         && oldItem.hasVibration == newItem.hasVibration

@@ -10,12 +10,14 @@ import android.view.WindowManager
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isInvisible
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.bluepig.alarm.R
 import com.bluepig.alarm.databinding.ActivityAlarmBinding
 import com.bluepig.alarm.domain.entity.alarm.Alarm
+import com.bluepig.alarm.domain.entity.alarm.media.MusicMedia
 import com.bluepig.alarm.domain.result.onFailureWitLoading
 import com.bluepig.alarm.manager.player.SongPlayerManager
 import com.bluepig.alarm.util.ext.audioManager
@@ -96,7 +98,15 @@ class AlarmActivity : AppCompatActivity() {
     }
 
     private fun initViews(alarm: Alarm) = with(_binding) {
-        ivThumbnail.setThumbnail(alarm.file.thumbnail)
+        when (val media = alarm.media) {
+            is MusicMedia -> {
+                ivThumbnail.setThumbnail(media.thumbnail)
+            }
+
+            else -> {
+                ivThumbnail.isInvisible = true
+            }
+        }
         tvMemo.text = alarm.memo
 
         if (_vm.isPreview) {
@@ -174,7 +184,7 @@ class AlarmActivity : AppCompatActivity() {
                 }
             })
 
-        playerManager.playSong(alarm.file)
+        playerManager.play(alarm.media)
     }
 
     private fun onPlayingStateChanged(isPlaying: Boolean) {}

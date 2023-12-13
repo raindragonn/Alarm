@@ -1,5 +1,5 @@
 package com.bluepig.alarm.data.network.parser
 
-interface FilePageParser {
+interface MusicInfoPageParser {
     suspend fun parse(url: String, userAgent: String): String
 }
