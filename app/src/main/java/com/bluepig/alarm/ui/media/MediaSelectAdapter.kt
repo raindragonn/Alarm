@@ -3,14 +3,16 @@ package com.bluepig.alarm.ui.media
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.bluepig.alarm.R
+import com.bluepig.alarm.ui.ringtone.RingtoneFragment
 import com.bluepig.alarm.ui.search.SearchFragment
 
 class MediaSelectAdapter(
     parent: Fragment,
 ) : FragmentStateAdapter(parent) {
 
-    private val _fragments = mapOf<String, Fragment>(
+    private val _fragments = mapOf(
         parent.getString(R.string.tab_title_search) to SearchFragment(),
+        parent.getString(R.string.tab_title_ringtone) to RingtoneFragment(),
     )
 
     override fun getItemCount(): Int =

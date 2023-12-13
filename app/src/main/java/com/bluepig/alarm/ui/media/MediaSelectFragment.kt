@@ -25,6 +25,7 @@ class MediaSelectFragment : Fragment(R.layout.fragment_media_select) {
     private fun initViews() = with(_binding) {
         viewPager.adapter = _adapter
         viewPager.isUserInputEnabled = false
+
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
             tab.text = _adapter.getTabTitle(position)
         }.attach()

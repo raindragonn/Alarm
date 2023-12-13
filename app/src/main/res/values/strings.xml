@@ -26,6 +26,7 @@
     <string name="week_guide">" 반복"</string>
 
     <string name="tab_title_search">노래</string>
+    <string name="tab_title_ringtone">벨소리</string>
 
     <string name="memo">메모</string>
     <string name="memo_hint">메모를 입력해주세요.</string>
