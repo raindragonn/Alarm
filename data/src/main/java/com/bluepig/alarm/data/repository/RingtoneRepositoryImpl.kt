@@ -22,15 +22,17 @@ class RingtoneRepositoryImpl @Inject constructor(
     override suspend fun getRingtoneList(): List<RingtoneMedia> =
         withContext(_dispatcher) {
             val result = mutableListOf<RingtoneMedia>()
-            _ringtoneManager.setType(RingtoneManager.TYPE_ALL)
-            _ringtoneManager.cursor.use { cursor ->
-                if (cursor.moveToFirst()) {
-                    do {
-                        val id = cursor.getLong(RingtoneManager.ID_COLUMN_INDEX)
-                        val title = cursor.getString(RingtoneManager.TITLE_COLUMN_INDEX)
-                        val uri = cursor.getString(RingtoneManager.URI_COLUMN_INDEX)
-                        result.add(RingtoneMedia(id, title, uri))
-                    } while (cursor.moveToNext())
+            _ringtoneManager.apply {
+                setType(RingtoneManager.TYPE_ALL)
+                cursor.use { cursor ->
+                    if (cursor.moveToFirst()) {
+                        do {
+                            val id = cursor.getLong(RingtoneManager.ID_COLUMN_INDEX)
+                            val title = cursor.getString(RingtoneManager.TITLE_COLUMN_INDEX)
+                            val uri = cursor.getString(RingtoneManager.URI_COLUMN_INDEX)
+                            result.add(RingtoneMedia(id, title, uri))
+                        } while (cursor.moveToNext())
+                    }
                 }
             }
             result
