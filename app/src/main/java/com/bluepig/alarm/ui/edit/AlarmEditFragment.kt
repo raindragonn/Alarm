@@ -17,6 +17,7 @@ import com.bluepig.alarm.databinding.FragmentAlarmEditBinding
 import com.bluepig.alarm.domain.entity.alarm.Week
 import com.bluepig.alarm.domain.entity.file.SongFile
 import com.bluepig.alarm.domain.result.NotSelectSongFile
+import com.bluepig.alarm.domain.result.onFailureWitLoading
 import com.bluepig.alarm.domain.util.CalendarHelper
 import com.bluepig.alarm.domain.util.hourOfDay
 import com.bluepig.alarm.domain.util.minute
@@ -105,7 +106,7 @@ class AlarmEditFragment : Fragment(R.layout.fragment_alarm_edit) {
                 _vm.getEditingAlarm() ?: throw NotSelectSongFile
             }.onSuccess { alarm ->
                 AlarmActivity.openPreView(requireContext(), alarm)
-            }.onFailure {
+            }.onFailureWitLoading {
                 showErrorToast(it)
             }
         }
@@ -122,7 +123,7 @@ class AlarmEditFragment : Fragment(R.layout.fragment_alarm_edit) {
             val action =
                 AlarmEditFragmentDirections.actionAlarmEditFragmentToAlarmListFragment()
             findNavController().navigate(action)
-        }.onFailure {
+        }.onFailureWitLoading {
             showErrorToast(it)
         }
     }

@@ -11,8 +11,7 @@ import androidx.navigation.fragment.findNavController
 import com.bluepig.alarm.R
 import com.bluepig.alarm.databinding.FragmentSearchBinding
 import com.bluepig.alarm.domain.entity.file.BasicFile
-import com.bluepig.alarm.domain.result.onFailureWithoutLoading
-import com.bluepig.alarm.domain.result.onLoading
+import com.bluepig.alarm.domain.result.onFailureWitLoading
 import com.bluepig.alarm.util.ext.setOnEnterListener
 import com.bluepig.alarm.util.ext.setOnLoadMore
 import com.bluepig.alarm.util.ext.showErrorToast
@@ -56,12 +55,14 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         result.onSuccess { list ->
             changeLoadingState(false)
             _adapter.submitList(list)
-        }.onFailureWithoutLoading {
+        }.onFailureWitLoading(::onLoading) {
             showErrorToast(it)
             changeLoadingState(false)
-        }.onLoading {
-            changeLoadingState(true)
         }
+    }
+
+    private fun onLoading() {
+        changeLoadingState(true)
     }
 
     @SuppressLint("UnsafeOptInUsageError")

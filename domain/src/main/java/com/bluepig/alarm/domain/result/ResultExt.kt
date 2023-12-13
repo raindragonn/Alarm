@@ -5,17 +5,16 @@ fun <T> resultLoading(): Result<T> {
     return Result.failure(LoadingException)
 }
 
-fun <T> Result<T>.onFailureWithoutLoading(action: (exception: Throwable) -> Unit): Result<T> {
-    onFailure {
-        if (isLoading) return@onFailure
-        action(it)
-    }
-    return this
-}
-
-fun <T> Result<T>.onLoading(loadingAction: () -> Unit): Result<T> {
-    if (isLoading) {
-        loadingAction()
+fun <T> Result<T>.onFailureWitLoading(
+    loadingAction: (() -> Unit)? = null,
+    failureAction: (t: Throwable) -> Unit
+): Result<T> {
+    onFailure { throwable ->
+        if (isLoading) {
+            loadingAction?.invoke()
+        } else {
+            failureAction.invoke(throwable)
+        }
     }
     return this
 }

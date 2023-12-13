@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.offline.DownloadService
 import com.bluepig.alarm.databinding.ActivityMainBinding
+import com.bluepig.alarm.domain.result.onFailureWitLoading
 import com.bluepig.alarm.notification.NotificationType
 import com.bluepig.alarm.service.MediaDownloadService
 import com.bluepig.alarm.util.PermissionHelper
@@ -36,7 +37,7 @@ class MainActivity : AppCompatActivity() {
                 this,
                 MediaDownloadService::class.java,
             )
-        }.onFailure {
+        }.onFailureWitLoading {
             DownloadService.startForeground(
                 this,
                 MediaDownloadService::class.java,
