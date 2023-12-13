@@ -12,7 +12,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bluepig.alarm.R
 import com.bluepig.alarm.databinding.FragmentFileSelectBinding
-import com.bluepig.alarm.domain.result.onFailureWithoutLoading
+import com.bluepig.alarm.domain.result.onFailureWitLoading
 import com.bluepig.alarm.manager.player.SongPlayerManager
 import com.bluepig.alarm.ui.edit.AlarmEditFragment
 import com.bluepig.alarm.util.ext.setThumbnail
@@ -98,7 +98,7 @@ class FileSelectBottomSheetDialogFragment :
             _vm.songFile.stateIn(this).collect { result ->
                 result.onSuccess {
                     playerManager.playSong(it)
-                }.onFailureWithoutLoading {
+                }.onFailureWitLoading {
                     showErrorToast(it) {
                         findNavController().popBackStack()
                     }
