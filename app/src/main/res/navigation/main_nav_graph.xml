@@ -45,8 +45,8 @@
             app:popUpToInclusive="true" />
 
         <action
-            android:id="@+id/action_alarmEditFragment_to_searchFragment"
-            app:destination="@id/searchFragment"
+            android:id="@+id/action_alarmEditFragment_to_mediaSelectFragment"
+            app:destination="@id/mediaSelectFragment"
             app:popUpTo="@id/alarmEditFragment"
             app:popUpToInclusive="false" />
     </fragment>
@@ -57,9 +57,14 @@
         android:label="FileSelectBottomSheetDialogFragment"
         tools:layout="@layout/fragment_file_select">
 
-    <argument
+        <argument
             android:name="basicFile"
             app:argType="com.bluepig.alarm.domain.entity.file.BasicFile" />
-
     </dialog>
+
+    <fragment
+        android:id="@+id/mediaSelectFragment"
+        android:name="com.bluepig.alarm.ui.media.MediaSelectFragment"
+        android:label="fragment_media_select"
+        tools:layout="@layout/fragment_media_select" />
 </navigation>

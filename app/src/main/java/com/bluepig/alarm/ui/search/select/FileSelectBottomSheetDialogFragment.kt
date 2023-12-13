@@ -2,6 +2,7 @@ package com.bluepig.alarm.ui.search.select
 
 import android.os.Bundle
 import android.view.View
+import androidx.annotation.OptIn
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.setFragmentResult
@@ -25,7 +26,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
-@UnstableApi // TODO: Media3 향후 stable version으로 업데이트 필요
 @AndroidEntryPoint
 class FileSelectBottomSheetDialogFragment :
     BottomSheetDialogFragment(R.layout.fragment_file_select) {
@@ -55,6 +55,7 @@ class FileSelectBottomSheetDialogFragment :
         playerManager.release()
     }
 
+    @OptIn(UnstableApi::class)
     private fun initViews() = with(_binding) {
         playerView.player = playerManager.getPlayer()
         val file = _navArgs.basicFile
@@ -105,5 +106,9 @@ class FileSelectBottomSheetDialogFragment :
                 }
             }
         }
+    }
+
+    companion object {
+        const val KEY_ARGS_BASIC_FILE = "basicFile"
     }
 }

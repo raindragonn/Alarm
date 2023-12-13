@@ -129,7 +129,7 @@ class AlarmEditFragment : Fragment(R.layout.fragment_alarm_edit) {
     }
 
     private fun goSearch() {
-        val action = AlarmEditFragmentDirections.actionAlarmEditFragmentToSearchFragment()
+        val action = AlarmEditFragmentDirections.actionAlarmEditFragmentToMediaSelectFragment()
         findNavController().navigate(action)
     }
 

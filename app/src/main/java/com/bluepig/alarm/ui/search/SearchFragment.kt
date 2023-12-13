@@ -3,6 +3,7 @@ package com.bluepig.alarm.ui.search
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -12,6 +13,7 @@ import com.bluepig.alarm.R
 import com.bluepig.alarm.databinding.FragmentSearchBinding
 import com.bluepig.alarm.domain.entity.file.BasicFile
 import com.bluepig.alarm.domain.result.onFailureWitLoading
+import com.bluepig.alarm.ui.search.select.FileSelectBottomSheetDialogFragment
 import com.bluepig.alarm.util.ext.setOnEnterListener
 import com.bluepig.alarm.util.ext.setOnLoadMore
 import com.bluepig.alarm.util.ext.showErrorToast
@@ -67,11 +69,12 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
 
     @SuppressLint("UnsafeOptInUsageError")
     private fun itemClick(file: BasicFile) {
-        val action =
-            SearchFragmentDirections.actionSearchFragmentToSelectBottomSheetDialogFragment(
-                file
+        findNavController().navigate(
+            R.id.fileSelectBottomSheetDialogFragment,
+            bundleOf(
+                FileSelectBottomSheetDialogFragment.KEY_ARGS_BASIC_FILE to file
             )
-        findNavController().navigate(action)
+        )
     }
 
     private fun changeLoadingState(isVisible: Boolean) {
