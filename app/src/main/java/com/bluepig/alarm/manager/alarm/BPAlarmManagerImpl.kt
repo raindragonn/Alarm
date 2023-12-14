@@ -25,7 +25,7 @@ class BPAlarmManagerImpl @Inject constructor(
         val alarmId = alarm.id ?: return
         if (alarm.timeInMillis < CalendarHelper.now.timeInMillis) return
         val intent = getAlarmReceiverIntent(alarmId)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && !_alarmManager.canScheduleExactAlarms()) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !_alarmManager.canScheduleExactAlarms()) {
             Timber.e("ExactAlarms Permission denied!")
             return
         }
