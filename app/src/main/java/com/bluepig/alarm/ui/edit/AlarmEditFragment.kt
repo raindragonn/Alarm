@@ -23,9 +23,9 @@ import com.bluepig.alarm.domain.util.CalendarHelper
 import com.bluepig.alarm.domain.util.hourOfDay
 import com.bluepig.alarm.domain.util.minute
 import com.bluepig.alarm.ui.alarm.AlarmActivity
+import com.bluepig.alarm.util.ext.getGuideText
 import com.bluepig.alarm.util.ext.setThumbnail
 import com.bluepig.alarm.util.ext.showErrorToast
-import com.bluepig.alarm.util.ext.stringId
 import com.bluepig.alarm.util.ext.viewLifeCycleScope
 import com.bluepig.alarm.util.ext.viewRepeatOnLifeCycle
 import com.bluepig.alarm.util.viewBinding
@@ -182,26 +182,7 @@ class AlarmEditFragment : Fragment(R.layout.fragment_alarm_edit) {
                 it.unSelected()
             }
         }
-
-        val weekEntries = Week.entries
-        val text = when {
-            setWeek.isEmpty() ->
-                getString(R.string.week_not_select_guide)
-
-            setWeek == weekEntries.filter { it.isWeekend }.toSet() ->
-                getString(R.string.week_weekend_guide)
-
-            setWeek == weekEntries.filter { it.isWeekend.not() }.toSet() ->
-                getString(R.string.week_weekday_guide)
-
-            setWeek == weekEntries.toSet() ->
-                getString(R.string.week_everyday_guide)
-
-            else ->
-                setWeek.sorted()
-                    .joinToString(" ") { getString(it.stringId) } + getString(R.string.week_guide)
-        }
-        _binding.tvRepeatGuide.text = text
+        _binding.tvRepeatGuide.text = setWeek.getGuideText(requireContext())
     }
 
     private fun bindAlarmMedia(alarmMedia: AlarmMedia?) {
