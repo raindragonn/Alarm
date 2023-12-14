@@ -36,7 +36,6 @@ class AlarmListFragment : Fragment(R.layout.fragment_alarm_list) {
 
         initViews()
         observing()
-        _vm.refresh()
     }
 
     private fun initViews() {

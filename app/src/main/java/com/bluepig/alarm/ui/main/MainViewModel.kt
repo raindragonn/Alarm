@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.bluepig.alarm.domain.entity.alarm.Alarm
 import com.bluepig.alarm.domain.entity.alarm.media.MusicMedia
 import com.bluepig.alarm.domain.usecase.GetAllAlarms
+import com.bluepig.alarm.domain.usecase.RefreshAlarms
 import com.bluepig.alarm.manager.download.MediaDownloadManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.stateIn
@@ -14,7 +15,8 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val _getAllAlarms: GetAllAlarms,
-    private val _mediaDownloadManager: MediaDownloadManager
+    private val _mediaDownloadManager: MediaDownloadManager,
+    private val _refreshAlarms: RefreshAlarms,
 ) : ViewModel() {
     fun startDownload() = viewModelScope.launch {
         _getAllAlarms.invoke()
@@ -23,6 +25,10 @@ class MainViewModel @Inject constructor(
                 startDownloadFiles(list)
                 removeDownloadFiles(list)
             }
+    }
+
+    fun refresh() = viewModelScope.launch {
+        _refreshAlarms.invoke()
     }
 
     private fun startDownloadFiles(list: List<Alarm>) {

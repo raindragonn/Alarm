@@ -26,8 +26,10 @@ class MainActivity : AppCompatActivity() {
         PermissionHelper.checkNotificationPermission(this) {
             NotificationType.DOWNLOAD_NOTIFICATION.createChannel(this)
         }
+        PermissionHelper.checkExactAlarmPermission(this, _binding.root) {
+            _vm.refresh()
+        }
         PermissionHelper.checkSystemAlertPermission(this, _binding.root)
-        PermissionHelper.checkExactAlarmPermission(this, _binding.root)
         startDownloadService()
     }
 

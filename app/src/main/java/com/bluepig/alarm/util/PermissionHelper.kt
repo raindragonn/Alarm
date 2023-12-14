@@ -95,24 +95,30 @@ object PermissionHelper {
         }
     }
 
-    fun checkExactAlarmPermission(activity: ComponentActivity, anchorView: View) {
+    fun checkExactAlarmPermission(
+        activity: ComponentActivity,
+        anchorView: View,
+        grantedAction: () -> Unit
+    ) {
         activity.apply {
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU || !alarmManager.canScheduleExactAlarms()) {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S || alarmManager.canScheduleExactAlarms()) {
                 return
             }
 
             activity.lifecycleScope.launch {
                 repeatOnLifecycle(Lifecycle.State.RESUMED) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && !alarmManager.canScheduleExactAlarms()) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !alarmManager.canScheduleExactAlarms()) {
                         Snackbar.make(
                             anchorView,
                             R.string.alert_request_permission_text_exact_alarm,
                             Snackbar.LENGTH_INDEFINITE
                         ).apply {
                             setAction(R.string.ok) {
-                                openSystemAlertWindow(activity)
+                                openExactAlarmSetting(activity)
                             }
                         }.show()
+                    } else {
+                        grantedAction.invoke()
                     }
                 }
             }
@@ -152,6 +158,14 @@ object PermissionHelper {
 
     private fun openSystemAlertWindow(context: Context) {
         val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION).apply {
+            data = Uri.parse("package:${context.packageName}")
+        }
+        context.startActivity(intent)
+    }
+
+    private fun openExactAlarmSetting(context: Context) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) return
+        val intent = Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM).apply {
             data = Uri.parse("package:${context.packageName}")
         }
         context.startActivity(intent)
