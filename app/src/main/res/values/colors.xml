@@ -5,6 +5,8 @@
     <color name="surface">@color/base</color>
 
     <color name="text">@color/point</color>
+    <color name="disable">@color/mono_500</color>
+    <color name="guide_text">@color/primary_600</color>
     <color name="button_text">@color/base</color>
 
     <color name="icon">@color/point</color>

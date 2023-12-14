@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/mono_800"
     tools:context=".ui.list.AlarmListFragment">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -17,7 +18,7 @@
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/transparent"
+            android:background="@drawable/shape_bottom_rounded_background"
             app:elevation="0dp">
 
             <com.google.android.material.appbar.CollapsingToolbarLayout
