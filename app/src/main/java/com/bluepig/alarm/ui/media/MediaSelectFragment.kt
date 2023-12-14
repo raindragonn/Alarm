@@ -3,6 +3,7 @@ package com.bluepig.alarm.ui.media
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.bluepig.alarm.R
 import com.bluepig.alarm.databinding.FragmentMediaSelectBinding
 import com.bluepig.alarm.util.viewBinding
@@ -29,5 +30,9 @@ class MediaSelectFragment : Fragment(R.layout.fragment_media_select) {
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
             tab.text = _adapter.getTabTitle(position)
         }.attach()
+
+        btnBack.setOnClickListener {
+            findNavController().popBackStack()
+        }
     }
 }

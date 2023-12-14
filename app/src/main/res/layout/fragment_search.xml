@@ -14,24 +14,12 @@
         android:background="@color/transparent"
         android:drawableStart="@drawable/ic_search"
         android:drawablePadding="@dimen/base_spacing_2"
+        android:hint="@string/hint_alarm_search"
         android:inputType="text"
         android:maxLines="1"
         android:padding="@dimen/base_spacing_2"
-        app:layout_constraintEnd_toStartOf="@id/btn_cancel"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:hint="@string/hint_alarm_search" />
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_cancel"
-        style="@style/Alarm.Base.TextButton.SemiBold"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:minWidth="0dp"
-        android:paddingHorizontal="@dimen/base_spacing_2"
-        android:text="@string/cancel"
-        app:layout_constraintBottom_toBottomOf="@id/et_search"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <View

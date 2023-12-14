@@ -7,6 +7,29 @@
     android:keepScreenOn="true"
     tools:context=".ui.alarm.AlarmActivity">
 
+    <TextView
+        android:id="@+id/tv_date"
+        style="@style/TextAppearance.Alarm.Subtitle1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.1"
+        tools:text="12월14일" />
+
+    <TextView
+        android:id="@+id/tv_time"
+        style="@style/TextAppearance.Alarm.HeadLine1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/base_spacing_3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_date"
+        tools:text="2:09" />
+
     <ImageView
         android:id="@+id/iv_thumbnail"
         android:layout_width="0dp"
@@ -15,9 +38,9 @@
         app:layout_constraintDimensionRatio="1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_time"
         app:layout_constraintVertical_bias="0.2"
-        app:layout_constraintWidth_percent="0.9"
+        app:layout_constraintWidth_percent="0.6"
         tools:src="@drawable/ic_image_place_holder" />
 
     <TextView

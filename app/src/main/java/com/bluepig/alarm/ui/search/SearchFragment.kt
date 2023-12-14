@@ -42,10 +42,6 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         }
         etSearch.setOnEnterListener(_vm::search)
 
-        btnCancel.setOnClickListener {
-            findNavController().popBackStack()
-        }
-
         viewRepeatOnLifeCycle(Lifecycle.State.STARTED) {
             _vm.fileList
                 .stateIn(this)

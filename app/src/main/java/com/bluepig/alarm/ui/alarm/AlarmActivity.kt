@@ -29,12 +29,18 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import java.text.SimpleDateFormat
+import java.util.Locale
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class AlarmActivity : AppCompatActivity() {
     private val _binding: ActivityAlarmBinding by viewBinding(ActivityAlarmBinding::inflate)
     private val _vm: AlarmViewModel by viewModels()
+    private val _currentDateFormat by lazy { SimpleDateFormat("MMM dd일 EE", Locale.getDefault()) }
+    private val _currentTimeFormat by lazy { SimpleDateFormat("hh:mm", Locale.getDefault()) }
+
+
     private var _defaultVolume: Int? = null
 
     @Inject
@@ -45,6 +51,7 @@ class AlarmActivity : AppCompatActivity() {
         setContentView(_binding.root)
 
         _vm.setAlarmState()
+        _vm.startDateTime()
         _defaultVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC)
         showOverLockscreen()
         disableBackButton()
@@ -81,6 +88,13 @@ class AlarmActivity : AppCompatActivity() {
                             }
                     }
                 }
+                launch {
+                    repeatOnLifecycle(Lifecycle.State.STARTED) {
+                        _vm.currentTimeState
+                            .stateIn(this)
+                            .collect(::bindCurrentTime)
+                    }
+                }
             }
         }
     }
@@ -114,6 +128,14 @@ class AlarmActivity : AppCompatActivity() {
         } else {
             alarmSetting()
         }
+    }
+
+    private fun bindCurrentTime(dateTimeInMillis: Long) {
+        val date = _currentDateFormat.format(dateTimeInMillis)
+        val time = _currentTimeFormat.format(dateTimeInMillis)
+
+        _binding.tvDate.text = date
+        _binding.tvTime.text = time
     }
 
     private fun previewSetting() {
