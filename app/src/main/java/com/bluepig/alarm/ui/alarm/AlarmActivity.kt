@@ -50,7 +50,6 @@ class AlarmActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(_binding.root)
 
-        _vm.setAlarmState()
         _defaultVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC)
         showOverLockscreen()
         disableBackButton()
@@ -61,17 +60,16 @@ class AlarmActivity : AppCompatActivity() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
-                    _vm.alarmState
+                    _vm.getAlarmState()
                         .stateIn(this)
                         .collect {
                             it.onSuccess { alarm ->
                                 initViews(alarm)
                                 setUpAlarmSong(alarm)
                                 setVibration(alarm)
-                                _vm.startAutoIncreaseVolume(
-                                    alarm.volume
-                                        ?: audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC)
-                                )
+                                val volume = alarm.volume
+                                    ?: audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC)
+                                _vm.startAutoIncreaseVolume(volume)
                             }.onFailureWitLoading { e ->
                                 Timber.w(e)
                                 finishAffinity()

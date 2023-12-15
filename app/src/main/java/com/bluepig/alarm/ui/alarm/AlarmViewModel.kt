@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bluepig.alarm.domain.entity.alarm.Alarm
 import com.bluepig.alarm.domain.result.NotFoundPreViewAlarmException
-import com.bluepig.alarm.domain.result.resultLoading
 import com.bluepig.alarm.domain.usecase.GetAlarmById
 import com.bluepig.alarm.domain.usecase.GetCurrentTime
 import com.bluepig.alarm.domain.usecase.SaveAlarm
@@ -13,6 +12,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -38,10 +38,6 @@ class AlarmViewModel @Inject constructor(
     val isPreview
         get() = _previewAlarm.isSuccess
 
-    private val _alarmState = MutableStateFlow<Result<Alarm>>(resultLoading())
-    val alarmState
-        get() = _alarmState.asStateFlow()
-
     private val _volumeIncreaseState = MutableStateFlow(0)
     val volumeIncreaseState
         get() = _volumeIncreaseState.asStateFlow()
@@ -49,13 +45,13 @@ class AlarmViewModel @Inject constructor(
 
     fun getDateTime() = _getCurrentTime.invoke()
 
-    fun setAlarmState() = viewModelScope.launch {
-        _alarmId.onSuccess {
-            val result = _getAlarmById.invoke(it)
-            _alarmState.emit(result)
+    fun getAlarmState() = flow {
+        _alarmId.onSuccess { id ->
+            val result = _getAlarmById.invoke(id)
+            emit(result)
         }
         _previewAlarm.onSuccess {
-            _alarmState.emit(_previewAlarm)
+            emit(_previewAlarm)
         }
     }
 
@@ -74,8 +70,10 @@ class AlarmViewModel @Inject constructor(
 
     fun updateAlarmExpired() = viewModelScope.launch {
         if (isPreview) return@launch
-        val alarm = alarmState.value.getOrNull()
-        _saveAlarm.invoke(alarm?.getActiveCheckedAlarm() ?: return@launch)
+        val id = _alarmId.getOrNull() ?: return@launch
+        val alarm = _getAlarmById.invoke(id).getOrNull() ?: return@launch
+
+        _saveAlarm.invoke(alarm.getActiveCheckedAlarm())
     }
 
     companion object {
