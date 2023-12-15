@@ -157,24 +157,26 @@ class AlarmEditFragment : Fragment(R.layout.fragment_alarm_edit) {
     }
 
     private fun bindWeek(setWeek: Set<Week>) {
-        val buttons = listOf(
-            _binding.btnSunday,
-            _binding.btnMonday,
-            _binding.btnTuesday,
-            _binding.btnWednesday,
-            _binding.btnThursday,
-            _binding.btnFriday,
-            _binding.btnSaturday,
-        )
+        _binding.apply {
+            val buttons = listOf(
+                btnSunday,
+                btnMonday,
+                btnTuesday,
+                btnWednesday,
+                btnThursday,
+                btnFriday,
+                btnSaturday,
+            )
 
-        buttons.forEach {
-            if (setWeek.contains(it.getWeek())) {
-                it.setSelected()
-            } else {
-                it.unSelected()
+            buttons.forEach {
+                if (setWeek.contains(it.getWeek())) {
+                    it.setSelected()
+                } else {
+                    it.unSelected()
+                }
             }
+            tvRepeat.text = setWeek.getGuideText(requireContext())
         }
-        _binding.tvRepeatGuide.text = setWeek.getGuideText(requireContext())
     }
 
     @SuppressLint("SetTextI18n")

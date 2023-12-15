@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:keepScreenOn="true"
     android:background="@color/surface"
+    android:keepScreenOn="true"
     tools:context=".ui.alarm.AlarmActivity">
 
     <TextView
@@ -31,21 +31,6 @@
         app:layout_constraintTop_toBottomOf="@id/tv_date"
         tools:text="2:09" />
 
-    <TextView
-        android:id="@+id/tv_thumbnail"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:text="@string/alarm_emoji"
-        app:autoSizeMaxTextSize="300dp"
-        app:autoSizeTextType="uniform"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintDimensionRatio="1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_time"
-        app:layout_constraintVertical_bias="0.2"
-        app:layout_constraintWidth_percent="0.6" />
-
     <ImageView
         android:id="@+id/iv_thumbnail"
         android:layout_width="0dp"
@@ -59,28 +44,6 @@
         app:layout_constraintWidth_percent="0.6"
         tools:src="@drawable/ic_image_place_holder" />
 
-    <androidx.constraintlayout.widget.Barrier
-        android:id="@+id/barrier_bottom"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:barrierDirection="bottom"
-        app:constraint_referenced_ids="tv_thumbnail, iv_thumbnail" />
-
-    <androidx.constraintlayout.widget.Barrier
-        android:id="@+id/barrier_start"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:barrierDirection="start"
-        app:constraint_referenced_ids="tv_thumbnail, iv_thumbnail" />
-
-    <androidx.constraintlayout.widget.Barrier
-        android:id="@+id/barrier_end"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:barrierDirection="end"
-        app:constraint_referenced_ids="tv_thumbnail, iv_thumbnail" />
-
-
     <TextView
         android:id="@+id/tv_memo"
         style="@style/TextAppearance.Alarm.Body1"
@@ -92,7 +55,7 @@
         app:layout_constraintBottom_toTopOf="@id/btn_alarm_end"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/barrier_bottom"
+        app:layout_constraintTop_toBottomOf="@id/iv_thumbnail"
         tools:text="@tools:sample/lorem/random" />
 
     <androidx.appcompat.widget.AppCompatButton
@@ -102,8 +65,8 @@
         android:layout_height="wrap_content"
         android:text="@string/alarm_end"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@id/barrier_end"
-        app:layout_constraintStart_toStartOf="@id/barrier_start"
-        app:layout_constraintTop_toBottomOf="@id/barrier_bottom" />
+        app:layout_constraintEnd_toEndOf="@id/iv_thumbnail"
+        app:layout_constraintStart_toStartOf="@id/iv_thumbnail"
+        app:layout_constraintTop_toBottomOf="@id/iv_thumbnail" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

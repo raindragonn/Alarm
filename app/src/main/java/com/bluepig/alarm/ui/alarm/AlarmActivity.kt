@@ -10,7 +10,7 @@ import android.view.WindowManager
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.isVisible
+import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -110,11 +110,11 @@ class AlarmActivity : AppCompatActivity() {
     private fun initViews(alarm: Alarm) = with(_binding) {
         alarm.media
             .onMusic {
-                tvThumbnail.isVisible = false
                 ivThumbnail.setThumbnail(it.thumbnail)
             }
             .onRingtone {
-                ivThumbnail.isVisible = false
+                val drawable = ResourcesCompat.getDrawable(resources, R.drawable.ic_alarm, null)
+                ivThumbnail.setThumbnail(drawable ?: return@onRingtone)
             }
         tvMemo.text = alarm.memo
 
