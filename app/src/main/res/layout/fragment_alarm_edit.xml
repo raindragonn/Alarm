@@ -115,6 +115,7 @@
                 app:layout_constraintGuide_end="@dimen/base_spacing_2" />
 
             <TextView
+                android:id="@+id/tv_repeat_guide"
                 style="@style/TextAppearance.Alarm.Body5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -125,13 +126,12 @@
                 app:layout_constraintTop_toTopOf="@id/v_point_background" />
 
             <TextView
-                android:id="@+id/tv_repeat_guide"
+                android:id="@+id/tv_repeat"
                 style="@style/TextAppearance.Alarm.Body6"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/base_spacing_2"
                 app:layout_constraintEnd_toEndOf="@id/guideline_end"
-                app:layout_constraintTop_toTopOf="@id/v_point_background"
+                app:layout_constraintTop_toTopOf="@id/tv_repeat_guide"
                 tools:text="@string/week_not_select_guide" />
 
             <com.bluepig.alarm.ui.view.WeekButton
