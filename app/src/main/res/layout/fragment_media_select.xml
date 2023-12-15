@@ -7,48 +7,50 @@
     android:orientation="vertical"
     tools:context=".ui.media.MediaSelectFragment">
 
-    <ImageButton
-        android:id="@+id/btn_back"
-        style="@style/Alarm.Base.ImageButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_back"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/tv_title"
-        style="@style/TextAppearance.Alarm.Body1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/alarm_media_select_title"
-        app:layout_constraintBottom_toBottomOf="@id/btn_back"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <androidx.constraintlayout.widget.Barrier
-        android:id="@+id/top_barrier"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:barrierDirection="bottom"
-        app:constraint_referenced_ids="btn_back,tv_title" />
-
-    <View
-        style="@style/Divider"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_top"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        app:layout_constraintTop_toTopOf="@id/top_barrier" />
+        android:layout_height="wrap_content"
+        android:background="@color/surface"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageButton
+            android:id="@+id/btn_back"
+            style="@style/Alarm.Base.ImageButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_back"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_title"
+            style="@style/TextAppearance.Alarm.Body1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/alarm_media_select_title"
+            app:layout_constraintBottom_toBottomOf="@id/btn_back"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tab_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="@id/top_barrier"
+        android:background="@color/surface"
+        app:layout_constraintTop_toBottomOf="@id/cl_top"
         app:tabGravity="fill"
+        app:tabIndicatorColor="@color/guide_text"
         app:tabIndicatorFullWidth="true"
         app:tabMaxWidth="0dp"
-        app:tabMode="fixed" />
+        app:tabMode="fixed"
+        app:tabSelectedTextAppearance="@style/TextAppearance.Alarm.Body2"
+        app:tabSelectedTextColor="@color/guide_text"
+        app:tabTextAppearance="@style/TextAppearance.Alarm.Body3"
+        app:tabTextColor="@color/text" />
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/view_pager"

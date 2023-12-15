@@ -3,6 +3,7 @@
     <string name="chennel_name_media_download">미디어 다운로드</string>
     <string name="chennel_description_media_download">인터넷 없이 재생을 위한 미디어 다운로드</string>
 
+    <string name="alarm_emoji">⏰</string>
     <string name="alarm_preview">미리보기</string>
     <string name="alarm_media_guide">알람음</string>
     <string name="alarm_edit">알람 수정</string>
@@ -27,6 +28,7 @@
     <string name="choice">선택</string>
     <string name="song">노래</string>
     <string name="ringtone">벨소리</string>
+    <string name="title">제목</string>
 
     <string name="volume">볼륨</string>
     <string name="volume_auto_increase_guide">볼륨 서서히 높히기</string>

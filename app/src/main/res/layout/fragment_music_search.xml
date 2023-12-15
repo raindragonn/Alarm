@@ -4,14 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.search.SearchFragment">
+    tools:context=".ui.search.MusicSearchFragment">
 
     <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/et_search"
         style="@style/TextAppearance.Alarm.Body6"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/transparent"
+        android:background="@color/surface"
         android:drawableStart="@drawable/ic_search"
         android:drawablePadding="@dimen/base_spacing_2"
         android:hint="@string/hint_alarm_search"
@@ -23,9 +23,21 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <View
+        android:id="@+id/divider"
         style="@style/Divider"
         android:layout_width="match_parent"
         app:layout_constraintTop_toBottomOf="@id/et_search" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_search"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/background"
+        android:paddingVertical="@dimen/base_spacing_1"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/divider"
+        tools:listitem="@layout/item_media" />
 
     <ProgressBar
         android:id="@+id/pb_loading"
@@ -38,12 +50,4 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_search"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/et_search"
-        tools:listitem="@layout/item_search" />
 </androidx.constraintlayout.widget.ConstraintLayout>

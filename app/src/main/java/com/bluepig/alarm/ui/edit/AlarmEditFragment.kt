@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.media.AudioManager
 import android.os.Build
 import android.os.Bundle
+import android.text.ParcelableSpan
 import android.text.style.ForegroundColorSpan
 import android.text.style.TextAppearanceSpan
 import android.view.View
@@ -178,6 +179,11 @@ class AlarmEditFragment : Fragment(R.layout.fragment_alarm_edit) {
 
     @SuppressLint("SetTextI18n")
     private fun bindAlarmMedia(alarmMedia: AlarmMedia?) {
+        val highlightSpans = arrayOf<ParcelableSpan>(
+            TextAppearanceSpan(
+                requireContext(), R.style.TextAppearance_Alarm_Body2
+            ), ForegroundColorSpan(requireContext().getColor(R.color.primary_600))
+        )
         _binding.apply {
             if (alarmMedia == null) {
                 ivThumbnail.isVisible = false
@@ -186,19 +192,16 @@ class AlarmEditFragment : Fragment(R.layout.fragment_alarm_edit) {
                 alarmMedia.onMusic {
                     ivThumbnail.setThumbnail(it.thumbnail)
                     tvMediaTitle.text = it.title
+                    val titleText = getString(R.string.title)
+                    tvMediaTitle.text = "$titleText  ${it.title}".createSpan(
+                        0, titleText.length, *highlightSpans
+                    )
+
                 }.onRingtone {
                     ivThumbnail.isVisible = false
                     val ringtoneGuideText = getString(R.string.ringtone)
                     tvMediaTitle.text = "$ringtoneGuideText  ${it.title}".createSpan(
-                        0,
-                        ringtoneGuideText.length,
-                        *arrayOf(
-                            TextAppearanceSpan(
-                                requireContext(),
-                                R.style.TextAppearance_Alarm_Body2
-                            ),
-                            ForegroundColorSpan(requireContext().getColor(R.color.primary_600))
-                        )
+                        0, ringtoneGuideText.length, *highlightSpans
                     )
                 }
             }
@@ -214,9 +217,7 @@ class AlarmEditFragment : Fragment(R.layout.fragment_alarm_edit) {
             seekbarVolume.max = maxVolume
             seekbarVolume.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
                 override fun onProgressChanged(
-                    seekBar: SeekBar?,
-                    progress: Int,
-                    fromUser: Boolean
+                    seekBar: SeekBar?, progress: Int, fromUser: Boolean
                 ) {
                     _vm.setVolume(progress)
                 }

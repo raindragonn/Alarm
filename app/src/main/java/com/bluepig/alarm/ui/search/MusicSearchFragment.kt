@@ -10,7 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
 import com.bluepig.alarm.R
-import com.bluepig.alarm.databinding.FragmentSearchBinding
+import com.bluepig.alarm.databinding.FragmentMusicSearchBinding
 import com.bluepig.alarm.domain.entity.music.MusicInfo
 import com.bluepig.alarm.domain.result.onFailureWitLoading
 import com.bluepig.alarm.domain.result.onLoading
@@ -24,8 +24,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.stateIn
 
 @AndroidEntryPoint
-class SearchFragment : Fragment(R.layout.fragment_search) {
-    private val _binding: FragmentSearchBinding by viewBinding(FragmentSearchBinding::bind)
+class MusicSearchFragment : Fragment(R.layout.fragment_music_search) {
+    private val _binding: FragmentMusicSearchBinding by viewBinding(FragmentMusicSearchBinding::bind)
     private val _vm: SearchViewModel by viewModels()
 
     private val _adapter: SearchAdapter by lazy { SearchAdapter(::itemClick) }
@@ -57,9 +57,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         }.onFailureWitLoading {
             showErrorToast(it)
             changeLoadingState(false)
-        }.onLoading {
-            changeLoadingState(it)
-        }
+        }.onLoading(::changeLoadingState)
     }
 
     @SuppressLint("UnsafeOptInUsageError")
