@@ -100,24 +100,27 @@ class MediaSelectBottomSheetDialogFragment :
                             showErrorToast(it) {
                                 findNavController().popBackStack()
                             }
-                        }.onLoading {
-                            _binding.pbLoading.isVisible = it
-                            _binding.groupContent.isVisible = it.not()
-                        }
+                        }.onLoading(::onLoading)
                 }
         }
     }
 
-    private fun bindMedia(alarmMedia: AlarmMedia) {
-        _binding.tvTitle.text = alarmMedia.title
+    private fun onLoading(isLoading: Boolean) {
+        _binding.pbLoading.isVisible = isLoading
+        _binding.groupContent.isVisible = isLoading.not()
+    }
 
-        alarmMedia
-            .onMusic { music ->
-                _binding.ivThumbnail.setThumbnail(music.thumbnail)
-            }
-            .onRingtone {
-                _binding.ivThumbnail.isVisible = false
-            }
+    private fun bindMedia(alarmMedia: AlarmMedia) {
+        _binding.apply {
+            tvTitle.text = alarmMedia.title
+            alarmMedia
+                .onMusic { music ->
+                    ivThumbnail.setThumbnail(music.thumbnail)
+                }
+                .onRingtone {
+                    ivThumbnail.isVisible = false
+                }
+        }
     }
 
     companion object {

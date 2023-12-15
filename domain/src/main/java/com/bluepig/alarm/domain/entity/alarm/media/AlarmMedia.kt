@@ -6,6 +6,12 @@ import kotlinx.serialization.Serializable
 sealed interface AlarmMedia : java.io.Serializable {
     val title: String
 
+    val isMusic
+        get() = this is MusicMedia
+
+    val isRingtone
+        get() = this is RingtoneMedia
+
     fun onMusic(action: (MusicMedia) -> Unit): AlarmMedia {
         if (this is MusicMedia) {
             action.invoke(this)

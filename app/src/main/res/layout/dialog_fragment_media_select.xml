@@ -8,13 +8,12 @@
     android:padding="@dimen/base_spacing_2"
     tools:context=".ui.search.select.MediaSelectBottomSheetDialogFragment">
 
-
     <androidx.constraintlayout.widget.Group
         android:id="@+id/group_content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        app:constraint_referenced_ids="iv_thumbnail, tv_title,btn_play,btn_select,player_view"
+        app:constraint_referenced_ids="tv_title,btn_play,btn_select,player_view"
         tools:visibility="visible" />
 
     <ProgressBar
@@ -25,8 +24,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btn_close"
-        tools:visibility="gone" />
+        app:layout_constraintTop_toBottomOf="@id/btn_close" />
 
     <ImageButton
         android:id="@+id/btn_close"
@@ -41,6 +39,7 @@
     <ImageView
         android:id="@+id/iv_thumbnail"
         android:layout_width="@dimen/base_spacing_7"
+        android:layout_marginTop="@dimen/base_spacing_1"
         android:layout_height="@dimen/base_spacing_7"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/btn_close"
@@ -52,13 +51,15 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/base_spacing_2"
-        android:layout_marginTop="@dimen/base_spacing_1"
         app:layout_constraintBottom_toBottomOf="@id/barrier"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/iv_thumbnail"
         app:layout_constraintTop_toTopOf="@id/iv_thumbnail"
         app:layout_constraintVertical_bias="0"
-        tools:text="Title" />
+        android:ellipsize="end"
+        android:maxLines="3"
+        app:layout_goneMarginStart="0dp"
+        tools:text="@tools:sample/lorem/random" />
 
     <androidx.media3.ui.PlayerControlView
         android:id="@+id/player_view"
