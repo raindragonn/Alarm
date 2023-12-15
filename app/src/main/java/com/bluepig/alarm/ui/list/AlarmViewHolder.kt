@@ -4,11 +4,11 @@ import android.annotation.SuppressLint
 import android.content.res.ColorStateList
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
-import com.bluepig.alarm.R
 import com.bluepig.alarm.databinding.ItemAlarmBinding
 import com.bluepig.alarm.domain.entity.alarm.Alarm
-import com.bluepig.alarm.util.ext.getGuideDrawableTintColor
 import com.bluepig.alarm.util.ext.getGuideText
+import com.bluepig.alarm.util.ext.setDefaultColor
+import com.bluepig.alarm.util.ext.tintColor
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -25,7 +25,7 @@ class AlarmViewHolder private constructor(
             tvRepeatGuide.text = alarm.repeatWeek.getGuideText(root.context)
             tvRepeatGuide.compoundDrawableTintList =
                 ColorStateList.valueOf(
-                    alarm.repeatWeek.getGuideDrawableTintColor(
+                    alarm.repeatWeek.tintColor(
                         root.context,
                         alarm.isActive
                     )
@@ -38,11 +38,7 @@ class AlarmViewHolder private constructor(
             groupMemo.isVisible = alarm.memo.isNotBlank()
             tvMemo.text = alarm.memo
 
-            val colorStateList =
-                root.resources.getColorStateList(R.color.switch_track, null)
-            switchOnOff.trackTintList = colorStateList
-            switchOnOff.trackDecorationTintList = colorStateList
-
+            switchOnOff.setDefaultColor()
             switchOnOff.isChecked = alarm.isActive
 
             listOf(tvRepeatGuide, tvTime, tvMeridiem, tvMedia, tvMemo, tvMediaGuide, tvMemoGuide)

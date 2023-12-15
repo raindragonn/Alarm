@@ -2,6 +2,7 @@
 
 package com.bluepig.alarm.domain.util
 
+import com.bluepig.alarm.domain.entity.alarm.Week
 import java.util.Calendar
 import java.util.Locale
 
@@ -34,6 +35,30 @@ object CalendarHelper {
             newCalendar.add(Calendar.DAY_OF_YEAR, 1)
         }
         return newCalendar
+    }
+
+    fun getNextTimeMillis(calendar: Calendar, repeatWeeks: Set<Week>): Long {
+        val toDayCalendar = todayFromHourAndMinute(calendar.hourOfDay, calendar.minute)
+        val now = CalendarHelper.now
+
+        val tomorrowOrToday = if (now.after(toDayCalendar)) 1 else 0
+        val todayWeek = toDayCalendar.dayOfWeek
+        val week = Week.fromCode(todayWeek)
+        val todayIndex = Week.entries.indexOf(week)
+        // repeatWeek이 설정된 경우 1 ~ 7일 이후, 안된 경우 내일(1) 이거나 오늘(0)
+        var daysToAdd = (1..7).firstOrNull { dayCount ->
+            val dayIndex = (todayIndex + dayCount) % 7
+            repeatWeeks.contains(Week.entries[dayIndex])
+        } ?: tomorrowOrToday
+
+        // 설정한 요일중 현재 요일을 포함하며 아직 시간이 지나지 않은 경우
+        if (repeatWeeks.contains(week) && now.before(toDayCalendar)) {
+            daysToAdd = 0
+        }
+
+        return toDayCalendar.apply {
+            add(Calendar.DAY_OF_YEAR, daysToAdd)
+        }.timeInMillis
     }
 }
 

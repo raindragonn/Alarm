@@ -3,6 +3,7 @@
     <color name="base">#FFFFFF</color>
     <color name="point">#000000</color>
     <color name="surface">@color/base</color>
+    <color name="background">@color/mono_800</color>
 
     <color name="text">@color/point</color>
     <color name="disable">@color/mono_500</color>

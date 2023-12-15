@@ -3,9 +3,6 @@ package com.bluepig.alarm.domain.entity.alarm
 import com.bluepig.alarm.domain.entity.alarm.media.AlarmMedia
 import com.bluepig.alarm.domain.entity.base.BaseEntity
 import com.bluepig.alarm.domain.util.CalendarHelper
-import com.bluepig.alarm.domain.util.dayOfWeek
-import com.bluepig.alarm.domain.util.hourOfDay
-import com.bluepig.alarm.domain.util.minute
 import kotlinx.serialization.Serializable
 import java.util.Calendar
 
@@ -47,32 +44,11 @@ data class Alarm(
     fun getNextTimeAlarm(): Alarm {
         if (isActive.not()) return this
 
-        val toDayCalendar = CalendarHelper
-            .todayFromHourAndMinute(getCalendar().hourOfDay, getCalendar().minute)
-        val now = CalendarHelper.now
-
-        val tomorrowOrToday = if (now.after(toDayCalendar)) 1 else 0
-        val todayWeek = toDayCalendar.dayOfWeek
-        val week = Week.fromCode(todayWeek)
-        val todayIndex = Week.entries.indexOf(week)
-        // repeatWeek이 설정된 경우 1 ~ 7일 이후, 안된 경우 내일(1) 이거나 오늘(0)
-        var daysToAdd = (1..7).firstOrNull { dayCount ->
-            val dayIndex = (todayIndex + dayCount) % 7
-            repeatWeek.contains(Week.entries[dayIndex])
-        } ?: tomorrowOrToday
-
-        // 설정한 요일중 현재 요일을 포함하며 아직 시간이 지나지 않은 경우
-        if (repeatWeek.contains(week) && now.before(toDayCalendar)) {
-            daysToAdd = 0
-        }
-
-        val newTimeInMillis = toDayCalendar.apply {
-            add(Calendar.DAY_OF_YEAR, daysToAdd)
-        }.timeInMillis
-
         return copy(
-            timeInMillis = newTimeInMillis
+            timeInMillis = CalendarHelper.getNextTimeMillis(
+                getCalendar(),
+                repeatWeek
+            )
         )
     }
-    // TODO: Week 포함하는 경우 timeInMillis를 변경하는 것이 아닌 hour, minute을 통해 NextAlarmTimeInMillis를 구하는걸로 고려하기
 }

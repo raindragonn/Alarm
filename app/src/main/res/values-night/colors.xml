@@ -2,7 +2,8 @@
 <resources>
     <color name="base">#000000</color>
     <color name="point">#FFFFFF</color>
-    <color name="surface">@color/mono_800</color>
+    <color name="surface">@color/mono_700</color>
+    <color name="background">@color/mono_800</color>
 
     <color name="text">@color/point</color>
     <color name="disable">@color/mono_500</color>

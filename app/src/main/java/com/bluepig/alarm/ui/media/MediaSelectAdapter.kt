@@ -11,8 +11,8 @@ class MediaSelectAdapter(
 ) : FragmentStateAdapter(parent) {
 
     private val _fragments = mapOf(
-        parent.getString(R.string.tab_title_search) to SearchFragment(),
-        parent.getString(R.string.tab_title_ringtone) to RingtoneFragment(),
+        parent.getString(R.string.song) to SearchFragment(),
+        parent.getString(R.string.ringtone) to RingtoneFragment(),
     )
 
     override fun getItemCount(): Int =

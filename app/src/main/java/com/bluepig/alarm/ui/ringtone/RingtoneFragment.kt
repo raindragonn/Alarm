@@ -14,7 +14,6 @@ import com.bluepig.alarm.ui.search.select.MediaSelectBottomSheetDialogFragment
 import com.bluepig.alarm.util.ext.viewRepeatOnLifeCycle
 import com.bluepig.alarm.util.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.stateIn
 
 @AndroidEntryPoint
 class RingtoneFragment : Fragment(R.layout.fragment_ringtone) {
@@ -35,12 +34,8 @@ class RingtoneFragment : Fragment(R.layout.fragment_ringtone) {
 
     private fun observing() {
         viewRepeatOnLifeCycle(Lifecycle.State.STARTED) {
-            _vm.ringtonesState
-                .stateIn(this)
-                .collect { result ->
-                    result.onSuccess(::bindRingtoneList)
-
-                }
+            _vm.getRingtoneAlarm()
+                .onSuccess(::bindRingtoneList)
         }
     }
 

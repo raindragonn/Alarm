@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class GetCurrentTime @Inject constructor() {
-    suspend operator fun invoke() = flow {
+    operator fun invoke() = flow {
         while (true) {
             val nowTime = CalendarHelper.now.timeInMillis
             emit(nowTime)

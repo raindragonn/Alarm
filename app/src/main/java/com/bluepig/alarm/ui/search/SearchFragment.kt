@@ -13,6 +13,7 @@ import com.bluepig.alarm.R
 import com.bluepig.alarm.databinding.FragmentSearchBinding
 import com.bluepig.alarm.domain.entity.music.MusicInfo
 import com.bluepig.alarm.domain.result.onFailureWitLoading
+import com.bluepig.alarm.domain.result.onLoading
 import com.bluepig.alarm.ui.search.select.MediaSelectBottomSheetDialogFragment
 import com.bluepig.alarm.util.ext.setOnEnterListener
 import com.bluepig.alarm.util.ext.setOnLoadMore
@@ -53,14 +54,12 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         result.onSuccess { list ->
             changeLoadingState(false)
             _adapter.submitList(list)
-        }.onFailureWitLoading(::onLoading) {
+        }.onFailureWitLoading {
             showErrorToast(it)
             changeLoadingState(false)
+        }.onLoading {
+            changeLoadingState(it)
         }
-    }
-
-    private fun onLoading() {
-        changeLoadingState(true)
     }
 
     @SuppressLint("UnsafeOptInUsageError")

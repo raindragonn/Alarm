@@ -1,11 +1,14 @@
 package com.bluepig.alarm.ui.edit
 
+import android.annotation.SuppressLint
 import android.media.AudioManager
 import android.os.Build
 import android.os.Bundle
+import android.text.style.ForegroundColorSpan
+import android.text.style.TextAppearanceSpan
 import android.view.View
 import android.widget.SeekBar
-import androidx.core.view.isInvisible
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
@@ -23,7 +26,9 @@ import com.bluepig.alarm.domain.util.CalendarHelper
 import com.bluepig.alarm.domain.util.hourOfDay
 import com.bluepig.alarm.domain.util.minute
 import com.bluepig.alarm.ui.alarm.AlarmActivity
+import com.bluepig.alarm.util.ext.createSpan
 import com.bluepig.alarm.util.ext.getGuideText
+import com.bluepig.alarm.util.ext.setDefaultColor
 import com.bluepig.alarm.util.ext.setThumbnail
 import com.bluepig.alarm.util.ext.showErrorToast
 import com.bluepig.alarm.util.ext.viewLifeCycleScope
@@ -50,66 +55,32 @@ class AlarmEditFragment : Fragment(R.layout.fragment_alarm_edit) {
     }
 
     private fun initViews() = with(_binding) {
-        btnBack.setOnClickListener {
-            findNavController().popBackStack()
-        }
+        tvTitle.text =
+            if (_vm.isEdit) getString(R.string.alarm_edit) else getString(R.string.alarm_create)
 
-        bindTimePicker(_vm.timeInMillis.value)
-        timepicker.setOnTimeChangedListener { _, hourOfDay, minute ->
-            _vm.setTimeInMillis(hourOfDay, minute)
-        }
+        initTimePicker(_vm.timeInMillis.value)
+        initWeekButtons(_vm::setRepeatWeek)
+        initVolume(_vm.volume.value)
+        initVolumeAutoIncrease()
+        initVibration(_vm.vibration.value)
+        initMemo(_vm.memo.value)
+        initDeleteButton()
 
-        btnSunday.setOnclickWeek(_vm::setRepeatWeek)
-        btnMonday.setOnclickWeek(_vm::setRepeatWeek)
-        btnTuesday.setOnclickWeek(_vm::setRepeatWeek)
-        btnWednesday.setOnclickWeek(_vm::setRepeatWeek)
-        btnThursday.setOnclickWeek(_vm::setRepeatWeek)
-        btnFriday.setOnclickWeek(_vm::setRepeatWeek)
-        btnSaturday.setOnclickWeek(_vm::setRepeatWeek)
+        btnBack.setOnClickListener { findNavController().popBackStack() }
+        btnMediaSelect.setOnClickListener { openMediaSelect() }
+        btnSave.setOnClickListener { saveAlarm() }
+        btnPreview.setOnClickListener { openPreview() }
+    }
 
-        bindVolume(_vm.volume.value)
-        val maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC)
-        seekbarVolume.max = maxVolume
-        seekbarVolume.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                _vm.setVolume(progress)
-            }
-
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
-        })
-
-        btnSearch.setOnClickListener {
-            goSearch()
-        }
-
-        bindVibration(_vm.vibration.value)
-        switchVibration.setOnCheckedChangeListener { _, isChecked ->
-            _vm.setVibration(isChecked)
-        }
-
-        bindMemo(_vm.memo.value)
-        etMemo.doAfterTextChanged {
-            _vm.setMemo(it.toString())
-        }
-
-        btnRemove.isVisible = _vm.isEdit
-        btnRemove.setOnClickListener {
-            removeAlarm()
-        }
-
-        btnSave.setOnClickListener {
-            saveAlarm()
-        }
-
-        btnPreview.setOnClickListener {
-            kotlin.runCatching {
-                _vm.getEditingAlarm() ?: throw NotSelectAlarmMedia
-            }.onSuccess { alarm ->
-                AlarmActivity.openPreView(requireContext(), alarm)
-            }.onFailureWitLoading {
-                showErrorToast(it)
-            }
+    private fun initWeekButtons(onClick: (Week) -> Unit) {
+        _binding.apply {
+            btnSunday.setOnclickWeek(onClick)
+            btnMonday.setOnclickWeek(onClick)
+            btnTuesday.setOnclickWeek(onClick)
+            btnWednesday.setOnclickWeek(onClick)
+            btnThursday.setOnclickWeek(onClick)
+            btnFriday.setOnclickWeek(onClick)
+            btnSaturday.setOnclickWeek(onClick)
         }
     }
 
@@ -129,7 +100,7 @@ class AlarmEditFragment : Fragment(R.layout.fragment_alarm_edit) {
         }
     }
 
-    private fun goSearch() {
+    private fun openMediaSelect() {
         val action = AlarmEditFragmentDirections.actionAlarmEditFragmentToMediaSelectFragment()
         findNavController().navigate(action)
     }
@@ -146,6 +117,11 @@ class AlarmEditFragment : Fragment(R.layout.fragment_alarm_edit) {
                     .stateIn(this)
                     .collect(::bindAlarmMedia)
             }
+            launch {
+                getExpiredTime()
+                    .stateIn(this)
+                    .collect(_binding.tvTimeReminder::setText)
+            }
         }
 
         setFragmentResultListener(REQUEST_ALARM_MEDIA) { _, bundle ->
@@ -159,9 +135,24 @@ class AlarmEditFragment : Fragment(R.layout.fragment_alarm_edit) {
         }
     }
 
-    private fun bindTimePicker(timeInMillis: Long) {
-        _binding.timepicker.hour = CalendarHelper.fromTimeInMillis(timeInMillis).hourOfDay
-        _binding.timepicker.minute = CalendarHelper.fromTimeInMillis(timeInMillis).minute
+    private fun openPreview() {
+        kotlin.runCatching {
+            _vm.getEditingAlarm() ?: throw NotSelectAlarmMedia
+        }.onSuccess { alarm ->
+            AlarmActivity.openPreView(requireContext(), alarm)
+        }.onFailureWitLoading {
+            showErrorToast(it)
+        }
+    }
+
+    private fun initTimePicker(timeInMillis: Long) {
+        _binding.apply {
+            timepicker.hour = CalendarHelper.fromTimeInMillis(timeInMillis).hourOfDay
+            timepicker.minute = CalendarHelper.fromTimeInMillis(timeInMillis).minute
+            timepicker.setOnTimeChangedListener { _, hourOfDay, minute ->
+                _vm.setTimeInMillis(hourOfDay, minute)
+            }
+        }
     }
 
     private fun bindWeek(setWeek: Set<Week>) {
@@ -185,29 +176,103 @@ class AlarmEditFragment : Fragment(R.layout.fragment_alarm_edit) {
         _binding.tvRepeatGuide.text = setWeek.getGuideText(requireContext())
     }
 
+    @SuppressLint("SetTextI18n")
     private fun bindAlarmMedia(alarmMedia: AlarmMedia?) {
-        _binding.groupMedia.isVisible = alarmMedia != null
+        _binding.apply {
+            if (alarmMedia == null) {
+                ivThumbnail.isVisible = false
+                tvMediaTitle.text = getString(R.string.alarm_media_required_notice)
+            } else {
+                alarmMedia.onMusic {
+                    ivThumbnail.setThumbnail(it.thumbnail)
+                    tvMediaTitle.text = it.title
+                }.onRingtone {
+                    ivThumbnail.isVisible = false
+                    val ringtoneGuideText = getString(R.string.ringtone)
+                    tvMediaTitle.text = "$ringtoneGuideText  ${it.title}".createSpan(
+                        0,
+                        ringtoneGuideText.length,
+                        *arrayOf(
+                            TextAppearanceSpan(
+                                requireContext(),
+                                R.style.TextAppearance_Alarm_Body2
+                            ),
+                            ForegroundColorSpan(requireContext().getColor(R.color.primary_600))
+                        )
+                    )
+                }
+            }
 
-        alarmMedia?.onMusic {
-            _binding.ivThumbnail.setThumbnail(it.thumbnail)
-            _binding.tvFileTitle.text = it.title
-        }?.onRingtone {
-            _binding.ivThumbnail.isInvisible = true
-            _binding.tvFileTitle.text = it.title
         }
     }
 
-    private fun bindVolume(volume: Int) {
-        _binding.seekbarVolume.progress = volume
+    private fun initVolume(volume: Int) {
+        _binding.apply {
+            seekbarVolume.progress = volume
+
+            val maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC)
+            seekbarVolume.max = maxVolume
+            seekbarVolume.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+                override fun onProgressChanged(
+                    seekBar: SeekBar?,
+                    progress: Int,
+                    fromUser: Boolean
+                ) {
+                    _vm.setVolume(progress)
+                }
+
+                override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+                override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+            })
+        }
     }
 
-    private fun bindVibration(switch: Boolean) {
-        _binding.switchVibration.isChecked = switch
-        _binding.switchVibration.jumpDrawablesToCurrentState()
+    private fun initVolumeAutoIncrease() {
+        _binding.apply {
+            switchVolumeAutoIncrease.setDefaultColor()
+            // TODO: 설정 옵션 추가
+            switchVolumeAutoIncrease.setOnClickListener {
+                Toast.makeText(requireContext(), "현재는 체크 여부에 상관없이 설정됩니다.", Toast.LENGTH_SHORT)
+                    .show()
+            }
+        }
+
     }
 
-    private fun bindMemo(memo: String) {
-        _binding.etMemo.setText(memo)
+    private fun initVibration(switch: Boolean) {
+        _binding.apply {
+            switchVibration.setDefaultColor()
+
+            switchVibration.isChecked = switch
+            switchVibration.jumpDrawablesToCurrentState()
+            switchVibration.setOnCheckedChangeListener { _, isChecked ->
+                _vm.setVibration(isChecked)
+            }
+        }
+    }
+
+    private fun initMemo(memo: String) {
+        _binding.apply {
+            etMemo.setText(memo)
+            etMemo.doAfterTextChanged {
+                _vm.setMemo(it.toString())
+            }
+            switchTts.setDefaultColor()
+            switchTts.setOnClickListener {
+                // TODO: TTS 기능 추가 예정
+                Toast.makeText(requireContext(), "해당 기능은 아직 사용할 수 없습니다.", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+    }
+
+    private fun initDeleteButton() {
+        _binding.apply {
+            btnDelete.isVisible = _vm.isEdit
+            btnDelete.setOnClickListener {
+                removeAlarm()
+            }
+        }
     }
 
     companion object {
