@@ -19,6 +19,13 @@ fun <T> Result<T>.onFailureWitLoading(
     return this
 }
 
+fun <T> Result<T>.onLoading(
+    loadingAction: (Boolean) -> Unit
+): Result<T> {
+    loadingAction.invoke(isLoading)
+    return this
+}
+
 val <T> Result<T>.isLoading: Boolean
     get() = this.isFailure && exceptionOrNull() == LoadingException
 

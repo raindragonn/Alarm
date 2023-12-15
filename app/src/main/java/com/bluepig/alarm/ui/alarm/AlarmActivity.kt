@@ -51,7 +51,6 @@ class AlarmActivity : AppCompatActivity() {
         setContentView(_binding.root)
 
         _vm.setAlarmState()
-        _vm.startDateTime()
         _defaultVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC)
         showOverLockscreen()
         disableBackButton()
@@ -90,7 +89,7 @@ class AlarmActivity : AppCompatActivity() {
                 }
                 launch {
                     repeatOnLifecycle(Lifecycle.State.STARTED) {
-                        _vm.currentTimeState
+                        _vm.getDateTime()
                             .stateIn(this)
                             .collect(::bindCurrentTime)
                     }

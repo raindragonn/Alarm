@@ -9,12 +9,10 @@ import com.bluepig.alarm.domain.result.resultLoading
 import com.bluepig.alarm.domain.usecase.GetAlarmById
 import com.bluepig.alarm.domain.usecase.GetCurrentTime
 import com.bluepig.alarm.domain.usecase.SaveAlarm
-import com.bluepig.alarm.domain.util.CalendarHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -48,18 +46,8 @@ class AlarmViewModel @Inject constructor(
     val volumeIncreaseState
         get() = _volumeIncreaseState.asStateFlow()
 
-    private val _currentTimeState = MutableStateFlow(CalendarHelper.now.timeInMillis)
-    val currentTimeState
-        get() = _currentTimeState.asStateFlow()
 
-    fun startDateTime() {
-        viewModelScope.launch {
-            _getCurrentTime
-                .invoke()
-                .stateIn(this)
-                .collect(_currentTimeState::emit)
-        }
-    }
+    fun getDateTime() = _getCurrentTime.invoke()
 
     fun setAlarmState() = viewModelScope.launch {
         _alarmId.onSuccess {

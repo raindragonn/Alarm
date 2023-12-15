@@ -16,7 +16,7 @@ class GetExpiredAlarmTime @Inject constructor(
     private val _dispatcher: CoroutineDispatcher,
     private val _repository: AlarmRepository,
 ) {
-    suspend operator fun invoke() = flow {
+    operator fun invoke() = flow {
         while (true) {
             val expireTime = kotlin.runCatching {
                 withContext(_dispatcher) {
