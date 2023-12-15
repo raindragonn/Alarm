@@ -43,7 +43,7 @@ fun RecyclerView.setOnLoadMore(triggerLessCount: Int = 5, action: () -> Unit) {
         override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
             super.onScrollStateChanged(recyclerView, newState)
             val itemCount = lm.itemCount
-
+            if (itemCount <= triggerLessCount) return
             if (lm.findLastCompletelyVisibleItemPosition() >= itemCount - triggerLessCount) {
                 action()
             }
