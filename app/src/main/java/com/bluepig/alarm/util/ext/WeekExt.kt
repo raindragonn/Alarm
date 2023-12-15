@@ -36,7 +36,7 @@ fun Set<Week>.getGuideText(context: Context): String {
 }
 
 @ColorInt
-fun Set<Week>.getGuideDrawableTintColor(context: Context, isActive: Boolean): Int {
+fun Set<Week>.tintColor(context: Context, isActive: Boolean): Int {
     if (isActive.not()) {
         return context.getColor(R.color.disable)
     }

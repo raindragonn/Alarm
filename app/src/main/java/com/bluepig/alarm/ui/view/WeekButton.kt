@@ -12,6 +12,13 @@ import com.bluepig.alarm.domain.entity.alarm.Week
 class WeekButton : AppCompatTextView {
     private lateinit var week: Week
 
+    val selectedForeground
+        get() = ResourcesCompat.getDrawable(
+            resources,
+            R.drawable.shape_week_selected_background,
+            null
+        )
+
     constructor(context: Context) : super(context, null)
     constructor(context: Context, attrs: AttributeSet?) : super(
         context,
@@ -44,8 +51,6 @@ class WeekButton : AppCompatTextView {
     fun getWeek(): Week = week
 
     fun setSelected() {
-        val selectedForeground =
-            ResourcesCompat.getDrawable(resources, R.drawable.shape_week_selected_background, null)
         var selectedTextColor = ResourcesCompat.getColor(resources, R.color.primary_600, null)
         if (week.isWeekend) {
             foregroundTintList = ColorStateList.valueOf(context.getColor(R.color.misc_050))
@@ -60,7 +65,7 @@ class WeekButton : AppCompatTextView {
     }
 
     fun unSelected() {
-        val unSelectedTextColor = ResourcesCompat.getColor(resources, R.color.button_text, null)
+        val unSelectedTextColor = ResourcesCompat.getColor(resources, R.color.text, null)
         setTextColor(unSelectedTextColor)
         foreground = null
         invalidate()

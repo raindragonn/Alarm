@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import coil.load
 import coil.transform.RoundedCornersTransformation
 import com.bluepig.alarm.R
+import com.google.android.material.materialswitch.MaterialSwitch
 
 val ViewGroup.inflater: LayoutInflater
     get() = LayoutInflater.from(context)
@@ -74,4 +75,11 @@ fun ViewHolder.checkNoPosition(action: () -> Unit) {
     if (bindingAdapterPosition != RecyclerView.NO_POSITION) {
         action.invoke()
     }
+}
+
+fun MaterialSwitch.setDefaultColor() {
+    val colorStateList =
+        resources.getColorStateList(R.color.switch_track, null)
+    this.trackTintList = colorStateList
+    this.trackDecorationTintList = colorStateList
 }

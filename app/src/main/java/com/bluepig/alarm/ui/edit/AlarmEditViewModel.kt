@@ -8,12 +8,16 @@ import com.bluepig.alarm.domain.entity.alarm.Week
 import com.bluepig.alarm.domain.entity.alarm.media.AlarmMedia
 import com.bluepig.alarm.domain.result.NotFoundAlarmException
 import com.bluepig.alarm.domain.result.NotSelectAlarmMedia
+import com.bluepig.alarm.domain.usecase.GetExpiredTime
 import com.bluepig.alarm.domain.usecase.RemoveAlarm
 import com.bluepig.alarm.domain.usecase.SaveAlarm
 import com.bluepig.alarm.domain.util.CalendarHelper
+import com.bluepig.alarm.manager.timeguide.TimeGuideManager
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 @HiltViewModel
@@ -21,6 +25,8 @@ class AlarmEditViewModel @Inject constructor(
     private val _state: SavedStateHandle,
     private val _saveAlarm: SaveAlarm,
     private val _removeAlarm: RemoveAlarm,
+    private val _getExpiredTime: GetExpiredTime,
+    private val _timeGuideManager: TimeGuideManager,
     audioManager: AudioManager
 ) : ViewModel() {
 
@@ -65,6 +71,21 @@ class AlarmEditViewModel @Inject constructor(
 
     fun setTimeInMillis(hourOfDay: Int, minute: Int) {
         _timeInMillis.value = CalendarHelper.todayFromHourAndMinute(hourOfDay, minute).timeInMillis
+    }
+
+    fun getExpiredTime() = flow {
+        while (true) {
+            val calendar = CalendarHelper.fromTimeInMillis(_timeInMillis.value)
+            val repeatWeek = _repeatWeek.value
+
+            val expiredTime = _getExpiredTime.invoke(
+                calendar,
+                repeatWeek
+            )
+            val result = _timeGuideManager.getRemainingTimeGuide(expiredTime)
+            emit(result)
+            delay(100L)
+        }
     }
 
     fun setRepeatWeek(week: Week) {

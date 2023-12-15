@@ -3,10 +3,10 @@
 
     <style name="TimePicker">
         <item name="android:includeFontPadding">false</item>
-        <item name="fontFamily">@font/pretendard_regular</item>
-        <item name="android:fontFamily">@font/pretendard_regular</item>
+        <item name="fontFamily">@font/pretendard_bold</item>
+        <item name="android:fontFamily">@font/pretendard_bold</item>
         <item name="android:textSize">30dp</item>
-        <item name="colorControlNormal">@color/mono_600</item>
+        <item name="colorControlNormal">@color/transparent</item>
         <item name="lineHeight">39dp</item>
         <item name="android:lineHeight" tools:targetApi="p">39dp</item>
     </style>
@@ -35,9 +35,9 @@
         <item name="android:background">@drawable/selector_default_button_background</item>
     </style>
 
-    <style name="Alarm.Base.TextButton.Remove" parent="Alarm.Base.TextButton.SemiBold">
+    <style name="Alarm.Base.TextButton.Delete" parent="Alarm.Base.TextButton.Bold">
         <item name="android:textColor">@color/misc_050</item>
-        <item name="android:background">@drawable/selector_remove_button_background</item>
+        <item name="android:background">@drawable/ripple_rectangle_delete</item>
     </style>
 
     <style name="Divider">
@@ -45,8 +45,13 @@
         <item name="android:background">@color/point</item>
     </style>
 
+    <style name="AlarmEditDivider">
+        <item name="android:layout_height">@dimen/base_spacing_0.5</item>
+        <item name="android:background">@color/background</item>
+    </style>
+
     <style name="Alarm.Base.WeekButton" parent="Alarm.Base.TextButton.SemiBold">
-        <item name="android:textColor">@color/button_text</item>
+        <item name="android:textColor">@color/text</item>
         <item name="android:background">@drawable/ripple_week_selected</item>
         <item name="android:clickable">true</item>
         <item name="android:gravity">center</item>
