@@ -1,11 +1,11 @@
 <resources>
     <!-- Base application theme. -->
     <style name="Base.Theme.Alarm" parent="Theme.Material3.DayNight.NoActionBar">
-        <item name="android:statusBarColor">@color/mono_500</item>
+        <item name="android:statusBarColor">@color/surface</item>
         <item name="android:windowLightStatusBar">true</item>
 
         <item name="android:windowAnimationStyle">@null</item>
-        <item name="android:windowBackground">@color/base</item>
+        <item name="android:windowBackground">@color/background</item>
 
         <item name="android:textColorPrimary">@color/point</item>
 
