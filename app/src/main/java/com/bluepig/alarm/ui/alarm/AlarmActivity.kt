@@ -57,7 +57,7 @@ class AlarmActivity : AppCompatActivity() {
 
     private fun observing() {
         lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
+            repeatOnLifecycle(Lifecycle.State.CREATED) {
                 launch {
                     _vm.getAlarmState()
                         .stateIn(this)
@@ -76,28 +76,24 @@ class AlarmActivity : AppCompatActivity() {
                         }
                 }
                 launch {
-                    repeatOnLifecycle(Lifecycle.State.STARTED) {
-                        _vm.volumeIncreaseState
-                            .stateIn(this)
-                            .collect { volume ->
-                                changeVolume(volume)
-                            }
-                    }
+                    _vm.volumeIncreaseState
+                        .stateIn(this)
+                        .collect { volume ->
+                            changeVolume(volume)
+                        }
                 }
                 launch {
-                    repeatOnLifecycle(Lifecycle.State.STARTED) {
-                        _vm.getDateTime()
-                            .stateIn(this)
-                            .collect(::bindCurrentTime)
-                    }
+                    _vm.getDateTime()
+                        .stateIn(this)
+                        .collect(::bindCurrentTime)
                 }
             }
         }
     }
 
     override fun onDestroy() {
-        super.onDestroy()
         release()
+        super.onDestroy()
     }
 
     private fun release() {
