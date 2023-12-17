@@ -23,7 +23,6 @@ import javax.inject.Singleton
 object ManagerModule {
 
     @Provides
-    @Singleton
     fun providesSongPlayerManager(
         @ApplicationContext context: Context,
         mediaDownloadManager: MediaDownloadManager,
