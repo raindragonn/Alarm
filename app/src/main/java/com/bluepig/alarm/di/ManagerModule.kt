@@ -9,6 +9,8 @@ import com.bluepig.alarm.manager.download.MediaDownloadManager
 import com.bluepig.alarm.manager.download.MediaDownloadManagerImpl
 import com.bluepig.alarm.manager.player.SongPlayerManager
 import com.bluepig.alarm.manager.player.SongPlayerManagerImpl
+import com.bluepig.alarm.manager.player.TtsPlayerManager
+import com.bluepig.alarm.manager.player.TtsPlayerManagerImpl
 import com.bluepig.alarm.util.ext.audioManager
 import dagger.Module
 import dagger.Provides
@@ -52,5 +54,13 @@ object ManagerModule {
         @ApplicationContext context: Context
     ): BpAlarmManager {
         return BPAlarmManagerImpl(context)
+    }
+
+    @Provides
+    fun providesTtsPlayerManager(
+        @ApplicationContext
+        context: Context
+    ): TtsPlayerManager {
+        return TtsPlayerManagerImpl(context)
     }
 }
