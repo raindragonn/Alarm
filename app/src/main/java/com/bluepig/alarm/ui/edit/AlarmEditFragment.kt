@@ -9,7 +9,6 @@ import android.text.style.ForegroundColorSpan
 import android.text.style.TextAppearanceSpan
 import android.view.View
 import android.widget.SeekBar
-import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
@@ -65,6 +64,7 @@ class AlarmEditFragment : Fragment(R.layout.fragment_alarm_edit) {
         initVolumeAutoIncrease(_vm.volumeAutoIncrease.value)
         initVibration(_vm.vibration.value)
         initMemo(_vm.memo.value)
+        initMemoTts(_vm.memoTtsEnabled.value)
         initDeleteButton()
 
         btnBack.setOnClickListener { findNavController().popBackStack() }
@@ -255,13 +255,18 @@ class AlarmEditFragment : Fragment(R.layout.fragment_alarm_edit) {
         _binding.apply {
             etMemo.setText(memo)
             etMemo.doAfterTextChanged { _vm.setMemo(it.toString()) }
+        }
+    }
+
+    private fun initMemoTts(enabled: Boolean) {
+        _binding.apply {
             switchTts.setDefaultColor()
-            switchTts.setOnClickListener {
-                // TODO: TTS 기능 추가 예정
-                Toast.makeText(requireContext(), "해당 기능은 아직 사용할 수 없습니다.", Toast.LENGTH_SHORT).show()
+            switchTts.isChecked = enabled
+            switchTts.jumpDrawablesToCurrentState()
+            switchTts.setOnCheckedChangeListener { _, isChecked ->
+                _vm.setMemoTtsEnabled(isChecked)
             }
         }
-
     }
 
     private fun initDeleteButton() {

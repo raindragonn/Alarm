@@ -69,6 +69,10 @@ class AlarmEditViewModel @Inject constructor(
     val memo
         get() = _memo.asStateFlow()
 
+    private val _memoTtsEnabled = MutableStateFlow(_alarm?.memoTtsEnabled ?: false)
+    val memoTtsEnabled
+        get() = _memoTtsEnabled.asStateFlow()
+
     private val _alarmMedia = MutableStateFlow(_alarm?.media)
     val alarmMedia
         get() = _alarmMedia.asStateFlow()
@@ -120,6 +124,10 @@ class AlarmEditViewModel @Inject constructor(
         _memo.value = memo
     }
 
+    fun setMemoTtsEnabled(enabled: Boolean) {
+        _memoTtsEnabled.value = enabled
+    }
+
     fun setAlarmMedia(alarmMedia: AlarmMedia) {
         _alarmMedia.value = alarmMedia
     }
@@ -133,7 +141,8 @@ class AlarmEditViewModel @Inject constructor(
             volume = _volume.value,
             isVolumeAutoIncrease = _volumeAutoIncrease.value,
             hasVibration = _vibration.value,
-            memo = _memo.value
+            memo = _memo.value,
+            memoTtsEnabled = _memoTtsEnabled.value
         )
     }
 
