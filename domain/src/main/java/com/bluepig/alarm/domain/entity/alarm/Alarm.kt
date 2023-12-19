@@ -17,6 +17,7 @@ data class Alarm(
     val isVolumeAutoIncrease: Boolean = true,
     val hasVibration: Boolean = true,
     val memo: String = "",
+    val memoTtsEnabled: Boolean = false,
 ) : BaseEntity, java.io.Serializable {
     fun getCalendar(): Calendar {
         return CalendarHelper.now.apply {
