@@ -62,7 +62,7 @@ class AlarmEditFragment : Fragment(R.layout.fragment_alarm_edit) {
         initTimePicker(_vm.timeInMillis.value)
         initWeekButtons(_vm::setRepeatWeek)
         initVolume(_vm.volume.value)
-        initVolumeAutoIncrease()
+        initVolumeAutoIncrease(_vm.volumeAutoIncrease.value)
         initVibration(_vm.vibration.value)
         initMemo(_vm.memo.value)
         initDeleteButton()
@@ -214,7 +214,6 @@ class AlarmEditFragment : Fragment(R.layout.fragment_alarm_edit) {
     private fun initVolume(volume: Int) {
         _binding.apply {
             seekbarVolume.progress = volume
-
             val maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC)
             seekbarVolume.max = maxVolume
             seekbarVolume.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
@@ -230,22 +229,20 @@ class AlarmEditFragment : Fragment(R.layout.fragment_alarm_edit) {
         }
     }
 
-    private fun initVolumeAutoIncrease() {
+    private fun initVolumeAutoIncrease(switch: Boolean) {
         _binding.apply {
             switchVolumeAutoIncrease.setDefaultColor()
-            // TODO: 설정 옵션 추가
-            switchVolumeAutoIncrease.setOnClickListener {
-                Toast.makeText(requireContext(), "현재는 체크 여부에 상관없이 설정됩니다.", Toast.LENGTH_SHORT)
-                    .show()
+            switchVolumeAutoIncrease.isChecked = switch
+            switchVolumeAutoIncrease.setDefaultColor()
+            switchVolumeAutoIncrease.setOnCheckedChangeListener { _, isChecked ->
+                _vm.setVolumeAutoIncrease(isChecked)
             }
         }
-
     }
 
     private fun initVibration(switch: Boolean) {
         _binding.apply {
             switchVibration.setDefaultColor()
-
             switchVibration.isChecked = switch
             switchVibration.jumpDrawablesToCurrentState()
             switchVibration.setOnCheckedChangeListener { _, isChecked ->
@@ -257,9 +254,7 @@ class AlarmEditFragment : Fragment(R.layout.fragment_alarm_edit) {
     private fun initMemo(memo: String) {
         _binding.apply {
             etMemo.setText(memo)
-            etMemo.doAfterTextChanged {
-                _vm.setMemo(it.toString())
-            }
+            etMemo.doAfterTextChanged { _vm.setMemo(it.toString()) }
             switchTts.setDefaultColor()
             switchTts.setOnClickListener {
                 // TODO: TTS 기능 추가 예정

@@ -38,10 +38,9 @@ class AlarmViewModel @Inject constructor(
     val isPreview
         get() = _previewAlarm.isSuccess
 
-    private val _volumeIncreaseState = MutableStateFlow(0)
-    val volumeIncreaseState
-        get() = _volumeIncreaseState.asStateFlow()
-
+    private val _volume = MutableStateFlow(0)
+    val volume
+        get() = _volume.asStateFlow()
 
     fun getDateTime() = _getCurrentTime.invoke()
 
@@ -55,6 +54,10 @@ class AlarmViewModel @Inject constructor(
         }
     }
 
+    fun setAlarmVolume(volume: Int) = viewModelScope.launch {
+        _volume.emit(volume)
+    }
+
     fun startAutoIncreaseVolume(maxVolume: Int, duration: Int = MAX_DURATION) =
         viewModelScope.launch {
             var volume = 0f
@@ -62,7 +65,7 @@ class AlarmViewModel @Inject constructor(
             val addedVolume = (maxVolume / duration.toFloat())
             while (currentDuration < duration) {
                 volume += addedVolume
-                _volumeIncreaseState.emit(volume.toInt())
+                _volume.emit(volume.toInt())
                 currentDuration++
                 delay(1000L)
             }
