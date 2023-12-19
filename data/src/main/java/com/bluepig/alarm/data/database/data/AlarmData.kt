@@ -13,7 +13,8 @@ data class AlarmData(
     @ColumnInfo("isActive") val isActive: Boolean,
     @ColumnInfo("alarmMedia") val alarmMedia: AlarmMedia,
     @ColumnInfo("repeatWeek") val repeatWeek: Set<Week>,
-    @ColumnInfo("volume") val volume: Int? = null,
+    @ColumnInfo("volume") val volume: Int,
+    @ColumnInfo("isVolumeAutoIncrease") val isVolumeAutoIncrease: Boolean = true,
     @ColumnInfo("hasVibration") val hasVibration: Boolean,
     @ColumnInfo("memo") val memo: String,
 ) : BaseData

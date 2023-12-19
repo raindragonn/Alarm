@@ -13,7 +13,8 @@ data class Alarm(
     val isActive: Boolean = true,
     val media: AlarmMedia,
     val repeatWeek: Set<Week> = setOf(),
-    val volume: Int? = null,
+    val volume: Int,
+    val isVolumeAutoIncrease: Boolean = true,
     val hasVibration: Boolean = true,
     val memo: String = "",
 ) : BaseEntity, java.io.Serializable {
