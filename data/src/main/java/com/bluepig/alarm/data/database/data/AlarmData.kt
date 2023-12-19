@@ -17,4 +17,5 @@ data class AlarmData(
     @ColumnInfo("isVolumeAutoIncrease") val isVolumeAutoIncrease: Boolean = true,
     @ColumnInfo("hasVibration") val hasVibration: Boolean,
     @ColumnInfo("memo") val memo: String,
+    @ColumnInfo("memoTtsEnabled") val memoTtsEnabled: Boolean,
 ) : BaseData

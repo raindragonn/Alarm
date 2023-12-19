@@ -18,7 +18,8 @@ import com.bluepig.alarm.R
 import com.bluepig.alarm.databinding.ActivityAlarmBinding
 import com.bluepig.alarm.domain.entity.alarm.Alarm
 import com.bluepig.alarm.domain.result.onFailureWitLoading
-import com.bluepig.alarm.manager.player.SongPlayerManager
+import com.bluepig.alarm.manager.player.MusicPlayerManager
+import com.bluepig.alarm.manager.player.TtsPlayerManager
 import com.bluepig.alarm.util.ext.audioManager
 import com.bluepig.alarm.util.ext.setThumbnail
 import com.bluepig.alarm.util.ext.showErrorToast
@@ -39,17 +40,21 @@ class AlarmActivity : AppCompatActivity() {
     private val _currentDateFormat by lazy { SimpleDateFormat("MMM dd일 EE", Locale.getDefault()) }
     private val _currentTimeFormat by lazy { SimpleDateFormat("hh:mm", Locale.getDefault()) }
 
-
     private var _defaultVolume: Int? = null
 
     @Inject
-    lateinit var playerManager: SongPlayerManager
+    lateinit var playerManager: MusicPlayerManager
+
+    @Inject
+    lateinit var ttsPlayerManager: TtsPlayerManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(_binding.root)
 
         _defaultVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC)
+        initAlarmMedia()
+
         showOverLockscreen()
         disableBackButton()
         observing()
@@ -63,10 +68,11 @@ class AlarmActivity : AppCompatActivity() {
                         .stateIn(this)
                         .collect {
                             it.onSuccess { alarm ->
-                                initViews(alarm)
-                                setUpAlarmSong(alarm)
+                                bindViews(alarm)
+                                startAlarmMedia(alarm)
                                 setVibration(alarm)
                                 setVolume(alarm)
+                                setTts(alarm)
                             }.onFailureWitLoading { e ->
                                 Timber.w(e)
                                 finishAffinity()
@@ -101,7 +107,7 @@ class AlarmActivity : AppCompatActivity() {
         _vm.updateAlarmExpired()
     }
 
-    private fun initViews(alarm: Alarm) = with(_binding) {
+    private fun bindViews(alarm: Alarm) = with(_binding) {
         alarm.media
             .onMusic {
                 ivThumbnail.setThumbnail(it.thumbnail)
@@ -151,8 +157,9 @@ class AlarmActivity : AppCompatActivity() {
     }
 
     @Suppress("DEPRECATION")
-    private fun setVibration(alarm: Alarm) {
-        if (alarm.hasVibration.not()) return
+    private fun setVibration(alarm: Alarm) = lifecycleScope.launch {
+        if (alarm.memoTtsEnabled) return@launch
+        if (alarm.hasVibration.not()) return@launch
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             vibrator.vibrate(VibrationEffect.createWaveform(VIBRATION_PATTERN, 0))
         } else {
@@ -160,7 +167,23 @@ class AlarmActivity : AppCompatActivity() {
         }
     }
 
-    private fun setVolume(alarm: Alarm) {
+    private fun setTts(alarm: Alarm) {
+        if (alarm.memoTtsEnabled.not()) return
+        // start Tts
+        ttsPlayerManager.play(alarm.memo) {
+            val ttsOverAlarm = alarm.copy(memoTtsEnabled = false)
+            startAlarmMedia(ttsOverAlarm)
+            setVolume(ttsOverAlarm)
+            setVibration(ttsOverAlarm)
+        }
+    }
+
+    private fun setVolume(alarm: Alarm) = lifecycleScope.launch {
+        if (alarm.memoTtsEnabled) {
+            _vm.setAlarmVolume(alarm.volume)
+            return@launch
+        }
+
         if (alarm.isVolumeAutoIncrease) {
             _vm.startAutoIncreaseVolume(alarm.volume)
         } else {
@@ -193,7 +216,7 @@ class AlarmActivity : AppCompatActivity() {
         }
     }
 
-    private fun setUpAlarmSong(alarm: Alarm) {
+    private fun initAlarmMedia() {
         playerManager.init(
             lifecycle,
             stateChangeListener = ::onPlayingStateChanged,
@@ -203,6 +226,10 @@ class AlarmActivity : AppCompatActivity() {
                 }
             })
 
+    }
+
+    private fun startAlarmMedia(alarm: Alarm) = lifecycleScope.launch {
+        if (alarm.memoTtsEnabled) return@launch
         playerManager.play(alarm.media)
     }
 

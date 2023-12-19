@@ -15,6 +15,7 @@ object AlarmMapper : BaseMapper<AlarmData, Alarm> {
             isVolumeAutoIncrease = data.isVolumeAutoIncrease,
             hasVibration = data.hasVibration,
             memo = data.memo,
+            memoTtsEnabled = data.memoTtsEnabled,
         )
 
     override fun mapToData(entity: Alarm): AlarmData =
@@ -27,6 +28,7 @@ object AlarmMapper : BaseMapper<AlarmData, Alarm> {
             isVolumeAutoIncrease = entity.isVolumeAutoIncrease,
             hasVibration = entity.hasVibration,
             memo = entity.memo,
-            alarmMedia = entity.media
+            memoTtsEnabled = entity.memoTtsEnabled,
+            alarmMedia = entity.media,
         )
 }
