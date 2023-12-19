@@ -55,6 +55,11 @@ class AlarmEditViewModel @Inject constructor(
     val volume
         get() = _volume.asStateFlow()
 
+    private val _volumeAutoIncrease =
+        MutableStateFlow(_alarm?.isVolumeAutoIncrease ?: true)
+    val volumeAutoIncrease
+        get() = _volumeAutoIncrease.asStateFlow()
+
     private val _vibration =
         MutableStateFlow(_alarm?.hasVibration ?: true)
     val vibration
@@ -103,6 +108,10 @@ class AlarmEditViewModel @Inject constructor(
         _volume.value = volume
     }
 
+    fun setVolumeAutoIncrease(checked: Boolean) {
+        _volumeAutoIncrease.value = checked
+    }
+
     fun setVibration(vibration: Boolean) {
         _vibration.value = vibration
     }
@@ -122,6 +131,7 @@ class AlarmEditViewModel @Inject constructor(
             media = _alarmMedia.value ?: return null,
             repeatWeek = _repeatWeek.value,
             volume = _volume.value,
+            isVolumeAutoIncrease = _volumeAutoIncrease.value,
             hasVibration = _vibration.value,
             memo = _memo.value
         )

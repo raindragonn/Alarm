@@ -66,9 +66,7 @@ class AlarmActivity : AppCompatActivity() {
                                 initViews(alarm)
                                 setUpAlarmSong(alarm)
                                 setVibration(alarm)
-                                val volume = alarm.volume
-                                    ?: audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC)
-                                _vm.startAutoIncreaseVolume(volume)
+                                setVolume(alarm)
                             }.onFailureWitLoading { e ->
                                 Timber.w(e)
                                 finishAffinity()
@@ -76,7 +74,7 @@ class AlarmActivity : AppCompatActivity() {
                         }
                 }
                 launch {
-                    _vm.volumeIncreaseState
+                    _vm.volume
                         .stateIn(this)
                         .collect { volume ->
                             changeVolume(volume)
@@ -159,6 +157,14 @@ class AlarmActivity : AppCompatActivity() {
             vibrator.vibrate(VibrationEffect.createWaveform(VIBRATION_PATTERN, 0))
         } else {
             vibrator.vibrate(VIBRATION_PATTERN, 0)
+        }
+    }
+
+    private fun setVolume(alarm: Alarm) {
+        if (alarm.isVolumeAutoIncrease) {
+            _vm.startAutoIncreaseVolume(alarm.volume)
+        } else {
+            _vm.setAlarmVolume(alarm.volume)
         }
     }
 

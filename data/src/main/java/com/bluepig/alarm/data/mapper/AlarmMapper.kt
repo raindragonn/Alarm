@@ -12,6 +12,7 @@ object AlarmMapper : BaseMapper<AlarmData, Alarm> {
             media = data.alarmMedia,
             repeatWeek = data.repeatWeek,
             volume = data.volume,
+            isVolumeAutoIncrease = data.isVolumeAutoIncrease,
             hasVibration = data.hasVibration,
             memo = data.memo,
         )
@@ -23,6 +24,7 @@ object AlarmMapper : BaseMapper<AlarmData, Alarm> {
             isActive = entity.isActive,
             repeatWeek = entity.repeatWeek,
             volume = entity.volume,
+            isVolumeAutoIncrease = entity.isVolumeAutoIncrease,
             hasVibration = entity.hasVibration,
             memo = entity.memo,
             alarmMedia = entity.media
