@@ -55,9 +55,10 @@ class SongPlayerManagerImpl @Inject constructor(
                 addListener(it)
             }
         }
+        _lifecycle = lifecycle
         EventObserver().let {
             _eventObserver = it
-            lifecycle.addObserver(it)
+            _lifecycle?.addObserver(it)
         }
     }
 
@@ -129,19 +130,14 @@ class SongPlayerManagerImpl @Inject constructor(
     }
 
     override fun release() {
-        _playListener?.let {
-            _player?.removeListener(it)
-        }
+        _playListener?.let { _player?.removeListener(it) }
         _playListener = null
 
-        _eventObserver?.let {
-            _lifecycle?.removeObserver(_eventObserver!!)
-        }
+        _eventObserver?.let { _lifecycle?.removeObserver(it) }
         _eventObserver = null
+        _lifecycle = null
 
-        _errorObserver?.let {
-            _player?.removeListener(it)
-        }
+        _errorObserver?.let { _player?.removeListener(it) }
         _errorObserver = null
 
         _player?.release()
