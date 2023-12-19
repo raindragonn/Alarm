@@ -15,7 +15,7 @@ import com.bluepig.alarm.databinding.DialogFragmentMediaSelectBinding
 import com.bluepig.alarm.domain.entity.alarm.media.AlarmMedia
 import com.bluepig.alarm.domain.result.onFailureWitLoading
 import com.bluepig.alarm.domain.result.onLoading
-import com.bluepig.alarm.manager.player.SongPlayerManager
+import com.bluepig.alarm.manager.player.MusicPlayerManager
 import com.bluepig.alarm.ui.edit.AlarmEditFragment
 import com.bluepig.alarm.util.ext.setThumbnail
 import com.bluepig.alarm.util.ext.showErrorToast
@@ -38,7 +38,7 @@ class MediaSelectBottomSheetDialogFragment :
     private val _vm: MediaSelectViewModel by viewModels()
 
     @Inject
-    lateinit var playerManager: SongPlayerManager
+    lateinit var playerManager: MusicPlayerManager
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

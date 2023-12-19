@@ -18,7 +18,7 @@ import com.bluepig.alarm.R
 import com.bluepig.alarm.databinding.ActivityAlarmBinding
 import com.bluepig.alarm.domain.entity.alarm.Alarm
 import com.bluepig.alarm.domain.result.onFailureWitLoading
-import com.bluepig.alarm.manager.player.SongPlayerManager
+import com.bluepig.alarm.manager.player.MusicPlayerManager
 import com.bluepig.alarm.manager.player.TtsPlayerManager
 import com.bluepig.alarm.util.ext.audioManager
 import com.bluepig.alarm.util.ext.setThumbnail
@@ -43,7 +43,7 @@ class AlarmActivity : AppCompatActivity() {
     private var _defaultVolume: Int? = null
 
     @Inject
-    lateinit var playerManager: SongPlayerManager
+    lateinit var playerManager: MusicPlayerManager
 
     @Inject
     lateinit var ttsPlayerManager: TtsPlayerManager

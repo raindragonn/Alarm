@@ -7,8 +7,8 @@ import com.bluepig.alarm.domain.alarm.BpAlarmManager
 import com.bluepig.alarm.manager.alarm.BPAlarmManagerImpl
 import com.bluepig.alarm.manager.download.MediaDownloadManager
 import com.bluepig.alarm.manager.download.MediaDownloadManagerImpl
-import com.bluepig.alarm.manager.player.SongPlayerManager
-import com.bluepig.alarm.manager.player.SongPlayerManagerImpl
+import com.bluepig.alarm.manager.player.MusicPlayerManager
+import com.bluepig.alarm.manager.player.MusicPlayerManagerImpl
 import com.bluepig.alarm.manager.player.TtsPlayerManager
 import com.bluepig.alarm.manager.player.TtsPlayerManagerImpl
 import com.bluepig.alarm.util.ext.audioManager
@@ -25,11 +25,11 @@ import javax.inject.Singleton
 object ManagerModule {
 
     @Provides
-    fun providesSongPlayerManager(
+    fun providesMusicPlayerManager(
         @ApplicationContext context: Context,
         mediaDownloadManager: MediaDownloadManager,
-    ): SongPlayerManager {
-        return SongPlayerManagerImpl(context, mediaDownloadManager)
+    ): MusicPlayerManager {
+        return MusicPlayerManagerImpl(context, mediaDownloadManager)
     }
 
     @Provides

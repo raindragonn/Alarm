@@ -24,11 +24,11 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
 @UnstableApi
-class SongPlayerManagerImpl @Inject constructor(
+class MusicPlayerManagerImpl @Inject constructor(
     @ApplicationContext
     private val _context: Context,
     private val _downloadManager: MediaDownloadManager,
-) : SongPlayerManager {
+) : MusicPlayerManager {
     private var _player: ExoPlayer? = null
     private var _lifecycle: Lifecycle? = null
     private var _mediaItem: MediaItem? = null
