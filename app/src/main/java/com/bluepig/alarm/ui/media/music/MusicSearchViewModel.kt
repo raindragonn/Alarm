@@ -1,4 +1,4 @@
-package com.bluepig.alarm.ui.music
+package com.bluepig.alarm.ui.media.music
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

@@ -1,4 +1,4 @@
-package com.bluepig.alarm.ui.music
+package com.bluepig.alarm.ui.media.music
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil

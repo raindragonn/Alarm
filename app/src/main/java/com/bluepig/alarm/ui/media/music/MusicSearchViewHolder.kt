@@ -1,4 +1,4 @@
-package com.bluepig.alarm.ui.music
+package com.bluepig.alarm.ui.media.music
 
 import androidx.recyclerview.widget.RecyclerView
 import com.bluepig.alarm.databinding.ItemMediaBinding
