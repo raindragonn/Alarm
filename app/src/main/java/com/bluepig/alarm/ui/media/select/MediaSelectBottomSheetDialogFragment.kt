@@ -1,4 +1,4 @@
-package com.bluepig.alarm.ui.music.select
+package com.bluepig.alarm.ui.media.select
 
 import android.os.Bundle
 import android.view.View

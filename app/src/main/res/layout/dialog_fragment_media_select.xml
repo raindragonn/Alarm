@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:background="@drawable/shape_top_rounded_background"
     android:padding="@dimen/base_spacing_2"
-    tools:context=".ui.music.select.MediaSelectBottomSheetDialogFragment">
+    tools:context=".ui.media.select.MediaSelectBottomSheetDialogFragment">
 
     <androidx.constraintlayout.widget.Group
         android:id="@+id/group_content"

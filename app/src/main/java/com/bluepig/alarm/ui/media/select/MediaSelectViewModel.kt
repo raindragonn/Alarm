@@ -1,4 +1,4 @@
-package com.bluepig.alarm.ui.music.select
+package com.bluepig.alarm.ui.media.select
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel

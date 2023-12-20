@@ -14,7 +14,7 @@ import com.bluepig.alarm.databinding.FragmentMusicSearchBinding
 import com.bluepig.alarm.domain.entity.music.MusicInfo
 import com.bluepig.alarm.domain.result.onFailureWitLoading
 import com.bluepig.alarm.domain.result.onLoading
-import com.bluepig.alarm.ui.music.select.MediaSelectBottomSheetDialogFragment
+import com.bluepig.alarm.ui.media.select.MediaSelectBottomSheetDialogFragment
 import com.bluepig.alarm.util.ext.setOnEnterListener
 import com.bluepig.alarm.util.ext.setOnLoadMore
 import com.bluepig.alarm.util.ext.showErrorToast
