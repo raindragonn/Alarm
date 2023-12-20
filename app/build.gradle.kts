@@ -1,3 +1,5 @@
+import com.bluepig.alarm.AppConfiguration
+
 @Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 plugins {
     alias(libs.plugins.com.android.application)
@@ -12,25 +14,56 @@ plugins {
 
 android {
     namespace = "com.bluepig.alarm"
-    compileSdk = 34
+    compileSdk = AppConfiguration.compileSdk
 
     defaultConfig {
         applicationId = "com.bluepig.alarm"
-        minSdk = 24
-        targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
+        minSdk = AppConfiguration.minSdk
+        targetSdk = AppConfiguration.compileSdk
+        versionCode = AppConfiguration.versionCode
+        versionName = AppConfiguration.versionName
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+    signingConfigs {
+        getByName("debug") {
+            val debugJson =
+                groovy.json.JsonSlurper()
+                    .parseText(file("../key.stores/debug.keys").readText()) as Map<String, String>
+
+            keyAlias = debugJson["KEY_ALIAS"]
+            keyPassword = debugJson["KEY_PASSWORD"]
+            storeFile = file("../key.stores/debug.jks")
+            storePassword = debugJson["STORE_PASSWORD"]
+        }
+        create("release") {
+            val releaseJson = groovy.json.JsonSlurper()
+                .parseText(file("../key.stores/release.keys").readText()) as Map<String, String>
+
+            keyAlias = releaseJson["KEY_ALIAS"]
+            keyPassword = releaseJson["KEY_PASSWORD"]
+            storeFile = file("../key.stores/release.jks")
+            storePassword = releaseJson["STORE_PASSWORD"]
+        }
     }
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            signingConfig = signingConfigs["release"]
+            isMinifyEnabled = true
+            isDebuggable = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            resValue("string", "app_name", AppConfiguration.appName)
+        }
+        debug {
+            signingConfig = signingConfigs["debug"]
+            isMinifyEnabled = false
+            isDebuggable = true
+            applicationIdSuffix = ".debug"
+            resValue("string", "app_name", AppConfiguration.appName + AppConfiguration.debugSuffix)
         }
     }
     compileOptions {
