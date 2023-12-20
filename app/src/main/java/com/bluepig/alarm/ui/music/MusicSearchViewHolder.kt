@@ -1,11 +1,11 @@
-package com.bluepig.alarm.ui.search
+package com.bluepig.alarm.ui.music
 
 import androidx.recyclerview.widget.RecyclerView
 import com.bluepig.alarm.databinding.ItemMediaBinding
 import com.bluepig.alarm.domain.entity.music.MusicInfo
 import com.bluepig.alarm.util.ext.setThumbnail
 
-class SearchViewHolder private constructor(
+class MusicSearchViewHolder private constructor(
     private val _binding: ItemMediaBinding,
 ) : RecyclerView.ViewHolder(_binding.root) {
 
@@ -19,8 +19,8 @@ class SearchViewHolder private constructor(
     companion object {
         fun create(
             binding: ItemMediaBinding
-        ): SearchViewHolder {
-            return SearchViewHolder(binding)
+        ): MusicSearchViewHolder {
+            return MusicSearchViewHolder(binding)
         }
     }
 }

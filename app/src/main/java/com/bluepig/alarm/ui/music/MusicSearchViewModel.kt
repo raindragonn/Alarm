@@ -1,4 +1,4 @@
-package com.bluepig.alarm.ui.search
+package com.bluepig.alarm.ui.music
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SearchViewModel @Inject constructor(
+class MusicSearchViewModel @Inject constructor(
     private val _searchFile: SearchFile,
 ) : ViewModel() {
 

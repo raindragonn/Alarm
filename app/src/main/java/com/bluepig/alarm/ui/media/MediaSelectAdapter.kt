@@ -4,7 +4,7 @@ import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.bluepig.alarm.R
 import com.bluepig.alarm.ui.media.ringtone.RingtoneFragment
-import com.bluepig.alarm.ui.search.MusicSearchFragment
+import com.bluepig.alarm.ui.music.MusicSearchFragment
 
 class MediaSelectAdapter(
     parent: Fragment,
