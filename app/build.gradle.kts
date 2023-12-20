@@ -7,6 +7,8 @@ plugins {
 
     alias(libs.plugins.google.hilt)
     alias(libs.plugins.google.ksp)
+    alias(libs.plugins.google.services)
+    alias(libs.plugins.firebase.crashlytics)
 
     alias(libs.plugins.androidx.navigation.safeargs)
     kotlin("kapt")
@@ -106,6 +108,9 @@ dependencies {
     implementation(libs.google.hilt)
     kapt(libs.google.hilt.compiler)
 
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics)
+    implementation(libs.firebase.crashlytics)
 
     implementation(libs.coil)
     implementation(libs.timber)
