@@ -3,7 +3,7 @@ package com.bluepig.alarm.ui.media
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.bluepig.alarm.R
-import com.bluepig.alarm.ui.ringtone.RingtoneFragment
+import com.bluepig.alarm.ui.media.ringtone.RingtoneFragment
 import com.bluepig.alarm.ui.search.MusicSearchFragment
 
 class MediaSelectAdapter(
@@ -24,9 +24,5 @@ class MediaSelectAdapter(
 
     fun getTabTitle(position: Int): String {
         return _fragments.keys.elementAt(position)
-    }
-
-    fun getFragment(position: Int): Fragment {
-        return _fragments.values.elementAt(position)
     }
 }

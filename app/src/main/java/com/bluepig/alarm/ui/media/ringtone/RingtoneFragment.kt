@@ -1,4 +1,4 @@
-package com.bluepig.alarm.ui.ringtone
+package com.bluepig.alarm.ui.media.ringtone
 
 import android.os.Bundle
 import android.view.View

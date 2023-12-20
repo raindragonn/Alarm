@@ -1,4 +1,4 @@
-package com.bluepig.alarm.ui.ringtone
+package com.bluepig.alarm.ui.media.ringtone
 
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
