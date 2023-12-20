@@ -13,8 +13,8 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MediaSelectFragment : Fragment(R.layout.fragment_media_select) {
     private val _binding: FragmentMediaSelectBinding by viewBinding(FragmentMediaSelectBinding::bind)
-    private val _adapter: MediaSelectAdapter by lazy {
-        MediaSelectAdapter(this)
+    private val _adapter: MediaSelectFragmentAdapter by lazy {
+        MediaSelectFragmentAdapter(this)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

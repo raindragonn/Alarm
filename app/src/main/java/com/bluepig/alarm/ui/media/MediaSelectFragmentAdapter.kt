@@ -6,7 +6,7 @@ import com.bluepig.alarm.R
 import com.bluepig.alarm.ui.media.music.MusicSearchFragment
 import com.bluepig.alarm.ui.media.ringtone.RingtoneFragment
 
-class MediaSelectAdapter(
+class MediaSelectFragmentAdapter(
     parent: Fragment,
 ) : FragmentStateAdapter(parent) {
 
