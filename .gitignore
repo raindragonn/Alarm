@@ -14,4 +14,8 @@
 .cxx
 local.properties
 
+google-services.json
+
+app/debug/
+app/release/
 key.stores/

@@ -19,6 +19,11 @@ androidx-media3-exoplayer = "1.2.0"
 # Google
 google-material = "1.10.0"
 google-hilt = "2.46"
+google-services = "4.4.0"
+
+#firebase
+firebase-bom = "32.7.0"
+firebase-crashlytics = "2.9.9"
 
 # ETC
 retrofit2 = "2.9.0"
@@ -38,6 +43,11 @@ espresso-core = "3.5.1"
 google-material = { group = "com.google.android.material", name = "material", version.ref = "google-material" }
 google-hilt = { group = "com.google.dagger", name = "hilt-android", version.ref = "google-hilt" }
 google-hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "google-hilt" }
+
+#firebase
+firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebase-bom" }
+firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics" }
+firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics" }
 
 # AndroidX
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "androidx-core-ktx" }
@@ -80,8 +90,11 @@ kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", versi
 
 google-hilt = { id = "com.google.dagger.hilt.android", version.ref = "google-hilt" }
 google-ksp = { id = "com.google.devtools.ksp", version.ref = "kotlin-ksp" }
+google-services = { id = "com.google.gms.google-services", version.ref = "google-services" }
 
 androidx-navigation-safeargs = { id = "androidx.navigation.safeargs.kotlin", version.ref = "androidx-navigation" }
+
+firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebase-crashlytics" }
 
 [bundles]
 
