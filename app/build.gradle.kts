@@ -109,8 +109,8 @@ dependencies {
     kapt(libs.google.hilt.compiler)
 
     implementation(platform(libs.firebase.bom))
-    implementation(libs.firebase.analytics)
-    implementation(libs.firebase.crashlytics)
+    implementation(libs.firebase.analytics.ktx)
+    implementation(libs.firebase.crashlytics.ktx)
 
     implementation(libs.coil)
     implementation(libs.timber)
