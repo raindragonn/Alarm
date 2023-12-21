@@ -16,14 +16,14 @@ class MusicSearchViewModel @Inject constructor(
     private val _searchFile: SearchFile,
 ) : ViewModel() {
 
-    private val _fileList: MutableStateFlow<Result<List<MusicInfo>>> =
+    private val _musicInfoList: MutableStateFlow<Result<List<MusicInfo>>> =
         MutableStateFlow(Result.success(emptyList()))
-    val fileList = _fileList.asStateFlow()
+    val musicInfoList = _musicInfoList.asStateFlow()
 
     fun search(query: String = "") {
         viewModelScope.launch {
-            _fileList.emit(resultLoading())
-            _fileList.emit(_searchFile.invoke(query))
+            _musicInfoList.emit(resultLoading())
+            _musicInfoList.emit(_searchFile.invoke(query))
         }
     }
 }

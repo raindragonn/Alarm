@@ -3,7 +3,7 @@ package com.bluepig.alarm.ui.media.music
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.bluepig.alarm.databinding.ItemMediaBinding
+import com.bluepig.alarm.databinding.ItemMusicBinding
 import com.bluepig.alarm.domain.entity.music.MusicInfo
 import com.bluepig.alarm.util.ext.checkNoPosition
 import com.bluepig.alarm.util.ext.inflater
@@ -13,7 +13,7 @@ class MusicSearchAdapter(
 ) : ListAdapter<MusicInfo, MusicSearchViewHolder>(differ) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MusicSearchViewHolder {
-        val binding = ItemMediaBinding.inflate(
+        val binding = ItemMusicBinding.inflate(
             parent.inflater,
             parent,
             false

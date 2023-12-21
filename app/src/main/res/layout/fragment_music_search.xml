@@ -14,7 +14,7 @@
         android:background="@color/surface"
         android:drawableStart="@drawable/ic_search"
         android:drawablePadding="@dimen/base_spacing_2"
-        android:hint="@string/hint_alarm_search"
+        android:hint="@string/hint_music_search"
         android:inputType="text"
         android:maxLines="1"
         android:padding="@dimen/base_spacing_2"
@@ -37,7 +37,7 @@
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/divider"
-        tools:listitem="@layout/item_media" />
+        tools:listitem="@layout/item_music" />
 
     <ProgressBar
         android:id="@+id/pb_loading"

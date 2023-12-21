@@ -27,6 +27,7 @@
     <string name="choice">선택</string>
     <string name="song">노래</string>
     <string name="ringtone">벨소리</string>
+    <string name="youtube">유튜브</string>
     <string name="title">제목</string>
 
     <string name="volume">볼륨</string>
@@ -62,7 +63,8 @@
 
     <string name="notification_message_media_downlaod">인터넷 없이 알람을 위한 다운로드 중</string>
 
-    <string name="hint_alarm_search">노래 혹은 가수 명으로 검색해주세요.</string>
+    <string name="hint_music_search">노래 혹은 가수 명으로 검색해주세요.</string>
+    <string name="hint_tube_search">영상 제목 혹은 url로 검색해주세요.</string>
 
     <string name="toast_error_basic">문제가 발생했습니다! 다시 시도해주세요.</string>
     <string name="toast_error_search_query_empty">검색어를 입력해주세요.</string>

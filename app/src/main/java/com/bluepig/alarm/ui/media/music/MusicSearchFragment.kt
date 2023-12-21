@@ -44,7 +44,7 @@ class MusicSearchFragment : Fragment(R.layout.fragment_music_search) {
         etSearch.setOnEnterListener(_vm::search)
 
         viewRepeatOnLifeCycle(Lifecycle.State.STARTED) {
-            _vm.fileList
+            _vm.musicInfoList
                 .stateIn(this)
                 .collect(::searchListHandle)
         }
@@ -52,11 +52,9 @@ class MusicSearchFragment : Fragment(R.layout.fragment_music_search) {
 
     private fun searchListHandle(result: Result<List<MusicInfo>>) {
         result.onSuccess { list ->
-            changeLoadingState(false)
             _adapter.submitList(list)
         }.onFailureWitLoading {
             showErrorToast(it)
-            changeLoadingState(false)
         }.onLoading(::changeLoadingState)
     }
 
