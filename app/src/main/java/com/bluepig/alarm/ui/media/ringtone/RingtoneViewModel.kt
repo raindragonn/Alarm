@@ -1,4 +1,4 @@
-package com.bluepig.alarm.ui.ringtone
+package com.bluepig.alarm.ui.media.ringtone
 
 import androidx.lifecycle.ViewModel
 import com.bluepig.alarm.domain.usecase.GetRingtones

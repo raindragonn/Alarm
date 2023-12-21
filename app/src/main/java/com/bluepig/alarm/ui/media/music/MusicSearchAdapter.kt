@@ -1,24 +1,24 @@
-package com.bluepig.alarm.ui.search
+package com.bluepig.alarm.ui.media.music
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.bluepig.alarm.databinding.ItemMediaBinding
+import com.bluepig.alarm.databinding.ItemMusicBinding
 import com.bluepig.alarm.domain.entity.music.MusicInfo
 import com.bluepig.alarm.util.ext.checkNoPosition
 import com.bluepig.alarm.util.ext.inflater
 
-class SearchAdapter(
+class MusicSearchAdapter(
     private val _clickListener: (MusicInfo) -> Unit
-) : ListAdapter<MusicInfo, SearchViewHolder>(differ) {
+) : ListAdapter<MusicInfo, MusicSearchViewHolder>(differ) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchViewHolder {
-        val binding = ItemMediaBinding.inflate(
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MusicSearchViewHolder {
+        val binding = ItemMusicBinding.inflate(
             parent.inflater,
             parent,
             false
         )
-        return SearchViewHolder.create(binding).apply {
+        return MusicSearchViewHolder.create(binding).apply {
             binding.root.setOnClickListener {
                 checkNoPosition {
                     _clickListener.invoke(currentList[bindingAdapterPosition])
@@ -27,7 +27,7 @@ class SearchAdapter(
         }
     }
 
-    override fun onBindViewHolder(holder: SearchViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: MusicSearchViewHolder, position: Int) {
         holder.bind(getItem(position))
     }
 

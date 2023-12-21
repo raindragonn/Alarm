@@ -1,9 +1,9 @@
-package com.bluepig.alarm.ui.ringtone
+package com.bluepig.alarm.ui.media.ringtone
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.bluepig.alarm.databinding.ItemMediaBinding
+import com.bluepig.alarm.databinding.ItemRingtoneBinding
 import com.bluepig.alarm.domain.entity.alarm.media.RingtoneMedia
 import com.bluepig.alarm.util.ext.checkNoPosition
 import com.bluepig.alarm.util.ext.inflater
@@ -13,7 +13,7 @@ class RingtoneAdapter(
 ) : ListAdapter<RingtoneMedia, RingtoneViewHolder>(differ) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RingtoneViewHolder {
-        val binding = ItemMediaBinding.inflate(
+        val binding = ItemRingtoneBinding.inflate(
             parent.inflater,
             parent,
             false

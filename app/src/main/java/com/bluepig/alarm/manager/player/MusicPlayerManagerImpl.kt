@@ -63,10 +63,10 @@ class MusicPlayerManagerImpl @Inject constructor(
     }
 
     override fun play(alarmMedia: AlarmMedia) {
-        when (alarmMedia) {
-            is MusicMedia -> playMusic(alarmMedia)
-            is RingtoneMedia -> playRingtone(alarmMedia)
-        }
+        alarmMedia
+            .onMusic(::playMusic)
+            .onRingtone(::playRingtone)
+            .onTube { }
     }
 
     private fun playMusic(musicMedia: MusicMedia) {

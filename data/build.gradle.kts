@@ -37,6 +37,10 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            resValue("string", "app_name", AppConfiguration.appName)
+        }
+        debug {
+            resValue("string", "app_name", AppConfiguration.appName + AppConfiguration.debugSuffix)
         }
     }
     compileOptions {
@@ -54,6 +58,12 @@ android {
      */
     kapt {
         correctErrorTypes = true
+    }
+
+    packaging {
+        resources.excludes.add(
+            "META-INF/DEPENDENCIES"
+        )
     }
 }
 
@@ -79,6 +89,10 @@ dependencies {
     implementation(libs.okhttp3)
     implementation(libs.okhttp3.logging.intercepter)
     implementation(libs.jsoup)
+
+    implementation(libs.google.playservices.auth)
+    implementation(libs.google.youtube)
+    implementation(libs.google.api.client)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)

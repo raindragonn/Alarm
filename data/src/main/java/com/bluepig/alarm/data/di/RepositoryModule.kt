@@ -7,10 +7,13 @@ import com.bluepig.alarm.data.network.parser.MusicInfoPageParser
 import com.bluepig.alarm.data.repository.AlarmRepositoryImpl
 import com.bluepig.alarm.data.repository.MusicInfoRepositoryImpl
 import com.bluepig.alarm.data.repository.RingtoneRepositoryImpl
+import com.bluepig.alarm.data.repository.TubeRepositoryImpl
 import com.bluepig.alarm.domain.di.IoDispatcher
 import com.bluepig.alarm.domain.repository.AlarmRepository
 import com.bluepig.alarm.domain.repository.MusicInfoRepository
 import com.bluepig.alarm.domain.repository.RingtoneRepository
+import com.bluepig.alarm.domain.repository.TubeRepository
+import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -58,6 +61,20 @@ object RepositoryModule {
         return RingtoneRepositoryImpl(
             context,
             dispatcher
+        )
+    }
+
+    @Provides
+    @Singleton
+    fun providesTubeRepository(
+        @ApplicationContext context: Context,
+        @IoDispatcher dispatcher: CoroutineDispatcher,
+        credential: GoogleAccountCredential,
+    ): TubeRepository {
+        return TubeRepositoryImpl(
+            context,
+            dispatcher,
+            credential
         )
     }
 }

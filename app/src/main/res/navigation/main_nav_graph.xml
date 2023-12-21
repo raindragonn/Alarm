@@ -42,7 +42,7 @@
 
     <dialog
         android:id="@+id/MediaSelectBottomSheetDialogFragment"
-        android:name="com.bluepig.alarm.ui.search.select.MediaSelectBottomSheetDialogFragment"
+        android:name="com.bluepig.alarm.ui.media.select.MediaSelectBottomSheetDialogFragment"
         android:label="MediaSelectBottomSheetDialogFragment"
         tools:layout="@layout/fragment_media_select">
 

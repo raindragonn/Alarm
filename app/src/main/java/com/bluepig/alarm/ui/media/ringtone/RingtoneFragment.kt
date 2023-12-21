@@ -1,4 +1,4 @@
-package com.bluepig.alarm.ui.ringtone
+package com.bluepig.alarm.ui.media.ringtone
 
 import android.os.Bundle
 import android.view.View
@@ -10,7 +10,7 @@ import androidx.navigation.fragment.findNavController
 import com.bluepig.alarm.R
 import com.bluepig.alarm.databinding.FragmentRingtoneBinding
 import com.bluepig.alarm.domain.entity.alarm.media.RingtoneMedia
-import com.bluepig.alarm.ui.search.select.MediaSelectBottomSheetDialogFragment
+import com.bluepig.alarm.ui.media.select.MediaSelectBottomSheetDialogFragment
 import com.bluepig.alarm.util.ext.viewRepeatOnLifeCycle
 import com.bluepig.alarm.util.viewBinding
 import dagger.hilt.android.AndroidEntryPoint

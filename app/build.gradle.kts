@@ -86,6 +86,11 @@ android {
     kapt {
         correctErrorTypes = true
     }
+    packaging {
+        resources.excludes.add(
+            "META-INF/DEPENDENCIES"
+        )
+    }
 }
 
 dependencies {
@@ -109,11 +114,14 @@ dependencies {
     kapt(libs.google.hilt.compiler)
 
     implementation(platform(libs.firebase.bom))
-    implementation(libs.firebase.analytics)
-    implementation(libs.firebase.crashlytics)
+    implementation(libs.firebase.analytics.ktx)
+    implementation(libs.firebase.crashlytics.ktx)
 
     implementation(libs.coil)
     implementation(libs.timber)
+
+    implementation(libs.google.playservices.auth)
+    implementation(libs.google.api.client)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)

@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import coil.load
+import coil.size.Scale
 import coil.transform.RoundedCornersTransformation
 import com.bluepig.alarm.R
 import com.google.android.material.materialswitch.MaterialSwitch
@@ -53,10 +54,14 @@ fun RecyclerView.setOnLoadMore(triggerLessCount: Int = 5, action: () -> Unit) {
     addOnScrollListener(scrollListener)
 }
 
-fun ImageView.setThumbnail(data: Any) {
-    val cornerRadius = resources.getDimension(R.dimen.base_spacing_1)
+fun ImageView.setThumbnail(data: Any, rounded: Boolean = true) {
     load(data) {
-        transformations(RoundedCornersTransformation(cornerRadius))
+        if (rounded) {
+            val cornerRadius = resources.getDimension(R.dimen.base_spacing_1)
+            transformations(RoundedCornersTransformation(cornerRadius))
+        } else {
+            scale(Scale.FILL)
+        }
         crossfade(true)
         val errorDrawable =
             ContextCompat.getDrawable(

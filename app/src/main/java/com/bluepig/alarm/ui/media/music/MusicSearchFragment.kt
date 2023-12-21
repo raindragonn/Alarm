@@ -1,4 +1,4 @@
-package com.bluepig.alarm.ui.search
+package com.bluepig.alarm.ui.media.music
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -14,7 +14,7 @@ import com.bluepig.alarm.databinding.FragmentMusicSearchBinding
 import com.bluepig.alarm.domain.entity.music.MusicInfo
 import com.bluepig.alarm.domain.result.onFailureWitLoading
 import com.bluepig.alarm.domain.result.onLoading
-import com.bluepig.alarm.ui.search.select.MediaSelectBottomSheetDialogFragment
+import com.bluepig.alarm.ui.media.select.MediaSelectBottomSheetDialogFragment
 import com.bluepig.alarm.util.ext.setOnEnterListener
 import com.bluepig.alarm.util.ext.setOnLoadMore
 import com.bluepig.alarm.util.ext.showErrorToast
@@ -26,9 +26,9 @@ import kotlinx.coroutines.flow.stateIn
 @AndroidEntryPoint
 class MusicSearchFragment : Fragment(R.layout.fragment_music_search) {
     private val _binding: FragmentMusicSearchBinding by viewBinding(FragmentMusicSearchBinding::bind)
-    private val _vm: SearchViewModel by viewModels()
+    private val _vm: MusicSearchViewModel by viewModels()
 
-    private val _adapter: SearchAdapter by lazy { SearchAdapter(::itemClick) }
+    private val _adapter: MusicSearchAdapter by lazy { MusicSearchAdapter(::itemClick) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -44,7 +44,7 @@ class MusicSearchFragment : Fragment(R.layout.fragment_music_search) {
         etSearch.setOnEnterListener(_vm::search)
 
         viewRepeatOnLifeCycle(Lifecycle.State.STARTED) {
-            _vm.fileList
+            _vm.musicInfoList
                 .stateIn(this)
                 .collect(::searchListHandle)
         }
@@ -52,11 +52,9 @@ class MusicSearchFragment : Fragment(R.layout.fragment_music_search) {
 
     private fun searchListHandle(result: Result<List<MusicInfo>>) {
         result.onSuccess { list ->
-            changeLoadingState(false)
             _adapter.submitList(list)
         }.onFailureWitLoading {
             showErrorToast(it)
-            changeLoadingState(false)
         }.onLoading(::changeLoadingState)
     }
 
