@@ -5,12 +5,14 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.bluepig.alarm.R
 import com.bluepig.alarm.ui.media.music.MusicSearchFragment
 import com.bluepig.alarm.ui.media.ringtone.RingtoneFragment
+import com.bluepig.alarm.ui.media.tube.TubeSearchFragment
 
 class MediaSelectFragmentAdapter(
     parent: Fragment,
 ) : FragmentStateAdapter(parent) {
 
     private val _fragments = mapOf(
+        parent.getString(R.string.youtube) to TubeSearchFragment(),
         parent.getString(R.string.song) to MusicSearchFragment(),
         parent.getString(R.string.ringtone) to RingtoneFragment(),
     )
