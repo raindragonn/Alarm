@@ -12,17 +12,42 @@ class GetTubeMediaList @Inject constructor(
     private val _dispatcher: CoroutineDispatcher,
     private val _repository: TubeRepository
 ) {
+    private var _lastQuery = ""
+    private var _lastNextPageToken: String? = null
+    private var _cachedList = mutableListOf<TubeMedia>()
+
     suspend operator fun invoke(query: String) = withContext(_dispatcher) {
         kotlin.runCatching {
-            val result = mutableListOf<TubeMedia>()
+            val tubeForId = _repository.checkTubeMedia(query)
 
-            _repository.checkTubeMedia(query)?.let { tubeForIds ->
-                result.add(tubeForIds)
-            } ?: _repository.getTubeList(query).let {
-                result.addAll(it)
+            if (tubeForId != null) {
+                clearCache()
+                return@runCatching listOf(tubeForId)
+            } else {
+                val pair =
+                    if (_lastQuery == query && _lastNextPageToken != null) {
+                        _repository.getTubeList(query, _lastNextPageToken)
+                    } else {
+                        clearCache()
+                        _repository.getTubeList(query)
+                    }
+
+                val result = pair.first
+                _lastNextPageToken = pair.second
+                _lastQuery = query
+
+                _cachedList.apply {
+                    addAll(result)
+                }.toMutableList()
             }
-
-            result
+        }.onFailure {
+            clearCache()
         }
+    }
+
+    private fun clearCache() {
+        _lastQuery = ""
+        _lastNextPageToken = null
+        _cachedList.clear()
     }
 }
