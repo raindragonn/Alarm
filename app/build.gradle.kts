@@ -86,6 +86,11 @@ android {
     kapt {
         correctErrorTypes = true
     }
+    packaging {
+        resources.excludes.add(
+            "META-INF/DEPENDENCIES"
+        )
+    }
 }
 
 dependencies {
@@ -114,6 +119,9 @@ dependencies {
 
     implementation(libs.coil)
     implementation(libs.timber)
+
+    implementation(libs.google.playservices.auth)
+    implementation(libs.google.api.client)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)

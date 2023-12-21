@@ -20,6 +20,9 @@ androidx-media3-exoplayer = "1.2.0"
 google-material = "1.10.0"
 google-hilt = "2.46"
 google-services = "4.4.0"
+google-playservices-auth = "20.7.0"
+google-youtube = "v3-rev222-1.25.0"
+google-api-client = "2.2.0"
 
 #firebase
 firebase-bom = "32.7.0"
@@ -43,6 +46,9 @@ espresso-core = "3.5.1"
 google-material = { group = "com.google.android.material", name = "material", version.ref = "google-material" }
 google-hilt = { group = "com.google.dagger", name = "hilt-android", version.ref = "google-hilt" }
 google-hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "google-hilt" }
+google-playservices-auth = { group = "com.google.android.gms", name = "play-services-auth", version.ref = "google-playservices-auth" }
+google-youtube = { group = "com.google.apis", name = "google-api-services-youtube", version.ref = "google-youtube" }
+google-api-client = { group = "com.google.api-client", name = "google-api-client-android", version.ref = "google-api-client" }
 
 #firebase
 firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebase-bom" }
