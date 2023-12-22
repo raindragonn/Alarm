@@ -21,7 +21,6 @@ import com.bluepig.alarm.databinding.FragmentAlarmEditBinding
 import com.bluepig.alarm.domain.entity.alarm.Week
 import com.bluepig.alarm.domain.entity.alarm.media.AlarmMedia
 import com.bluepig.alarm.domain.result.NotSelectAlarmMedia
-import com.bluepig.alarm.domain.result.onFailureWitLoading
 import com.bluepig.alarm.domain.util.CalendarHelper
 import com.bluepig.alarm.domain.util.hourOfDay
 import com.bluepig.alarm.domain.util.minute
@@ -29,7 +28,6 @@ import com.bluepig.alarm.ui.alarm.AlarmActivity
 import com.bluepig.alarm.util.ext.createSpan
 import com.bluepig.alarm.util.ext.getGuideText
 import com.bluepig.alarm.util.ext.setDefaultColor
-import com.bluepig.alarm.util.ext.setThumbnail
 import com.bluepig.alarm.util.ext.showErrorToast
 import com.bluepig.alarm.util.ext.viewLifeCycleScope
 import com.bluepig.alarm.util.ext.viewRepeatOnLifeCycle
@@ -96,7 +94,7 @@ class AlarmEditFragment : Fragment(R.layout.fragment_alarm_edit) {
             val action =
                 AlarmEditFragmentDirections.actionAlarmEditFragmentToAlarmListFragment()
             findNavController().navigate(action)
-        }.onFailureWitLoading {
+        }.onFailure {
             showErrorToast(it)
         }
     }
@@ -141,7 +139,7 @@ class AlarmEditFragment : Fragment(R.layout.fragment_alarm_edit) {
             _vm.getEditingAlarm() ?: throw NotSelectAlarmMedia
         }.onSuccess { alarm ->
             AlarmActivity.openPreView(requireContext(), alarm)
-        }.onFailureWitLoading {
+        }.onFailure {
             showErrorToast(it)
         }
     }
@@ -187,12 +185,12 @@ class AlarmEditFragment : Fragment(R.layout.fragment_alarm_edit) {
             ), ForegroundColorSpan(requireContext().getColor(R.color.primary_600))
         )
         _binding.apply {
+            ivThumbnail.isVisible = alarmMedia?.isMusic ?: false
+
             if (alarmMedia == null) {
-                ivThumbnail.isVisible = false
                 tvMediaTitle.text = getString(R.string.alarm_media_required_notice)
             } else {
                 alarmMedia.onMusic {
-                    ivThumbnail.setThumbnail(it.thumbnail)
                     tvMediaTitle.text = it.title
                     val titleText = getString(R.string.title)
                     tvMediaTitle.text = "$titleText  ${it.title}".createSpan(
@@ -200,10 +198,15 @@ class AlarmEditFragment : Fragment(R.layout.fragment_alarm_edit) {
                     )
 
                 }.onRingtone {
-                    ivThumbnail.isVisible = false
                     val ringtoneGuideText = getString(R.string.ringtone)
                     tvMediaTitle.text = "$ringtoneGuideText  ${it.title}".createSpan(
                         0, ringtoneGuideText.length, *highlightSpans
+                    )
+                }.onTube {
+                    tvMediaTitle.text = it.title
+                    val titleText = getString(R.string.title)
+                    tvMediaTitle.text = "$titleText  ${it.title}".createSpan(
+                        0, titleText.length, *highlightSpans
                     )
                 }
             }

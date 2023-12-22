@@ -119,6 +119,8 @@ dependencies {
 
     implementation(libs.coil)
     implementation(libs.timber)
+    implementation(libs.youtube.player.core)
+    implementation(libs.youtube.player.ui)
 
     implementation(libs.google.playservices.auth)
     implementation(libs.google.api.client)

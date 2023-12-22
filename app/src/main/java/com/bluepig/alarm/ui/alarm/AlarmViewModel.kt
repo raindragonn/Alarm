@@ -42,6 +42,14 @@ class AlarmViewModel @Inject constructor(
     val volume
         get() = _volume.asStateFlow()
 
+    private var _defaultVolume: Int? = null
+
+    fun setDefaultVolume(volume: Int) {
+        _defaultVolume = volume
+    }
+
+    fun getDefaultVolume() = _defaultVolume ?: 7
+
     fun getDateTime() = _getCurrentTime.invoke()
 
     fun getAlarmState() = flow {

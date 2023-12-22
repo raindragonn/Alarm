@@ -11,20 +11,29 @@ import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.bluepig.alarm.R
 import com.bluepig.alarm.databinding.ActivityAlarmBinding
 import com.bluepig.alarm.domain.entity.alarm.Alarm
-import com.bluepig.alarm.domain.result.onFailureWitLoading
+import com.bluepig.alarm.domain.entity.alarm.media.TubeMedia
 import com.bluepig.alarm.manager.player.MusicPlayerManager
 import com.bluepig.alarm.manager.player.TtsPlayerManager
 import com.bluepig.alarm.util.ext.audioManager
+import com.bluepig.alarm.util.ext.isConnectedToInternet
 import com.bluepig.alarm.util.ext.setThumbnail
 import com.bluepig.alarm.util.ext.showErrorToast
 import com.bluepig.alarm.util.ext.vibrator
 import com.bluepig.alarm.util.viewBinding
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.customui.DefaultPlayerUiController
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.options.IFramePlayerOptions
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.utils.loadOrCueVideo
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -40,8 +49,6 @@ class AlarmActivity : AppCompatActivity() {
     private val _currentDateFormat by lazy { SimpleDateFormat("MMM dd일 EE", Locale.getDefault()) }
     private val _currentTimeFormat by lazy { SimpleDateFormat("hh:mm", Locale.getDefault()) }
 
-    private var _defaultVolume: Int? = null
-
     @Inject
     lateinit var playerManager: MusicPlayerManager
 
@@ -52,7 +59,7 @@ class AlarmActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(_binding.root)
 
-        _defaultVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC)
+        _vm.setDefaultVolume(audioManager.getStreamVolume(AudioManager.STREAM_MUSIC))
         initAlarmMedia()
 
         showOverLockscreen()
@@ -70,11 +77,11 @@ class AlarmActivity : AppCompatActivity() {
                             it.onSuccess { alarm ->
                                 bindViews(alarm)
                                 startAlarmMedia(alarm)
-                                setVibration(alarm)
+                                startVibration(alarm)
                                 setVolume(alarm)
                                 setTts(alarm)
-                            }.onFailureWitLoading { e ->
-                                Timber.w(e)
+                            }.onFailure { e ->
+                                showErrorToast(e)
                                 finishAffinity()
                             }
                         }
@@ -102,7 +109,7 @@ class AlarmActivity : AppCompatActivity() {
 
     private fun release() {
         playerManager.release()
-        audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, _defaultVolume ?: 7, 0)
+        audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, _vm.getDefaultVolume(), 0)
         vibrator.cancel()
         _vm.updateAlarmExpired()
     }
@@ -113,8 +120,11 @@ class AlarmActivity : AppCompatActivity() {
                 ivThumbnail.setThumbnail(it.thumbnail)
             }
             .onRingtone {
-                val drawable = ResourcesCompat.getDrawable(resources, R.drawable.ic_alarm, null)
-                ivThumbnail.setThumbnail(drawable ?: return@onRingtone)
+                setDefaultThumbnail()
+            }
+            .onTube {
+                ivThumbnail.isVisible = false
+                yp.isVisible = true
             }
         tvMemo.text = alarm.memo
 
@@ -123,6 +133,12 @@ class AlarmActivity : AppCompatActivity() {
         } else {
             alarmSetting()
         }
+    }
+
+    private fun setDefaultThumbnail() {
+        val drawable = ResourcesCompat.getDrawable(resources, R.drawable.ic_alarm, null) ?: return
+        _binding.ivThumbnail.isVisible = true
+        _binding.ivThumbnail.setThumbnail(drawable)
     }
 
     private fun bindCurrentTime(dateTimeInMillis: Long) {
@@ -157,7 +173,7 @@ class AlarmActivity : AppCompatActivity() {
     }
 
     @Suppress("DEPRECATION")
-    private fun setVibration(alarm: Alarm) = lifecycleScope.launch {
+    private fun startVibration(alarm: Alarm) = lifecycleScope.launch {
         if (alarm.memoTtsEnabled) return@launch
         if (alarm.hasVibration.not()) return@launch
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -174,7 +190,7 @@ class AlarmActivity : AppCompatActivity() {
             val ttsOverAlarm = alarm.copy(memoTtsEnabled = false)
             startAlarmMedia(ttsOverAlarm)
             setVolume(ttsOverAlarm)
-            setVibration(ttsOverAlarm)
+            startVibration(ttsOverAlarm)
         }
     }
 
@@ -230,7 +246,45 @@ class AlarmActivity : AppCompatActivity() {
 
     private fun startAlarmMedia(alarm: Alarm) = lifecycleScope.launch {
         if (alarm.memoTtsEnabled) return@launch
-        playerManager.play(alarm.media)
+        val media = alarm.media
+        if (media !is TubeMedia) {
+            playerManager.play(alarm.media)
+        } else {
+            initYoutubePlayer(_binding.yp, media)
+            if (!applicationContext.isConnectedToInternet) {
+                setDefaultThumbnail()
+                playerManager.playDefaultAlarm()
+            }
+        }
+    }
+
+    private fun initYoutubePlayer(yp: YouTubePlayerView, tubeMedia: TubeMedia) {
+        lifecycle.addObserver(yp)
+        val listener = object : AbstractYouTubePlayerListener() {
+            override fun onReady(youTubePlayer: YouTubePlayer) {
+                _binding.ivThumbnail.isVisible = false
+                playerManager.release()
+                val controller = DefaultPlayerUiController(yp, youTubePlayer).apply {
+                    showFullscreenButton(false)
+                    showYouTubeButton(false)
+                }
+                yp.setCustomPlayerUi(controller.rootView)
+                youTubePlayer.loadOrCueVideo(
+                    lifecycle,
+                    tubeMedia.videoId,
+                    0f
+                )
+            }
+
+            override fun onError(youTubePlayer: YouTubePlayer, error: PlayerConstants.PlayerError) {
+                super.onError(youTubePlayer, error)
+                Timber.e("$error")
+                setDefaultThumbnail()
+                playerManager.playDefaultAlarm()
+            }
+        }
+        val options = IFramePlayerOptions.Builder().controls(0).build()
+        yp.initialize(listener, true, options)
     }
 
     private fun onPlayingStateChanged(isPlaying: Boolean) {}

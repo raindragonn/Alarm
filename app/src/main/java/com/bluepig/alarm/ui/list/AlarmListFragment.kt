@@ -11,7 +11,6 @@ import com.bluepig.alarm.databinding.FragmentAlarmListBinding
 import com.bluepig.alarm.domain.entity.alarm.Alarm
 import com.bluepig.alarm.domain.result.NotFoundActiveAlarmException
 import com.bluepig.alarm.domain.result.NotFoundAlarmException
-import com.bluepig.alarm.domain.result.onFailureWitLoading
 import com.bluepig.alarm.manager.timeguide.TimeGuideManager
 import com.bluepig.alarm.util.ext.viewLifeCycleScope
 import com.bluepig.alarm.util.ext.viewRepeatOnLifeCycle
@@ -73,7 +72,7 @@ class AlarmListFragment : Fragment(R.layout.fragment_alarm_list) {
             .onSuccess { guideText ->
                 _binding.tvAlarmState.text = timeGuideManager.getRemainingTimeGuide(guideText)
             }
-            .onFailureWitLoading {
+            .onFailure {
                 when (it) {
                     NotFoundActiveAlarmException -> _binding.tvAlarmState.text =
                         getString(R.string.alarm_inactive_notice)

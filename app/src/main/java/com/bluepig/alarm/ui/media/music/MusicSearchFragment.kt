@@ -12,8 +12,7 @@ import androidx.navigation.fragment.findNavController
 import com.bluepig.alarm.R
 import com.bluepig.alarm.databinding.FragmentMusicSearchBinding
 import com.bluepig.alarm.domain.entity.music.MusicInfo
-import com.bluepig.alarm.domain.result.onFailureWitLoading
-import com.bluepig.alarm.domain.result.onLoading
+import com.bluepig.alarm.domain.result.isLoading
 import com.bluepig.alarm.ui.media.select.MediaSelectBottomSheetDialogFragment
 import com.bluepig.alarm.util.ext.setOnEnterListener
 import com.bluepig.alarm.util.ext.setOnLoadMore
@@ -52,10 +51,16 @@ class MusicSearchFragment : Fragment(R.layout.fragment_music_search) {
 
     private fun searchListHandle(result: Result<List<MusicInfo>>) {
         result.onSuccess { list ->
+            setLoadingVisible(false)
             _adapter.submitList(list)
-        }.onFailureWitLoading {
-            showErrorToast(it)
-        }.onLoading(::changeLoadingState)
+        }.onFailure {
+            if (it.isLoading) {
+                setLoadingVisible(true)
+            } else {
+                setLoadingVisible(false)
+                showErrorToast(it)
+            }
+        }
     }
 
     @SuppressLint("UnsafeOptInUsageError")
@@ -68,7 +73,7 @@ class MusicSearchFragment : Fragment(R.layout.fragment_music_search) {
         )
     }
 
-    private fun changeLoadingState(isVisible: Boolean) {
+    private fun setLoadingVisible(isVisible: Boolean) {
         _binding.pbLoading.isVisible = isVisible
     }
 }

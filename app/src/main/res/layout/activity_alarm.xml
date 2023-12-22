@@ -31,6 +31,18 @@
         app:layout_constraintTop_toBottomOf="@id/tv_date"
         tools:text="2:09" />
 
+    <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
+        android:id="@+id/yp"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:enableAutomaticInitialization="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="16:9"
+        app:layout_constraintTop_toBottomOf="@id/tv_time"
+        app:layout_constraintVertical_bias="0.2"
+        tools:visibility="visible" />
+
     <ImageView
         android:id="@+id/iv_thumbnail"
         android:layout_width="0dp"
@@ -44,6 +56,13 @@
         app:layout_constraintWidth_percent="0.6"
         tools:src="@drawable/ic_image_place_holder" />
 
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/media_barrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="yp, iv_thumbnail" />
+
     <TextView
         android:id="@+id/tv_memo"
         style="@style/TextAppearance.Alarm.Body1"
@@ -55,7 +74,7 @@
         app:layout_constraintBottom_toTopOf="@id/btn_alarm_end"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/iv_thumbnail"
+        app:layout_constraintTop_toBottomOf="@id/media_barrier"
         tools:text="@tools:sample/lorem/random" />
 
     <androidx.appcompat.widget.AppCompatButton
@@ -63,10 +82,11 @@
         style="@style/Alarm.Base.TextButton.Primary"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
         android:text="@string/alarm_end"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@id/iv_thumbnail"
-        app:layout_constraintStart_toStartOf="@id/iv_thumbnail"
-        app:layout_constraintTop_toBottomOf="@id/iv_thumbnail" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/media_barrier"
+        app:layout_constraintWidth_percent="0.6" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
