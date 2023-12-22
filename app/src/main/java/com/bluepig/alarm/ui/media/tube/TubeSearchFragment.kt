@@ -92,7 +92,6 @@ class TubeSearchFragment : Fragment(R.layout.fragment_tube_search) {
             Timber.d(list.size.toString())
             _adapter.submitList(list)
         }.onFailureWitLoading {
-            showErrorToast(it)
             requestOauth(it)
         }.onLoading(::changeLoadingState)
     }
@@ -105,6 +104,8 @@ class TubeSearchFragment : Fragment(R.layout.fragment_tube_search) {
         if (throwable is UserRecoverableAuthIOException) {
             val requestIntent = throwable.intent
             _credentialLauncher.launch(requestIntent)
+        } else {
+            showErrorToast(throwable)
         }
     }
 
