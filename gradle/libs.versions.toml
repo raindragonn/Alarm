@@ -35,6 +35,7 @@ retrofit2-serialization-converter = "1.0.0"
 coil = "2.5.0"
 jsoup = "1.16.2"
 timber = "5.0.1"
+youtube-player = "12.1.0"
 
 # Test
 junit = "4.13.2"
@@ -80,6 +81,8 @@ okhttp3-logging-intercepter = { group = "com.squareup.okhttp3", name = "logging-
 coil = { group = "io.coil-kt", name = "coil", version.ref = "coil" }
 jsoup = { group = "org.jsoup", name = "jsoup", version.ref = "jsoup" }
 timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
+youtube-player-core = { group = "com.pierfrancescosoffritti.androidyoutubeplayer", name = "core", version.ref = "youtube-player" }
+youtube-player-ui = { group = "com.pierfrancescosoffritti.androidyoutubeplayer", name = "custom-ui", version.ref = "youtube-player" }
 
 # Test
 junit = { group = "junit", name = "junit", version.ref = "junit" }

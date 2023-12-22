@@ -3,6 +3,8 @@ package com.bluepig.alarm.util.ext
 import android.app.AlarmManager
 import android.content.Context
 import android.media.AudioManager
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.os.Vibrator
 import android.view.LayoutInflater
 import android.view.inputmethod.InputMethodManager
@@ -46,4 +48,20 @@ fun Context.showErrorToast(throwable: Throwable?, moreAction: (() -> Unit)? = nu
     }
     Toast.makeText(this, getString(errorTextId), Toast.LENGTH_SHORT).show()
     moreAction?.invoke()
+}
+
+val Context.isConnectedToInternet: Boolean
+    get() {
+        val connectivityManager =
+            getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val networkCapabilities =
+            connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
+                ?: return false
+        return networkCapabilities.isConnectedToInternet()
+    }
+
+private fun NetworkCapabilities.isConnectedToInternet(): Boolean {
+    return (hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
+            hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) ||
+            hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET))
 }

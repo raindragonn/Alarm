@@ -5,16 +5,18 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
+import androidx.navigation.fragment.findNavController
 import com.bluepig.alarm.R
 import com.bluepig.alarm.databinding.FragmentTubeSearchBinding
 import com.bluepig.alarm.domain.entity.alarm.media.TubeMedia
 import com.bluepig.alarm.domain.preferences.AppPreferences
-import com.bluepig.alarm.domain.result.onFailureWitLoading
-import com.bluepig.alarm.domain.result.onLoading
+import com.bluepig.alarm.domain.result.isLoading
+import com.bluepig.alarm.ui.media.select.MediaSelectBottomSheetDialogFragment
 import com.bluepig.alarm.util.ext.setOnEnterListener
 import com.bluepig.alarm.util.ext.setOnLoadMore
 import com.bluepig.alarm.util.ext.showErrorToast
@@ -24,7 +26,6 @@ import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccoun
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.stateIn
-import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -89,26 +90,37 @@ class TubeSearchFragment : Fragment(R.layout.fragment_tube_search) {
 
     private fun searchListHandle(result: Result<List<TubeMedia>>) {
         result.onSuccess { list ->
-            Timber.d(list.size.toString())
+            setLoadingVisible(false)
             _adapter.submitList(list)
-        }.onFailureWitLoading {
-            showErrorToast(it)
-            requestOauth(it)
-        }.onLoading(::changeLoadingState)
+        }.onFailure {
+            if (it.isLoading) {
+                setLoadingVisible(true)
+            } else {
+                setLoadingVisible(false)
+                requestOauth(it)
+            }
+        }
     }
 
     private fun onItemClick(tubeMedia: TubeMedia) {
-        // TODO: open Select Dialog
+        findNavController().navigate(
+            R.id.MediaSelectBottomSheetDialogFragment,
+            bundleOf(
+                MediaSelectBottomSheetDialogFragment.KEY_ARGS_ALARM_MEDIA to tubeMedia
+            )
+        )
     }
 
     private fun requestOauth(throwable: Throwable) {
         if (throwable is UserRecoverableAuthIOException) {
             val requestIntent = throwable.intent
             _credentialLauncher.launch(requestIntent)
+        } else {
+            showErrorToast(throwable)
         }
     }
 
-    private fun changeLoadingState(isVisible: Boolean) {
+    private fun setLoadingVisible(isVisible: Boolean) {
         _binding.pbLoading.isVisible = isVisible
     }
 }

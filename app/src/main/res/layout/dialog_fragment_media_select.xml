@@ -8,12 +8,17 @@
     android:padding="@dimen/base_spacing_2"
     tools:context=".ui.media.select.MediaSelectBottomSheetDialogFragment">
 
-    <androidx.constraintlayout.widget.Group
-        android:id="@+id/group_content"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+
+    <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
+        android:id="@+id/yp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:visibility="gone"
-        app:constraint_referenced_ids="tv_title,btn_play,btn_select,player_view"
+        app:enableAutomaticInitialization="false"
+        app:layout_constraintDimensionRatio="16:9"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btn_close"
         tools:visibility="visible" />
 
     <ProgressBar
@@ -39,10 +44,10 @@
     <ImageView
         android:id="@+id/iv_thumbnail"
         android:layout_width="@dimen/base_spacing_7"
-        android:layout_marginTop="@dimen/base_spacing_1"
         android:layout_height="@dimen/base_spacing_7"
+        android:layout_marginTop="@dimen/base_spacing_1"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btn_close"
+        app:layout_constraintTop_toBottomOf="@id/yp"
         tools:src="@drawable/ic_image_place_holder" />
 
     <TextView
@@ -51,14 +56,15 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/base_spacing_2"
+        android:ellipsize="end"
+        android:maxLines="3"
         app:layout_constraintBottom_toBottomOf="@id/barrier"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/iv_thumbnail"
         app:layout_constraintTop_toTopOf="@id/iv_thumbnail"
         app:layout_constraintVertical_bias="0"
-        android:ellipsize="end"
-        android:maxLines="3"
         app:layout_goneMarginStart="0dp"
+        app:layout_goneMarginTop="@dimen/base_spacing_1"
         tools:text="@tools:sample/lorem/random" />
 
     <androidx.media3.ui.PlayerControlView
@@ -98,9 +104,10 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/choice"
+        android:layout_marginTop="@dimen/base_spacing_2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/btn_play"
-        app:layout_constraintTop_toTopOf="@id/btn_play" />
+        app:layout_constraintTop_toBottomOf="@id/player_view" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
