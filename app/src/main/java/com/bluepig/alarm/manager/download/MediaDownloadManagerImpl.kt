@@ -21,7 +21,6 @@ import com.bluepig.alarm.domain.entity.alarm.media.MusicMedia
 import com.bluepig.alarm.notification.NotificationType
 import com.bluepig.alarm.service.MediaDownloadService
 import kotlinx.serialization.json.Json
-import timber.log.Timber
 import java.util.concurrent.Executor
 import javax.inject.Inject
 
@@ -126,9 +125,6 @@ class MediaDownloadManagerImpl @Inject constructor(
         val downloadedIds = getDownloadedIds().toSet()
         val filesIds = musicMedias.map { it.id }.toSet()
         downloadedIds.minus(filesIds)
-            .also {
-                Timber.d(it.toString())
-            }
             .forEach {
                 DownloadService.sendRemoveDownload(
                     _context,
