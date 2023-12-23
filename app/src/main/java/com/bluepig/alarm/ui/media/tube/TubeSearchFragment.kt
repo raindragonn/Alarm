@@ -21,6 +21,7 @@ import com.bluepig.alarm.util.ext.setOnEnterListener
 import com.bluepig.alarm.util.ext.setOnLoadMore
 import com.bluepig.alarm.util.ext.showErrorToast
 import com.bluepig.alarm.util.ext.viewRepeatOnLifeCycle
+import com.bluepig.alarm.util.logger.BpLogger
 import com.bluepig.alarm.util.viewBinding
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException
@@ -49,6 +50,11 @@ class TubeSearchFragment : Fragment(R.layout.fragment_tube_search) {
         initViews()
     }
 
+    override fun onResume() {
+        super.onResume()
+        BpLogger.logScreenView(TubeSearchFragment::class.java.simpleName)
+    }
+
     private fun initViews() = with(_binding) {
         rvSearch.adapter = _adapter
 
@@ -59,6 +65,7 @@ class TubeSearchFragment : Fragment(R.layout.fragment_tube_search) {
 
         etSearch.setOnEnterListener {
             if (checkOAuthLogin()) {
+                BpLogger.logMediaSearch(TubeMedia::class.java.simpleName, it)
                 _vm.search(it)
             }
         }

@@ -31,6 +31,7 @@ import com.bluepig.alarm.util.ext.setDefaultColor
 import com.bluepig.alarm.util.ext.showErrorToast
 import com.bluepig.alarm.util.ext.viewLifeCycleScope
 import com.bluepig.alarm.util.ext.viewRepeatOnLifeCycle
+import com.bluepig.alarm.util.logger.BpLogger
 import com.bluepig.alarm.util.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.stateIn
@@ -50,6 +51,11 @@ class AlarmEditFragment : Fragment(R.layout.fragment_alarm_edit) {
 
         initViews()
         observing()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        BpLogger.logScreenView(AlarmEditFragment::class.java.simpleName)
     }
 
     private fun initViews() = with(_binding) {
@@ -85,12 +91,14 @@ class AlarmEditFragment : Fragment(R.layout.fragment_alarm_edit) {
 
     private fun removeAlarm() = viewLifeCycleScope.launch {
         _vm.removeAlarm().onSuccess {
+            BpLogger.logAlarmDelete()
             findNavController().popBackStack()
         }
     }
 
     private fun saveAlarm() = viewLifeCycleScope.launch {
         _vm.saveAlarm().onSuccess {
+            BpLogger.logAlarmSave(it, !_vm.isEdit, requireContext())
             val action =
                 AlarmEditFragmentDirections.actionAlarmEditFragmentToAlarmListFragment()
             findNavController().navigate(action)
@@ -139,6 +147,7 @@ class AlarmEditFragment : Fragment(R.layout.fragment_alarm_edit) {
             _vm.getEditingAlarm() ?: throw NotSelectAlarmMedia
         }.onSuccess { alarm ->
             AlarmActivity.openPreView(requireContext(), alarm)
+            BpLogger.logPreviewClick()
         }.onFailure {
             showErrorToast(it)
         }

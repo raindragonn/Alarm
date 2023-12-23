@@ -21,6 +21,7 @@ import com.bluepig.alarm.util.ext.setThumbnail
 import com.bluepig.alarm.util.ext.showErrorToast
 import com.bluepig.alarm.util.ext.viewLifeCycleScope
 import com.bluepig.alarm.util.ext.viewRepeatOnLifeCycle
+import com.bluepig.alarm.util.logger.BpLogger
 import com.bluepig.alarm.util.viewBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.customui.DefaultPlayerUiController
@@ -59,6 +60,11 @@ class MediaSelectBottomSheetDialogFragment :
         observing()
     }
 
+    override fun onResume() {
+        super.onResume()
+        BpLogger.logScreenView(MediaSelectBottomSheetDialogFragment::class.java.simpleName)
+    }
+
     override fun onDestroyView() {
         playerManager.release()
         super.onDestroyView()
@@ -77,6 +83,7 @@ class MediaSelectBottomSheetDialogFragment :
                     return@launch
                 }
 
+                BpLogger.logMediaSelect(alarmMedia)
                 setFragmentResult(
                     AlarmEditFragment.REQUEST_ALARM_MEDIA,
                     bundleOf(AlarmEditFragment.KEY_ALARM_MEDIA to alarmMedia)

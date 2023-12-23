@@ -26,6 +26,7 @@ import com.bluepig.alarm.util.ext.isConnectedToInternet
 import com.bluepig.alarm.util.ext.setThumbnail
 import com.bluepig.alarm.util.ext.showErrorToast
 import com.bluepig.alarm.util.ext.vibrator
+import com.bluepig.alarm.util.logger.BpLogger
 import com.bluepig.alarm.util.viewBinding
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.customui.DefaultPlayerUiController
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants
@@ -67,6 +68,11 @@ class AlarmActivity : AppCompatActivity() {
         observing()
     }
 
+    override fun onResume() {
+        super.onResume()
+        BpLogger.logScreenView(AlarmActivity::class.java.simpleName)
+    }
+
     private fun observing() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.CREATED) {
@@ -80,6 +86,7 @@ class AlarmActivity : AppCompatActivity() {
                                 startVibration(alarm)
                                 setVolume(alarm)
                                 setTts(alarm)
+                                if (!_vm.isPreview) BpLogger.logAlarmFired(alarm)
                             }.onFailure { e ->
                                 showErrorToast(e)
                                 finishAffinity()
@@ -109,6 +116,7 @@ class AlarmActivity : AppCompatActivity() {
 
     private fun release() {
         playerManager.release()
+        ttsPlayerManager.release()
         audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, _vm.getDefaultVolume(), 0)
         vibrator.cancel()
         _vm.updateAlarmExpired()

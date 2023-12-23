@@ -12,6 +12,7 @@ import com.bluepig.alarm.databinding.FragmentRingtoneBinding
 import com.bluepig.alarm.domain.entity.alarm.media.RingtoneMedia
 import com.bluepig.alarm.ui.media.select.MediaSelectBottomSheetDialogFragment
 import com.bluepig.alarm.util.ext.viewRepeatOnLifeCycle
+import com.bluepig.alarm.util.logger.BpLogger
 import com.bluepig.alarm.util.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -26,6 +27,11 @@ class RingtoneFragment : Fragment(R.layout.fragment_ringtone) {
 
         initViews()
         observing()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        BpLogger.logScreenView(RingtoneFragment::class.java.simpleName)
     }
 
     private fun initViews() = with(_binding) {

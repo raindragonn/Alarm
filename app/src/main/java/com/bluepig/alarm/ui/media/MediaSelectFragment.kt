@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.bluepig.alarm.R
 import com.bluepig.alarm.databinding.FragmentMediaSelectBinding
+import com.bluepig.alarm.util.logger.BpLogger
 import com.bluepig.alarm.util.viewBinding
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
@@ -21,6 +22,11 @@ class MediaSelectFragment : Fragment(R.layout.fragment_media_select) {
         super.onViewCreated(view, savedInstanceState)
 
         initViews()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        BpLogger.logScreenView(MediaSelectFragment::class.java.simpleName)
     }
 
     private fun initViews() = with(_binding) {

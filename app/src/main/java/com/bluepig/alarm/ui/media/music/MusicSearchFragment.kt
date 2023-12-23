@@ -11,6 +11,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
 import com.bluepig.alarm.R
 import com.bluepig.alarm.databinding.FragmentMusicSearchBinding
+import com.bluepig.alarm.domain.entity.alarm.media.MusicMedia
 import com.bluepig.alarm.domain.entity.music.MusicInfo
 import com.bluepig.alarm.domain.result.isLoading
 import com.bluepig.alarm.ui.media.select.MediaSelectBottomSheetDialogFragment
@@ -18,6 +19,7 @@ import com.bluepig.alarm.util.ext.setOnEnterListener
 import com.bluepig.alarm.util.ext.setOnLoadMore
 import com.bluepig.alarm.util.ext.showErrorToast
 import com.bluepig.alarm.util.ext.viewRepeatOnLifeCycle
+import com.bluepig.alarm.util.logger.BpLogger
 import com.bluepig.alarm.util.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.stateIn
@@ -35,12 +37,20 @@ class MusicSearchFragment : Fragment(R.layout.fragment_music_search) {
         initViews()
     }
 
+    override fun onResume() {
+        super.onResume()
+        BpLogger.logScreenView(MusicSearchFragment::class.java.simpleName)
+    }
+
     private fun initViews() = with(_binding) {
         rvSearch.adapter = _adapter
         rvSearch.setOnLoadMore {
             _vm.search()
         }
-        etSearch.setOnEnterListener(_vm::search)
+        etSearch.setOnEnterListener {
+            BpLogger.logMediaSearch(MusicMedia::class.java.simpleName, it)
+            _vm.search(it)
+        }
 
         viewRepeatOnLifeCycle(Lifecycle.State.STARTED) {
             _vm.musicInfoList
