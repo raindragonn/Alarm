@@ -8,6 +8,7 @@ import com.bluepig.alarm.domain.result.NotFoundPreViewAlarmException
 import com.bluepig.alarm.domain.usecase.GetAlarmById
 import com.bluepig.alarm.domain.usecase.GetCurrentTime
 import com.bluepig.alarm.domain.usecase.SaveAlarm
+import com.bluepig.alarm.util.logger.BpLogger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -84,6 +85,7 @@ class AlarmViewModel @Inject constructor(
         val id = _alarmId.getOrNull() ?: return@launch
         val alarm = _getAlarmById.invoke(id).getOrNull() ?: return@launch
 
+        BpLogger.logFiredAlarmClose(alarm)
         _saveAlarm.invoke(alarm.getActiveCheckedAlarm())
     }
 

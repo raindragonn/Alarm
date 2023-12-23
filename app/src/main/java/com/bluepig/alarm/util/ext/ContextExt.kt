@@ -15,7 +15,7 @@ import androidx.media3.datasource.HttpDataSource.HttpDataSourceException
 import com.bluepig.alarm.R
 import com.bluepig.alarm.domain.result.NotSelectAlarmMedia
 import com.bluepig.alarm.domain.result.SearchQueryEmptyException
-import timber.log.Timber
+import com.bluepig.alarm.util.logger.BpLogger
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 
@@ -39,7 +39,7 @@ val Context.userAgent
     get() = Util.getUserAgent(this, getString(R.string.app_name))
 
 fun Context.showErrorToast(throwable: Throwable?, moreAction: (() -> Unit)? = null) {
-    Timber.w(throwable)
+    throwable?.let(BpLogger::logException)
     val errorTextId = when (throwable) {
         is SearchQueryEmptyException -> R.string.toast_error_search_query_empty
         is HttpDataSourceException, is SocketTimeoutException, is UnknownHostException -> R.string.toast_error_network

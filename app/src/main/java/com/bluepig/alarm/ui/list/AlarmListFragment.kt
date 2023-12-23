@@ -14,6 +14,7 @@ import com.bluepig.alarm.domain.result.NotFoundAlarmException
 import com.bluepig.alarm.manager.timeguide.TimeGuideManager
 import com.bluepig.alarm.util.ext.viewLifeCycleScope
 import com.bluepig.alarm.util.ext.viewRepeatOnLifeCycle
+import com.bluepig.alarm.util.logger.BpLogger
 import com.bluepig.alarm.util.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.stateIn
@@ -41,6 +42,11 @@ class AlarmListFragment : Fragment(R.layout.fragment_alarm_list) {
         observing()
     }
 
+    override fun onResume() {
+        super.onResume()
+        BpLogger.logScreenView(AlarmListFragment::class.java.simpleName)
+    }
+
     private fun initViews() {
         _binding.rvAlarm.adapter = _alarmAdapter
 
@@ -56,7 +62,10 @@ class AlarmListFragment : Fragment(R.layout.fragment_alarm_list) {
             launch {
                 _vm.getAllAlarmsFlow()
                     .stateIn(this)
-                    .collect(_alarmAdapter::submitList)
+                    .collect {
+                        _alarmAdapter.submitList(it)
+                        BpLogger.logAlarmTotalCount(it)
+                    }
             }
 
             launch {
@@ -91,7 +100,9 @@ class AlarmListFragment : Fragment(R.layout.fragment_alarm_list) {
 
     private fun onItemSwitchClick(alarm: Alarm) {
         viewLifeCycleScope.launch {
-            _vm.alarmActiveSwitching(alarm)
+            _vm.alarmActiveSwitching(alarm).onSuccess {
+                BpLogger.logAlarmSave(it, false, requireContext())
+            }
         }
     }
 }

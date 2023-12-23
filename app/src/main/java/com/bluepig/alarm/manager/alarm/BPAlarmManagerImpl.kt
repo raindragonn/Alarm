@@ -10,8 +10,8 @@ import com.bluepig.alarm.domain.entity.alarm.Alarm
 import com.bluepig.alarm.domain.util.CalendarHelper
 import com.bluepig.alarm.receiver.AlarmReceiver
 import com.bluepig.alarm.util.ext.alarmManager
+import com.bluepig.alarm.util.logger.BpLogger
 import dagger.hilt.android.qualifiers.ApplicationContext
-import timber.log.Timber
 import javax.inject.Inject
 
 class BPAlarmManagerImpl @Inject constructor(
@@ -26,7 +26,7 @@ class BPAlarmManagerImpl @Inject constructor(
         if (alarm.timeInMillis < CalendarHelper.now.timeInMillis) return
         val intent = getAlarmReceiverIntent(alarmId)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !_alarmManager.canScheduleExactAlarms()) {
-            Timber.e("ExactAlarms Permission denied!")
+            BpLogger.logException(Exception("ExactAlarms Permission denied!"))
             return
         }
         _alarmManager.setAlarmClock(
