@@ -37,6 +37,11 @@ object BpLogger {
         Timber.d("[CustomKey] ${customKey.lowerCaseName}: $value")
     }
 
+    fun logException(t: Throwable) {
+        Timber.w(t)
+        _crashlytics.recordException(t)
+    }
+
     fun logScreenView(screenName: String) {
         logEvent(Event.ScreenView, Event.ScreenView.getBundle(screenName))
         logCustomKey(CustomKey.LAST_VISIT_SCREEN, screenName)

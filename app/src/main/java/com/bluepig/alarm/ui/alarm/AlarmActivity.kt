@@ -38,7 +38,6 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTube
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.Locale
 import javax.inject.Inject
@@ -286,7 +285,7 @@ class AlarmActivity : AppCompatActivity() {
 
             override fun onError(youTubePlayer: YouTubePlayer, error: PlayerConstants.PlayerError) {
                 super.onError(youTubePlayer, error)
-                Timber.e("$error")
+                BpLogger.logException(Exception("$error"))
                 setDefaultThumbnail()
                 playerManager.playDefaultAlarm()
             }

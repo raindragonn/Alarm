@@ -12,7 +12,6 @@ import com.bluepig.alarm.util.PermissionHelper
 import com.bluepig.alarm.util.logger.BpLogger
 import com.bluepig.alarm.util.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
-import timber.log.Timber
 
 @UnstableApi
 @AndroidEntryPoint
@@ -49,7 +48,7 @@ class MainActivity : AppCompatActivity() {
                 this,
                 MediaDownloadService::class.java,
             )
-            Timber.e(it)
+            BpLogger.logException(it)
         }
         _vm.startDownload()
     }
