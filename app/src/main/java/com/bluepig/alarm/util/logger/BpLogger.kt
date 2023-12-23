@@ -22,10 +22,10 @@ object BpLogger {
         get() = Firebase.analytics
 
     private val _dateFormat
-        get() = SimpleDateFormat("yyyy-MM-dd,hh:mm", Locale.getDefault())
+        get() = SimpleDateFormat("yyyy-MM-dd,HH:mm", Locale.getDefault())
 
     private val _timeFormat
-        get() = SimpleDateFormat("hh:mm:ss", Locale.getDefault())
+        get() = SimpleDateFormat("HH:mm:ss", Locale.getDefault())
 
     private fun logEvent(event: Event, bundle: Bundle) {
         _analytics.logEvent(event.name, bundle)
