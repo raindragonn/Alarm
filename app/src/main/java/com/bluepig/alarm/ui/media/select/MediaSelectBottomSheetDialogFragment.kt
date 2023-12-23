@@ -60,8 +60,8 @@ class MediaSelectBottomSheetDialogFragment :
     }
 
     override fun onDestroyView() {
-        super.onDestroyView()
         playerManager.release()
+        super.onDestroyView()
     }
 
     @OptIn(UnstableApi::class)
