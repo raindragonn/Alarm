@@ -6,12 +6,15 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ConcatAdapter
 import com.bluepig.alarm.R
 import com.bluepig.alarm.databinding.FragmentAlarmListBinding
 import com.bluepig.alarm.domain.entity.alarm.Alarm
 import com.bluepig.alarm.domain.result.NotFoundActiveAlarmException
 import com.bluepig.alarm.domain.result.NotFoundAlarmException
 import com.bluepig.alarm.manager.timeguide.TimeGuideManager
+import com.bluepig.alarm.util.ads.AdsManager
+import com.bluepig.alarm.util.ads.NativeAdsAdapter
 import com.bluepig.alarm.util.ext.viewLifeCycleScope
 import com.bluepig.alarm.util.ext.viewRepeatOnLifeCycle
 import com.bluepig.alarm.util.logger.BpLogger
@@ -25,12 +28,16 @@ import javax.inject.Inject
 class AlarmListFragment : Fragment(R.layout.fragment_alarm_list) {
     private val _binding: FragmentAlarmListBinding by viewBinding(FragmentAlarmListBinding::bind)
     private val _vm: AlarmListViewModel by viewModels()
+    private val _nativeAdAdapter: NativeAdsAdapter by lazy {
+        NativeAdsAdapter()
+    }
     private val _alarmAdapter: AlarmAdapter by lazy {
         AlarmAdapter(
             ::onItemClick,
             ::onItemSwitchClick
         )
     }
+    private val _adsManager by lazy { AdsManager(this) }
 
     @Inject
     lateinit var timeGuideManager: TimeGuideManager
@@ -48,13 +55,21 @@ class AlarmListFragment : Fragment(R.layout.fragment_alarm_list) {
     }
 
     private fun initViews() {
-        _binding.rvAlarm.adapter = _alarmAdapter
+        _binding.rvAlarm.adapter = ConcatAdapter(_nativeAdAdapter, _alarmAdapter)
 
         _binding.btnAlarmCreate.setOnClickListener {
             val action =
                 AlarmListFragmentDirections.actionAlarmListFragmentToAlarmEditFragment(null)
             findNavController().navigate(action)
         }
+        _adsManager.loadAlarmListNativeAd {
+            _nativeAdAdapter.submitList(listOf(it))
+        }
+    }
+
+    override fun onDestroy() {
+        _adsManager.release()
+        super.onDestroy()
     }
 
     private fun observing() {

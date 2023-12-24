@@ -4,6 +4,7 @@ import android.app.Application
 import com.bluepig.alarm.util.log.DebugTree
 import com.bluepig.alarm.util.log.ReleaseTree
 import com.bluepig.alarm.util.logger.BpLogger
+import com.google.android.gms.ads.MobileAds
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 
@@ -13,6 +14,7 @@ class AlarmApplication : Application() {
         super.onCreate()
         setupTimber()
         BpLogger.logAppCreatedTime()
+        MobileAds.initialize(this)
     }
 
     private fun setupTimber() {

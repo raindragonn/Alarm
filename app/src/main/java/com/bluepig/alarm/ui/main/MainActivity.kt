@@ -9,15 +9,18 @@ import com.bluepig.alarm.databinding.ActivityMainBinding
 import com.bluepig.alarm.notification.NotificationType
 import com.bluepig.alarm.service.MediaDownloadService
 import com.bluepig.alarm.util.PermissionHelper
+import com.bluepig.alarm.util.ads.AdsManager
 import com.bluepig.alarm.util.logger.BpLogger
 import com.bluepig.alarm.util.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 @UnstableApi
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private val _binding: ActivityMainBinding by viewBinding(ActivityMainBinding::inflate)
     private val _vm: MainViewModel by viewModels()
+    private val _adsManager by lazy { AdsManager(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,11 +33,19 @@ class MainActivity : AppCompatActivity() {
         }
         PermissionHelper.checkSystemAlertPermission(this, _binding.root)
         startDownloadService()
+
+        _adsManager.loadBottomNativeAd(_binding.adFrame)
     }
 
     override fun onResume() {
         super.onResume()
         BpLogger.logScreenView(MainActivity::class.java.simpleName)
+    }
+
+    override fun onDestroy() {
+        Timber.d("activity Destroy")
+        _adsManager.release()
+        super.onDestroy()
     }
 
     private fun startDownloadService() {
