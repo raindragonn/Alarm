@@ -14,6 +14,12 @@ plugins {
     kotlin("kapt")
 }
 
+val debugJson =
+    groovy.json.JsonSlurper()
+        .parseText(file("../key.stores/debug.keys").readText()) as Map<String, String>
+val releaseJson = groovy.json.JsonSlurper()
+    .parseText(file("../key.stores/release.keys").readText()) as Map<String, String>
+
 android {
     namespace = "com.bluepig.alarm"
     compileSdk = AppConfiguration.compileSdk
@@ -29,19 +35,12 @@ android {
     }
     signingConfigs {
         getByName("debug") {
-            val debugJson =
-                groovy.json.JsonSlurper()
-                    .parseText(file("../key.stores/debug.keys").readText()) as Map<String, String>
-
             keyAlias = debugJson["KEY_ALIAS"]
             keyPassword = debugJson["KEY_PASSWORD"]
             storeFile = file("../key.stores/debug.jks")
             storePassword = debugJson["STORE_PASSWORD"]
         }
         create("release") {
-            val releaseJson = groovy.json.JsonSlurper()
-                .parseText(file("../key.stores/release.keys").readText()) as Map<String, String>
-
             keyAlias = releaseJson["KEY_ALIAS"]
             keyPassword = releaseJson["KEY_PASSWORD"]
             storeFile = file("../key.stores/release.jks")
@@ -66,6 +65,9 @@ android {
             isDebuggable = true
             applicationIdSuffix = ".debug"
             resValue("string", "app_name", AppConfiguration.appName + AppConfiguration.debugSuffix)
+            resValue("string", "ads_app_id", debugJson["ADS_APP_ID"]!!)
+            resValue("string", "ads_main_bottom_native", debugJson["ADS_MAIN_BOTTOM_NATIVE"]!!)
+            resValue("string", "ads_alarm_list_native", debugJson["ADS_ALARM_LIST_NATIVE"]!!)
         }
     }
     compileOptions {
@@ -123,6 +125,7 @@ dependencies {
     implementation(libs.youtube.player.ui)
 
     implementation(libs.google.playservices.auth)
+    implementation(libs.google.playservices.ads)
     implementation(libs.google.api.client)
 
     testImplementation(libs.junit)
