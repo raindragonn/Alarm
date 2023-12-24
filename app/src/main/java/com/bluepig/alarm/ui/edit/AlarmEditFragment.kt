@@ -28,6 +28,7 @@ import com.bluepig.alarm.ui.alarm.AlarmActivity
 import com.bluepig.alarm.util.ext.createSpan
 import com.bluepig.alarm.util.ext.getGuideText
 import com.bluepig.alarm.util.ext.setDefaultColor
+import com.bluepig.alarm.util.ext.setThumbnail
 import com.bluepig.alarm.util.ext.showErrorToast
 import com.bluepig.alarm.util.ext.viewLifeCycleScope
 import com.bluepig.alarm.util.ext.viewRepeatOnLifeCycle
@@ -205,6 +206,7 @@ class AlarmEditFragment : Fragment(R.layout.fragment_alarm_edit) {
                     tvMediaTitle.text = "$titleText  ${it.title}".createSpan(
                         0, titleText.length, *highlightSpans
                     )
+                    ivThumbnail.setThumbnail(it.thumbnail)
 
                 }.onRingtone {
                     val ringtoneGuideText = getString(R.string.ringtone)
