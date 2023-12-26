@@ -201,7 +201,7 @@ class AlarmEditFragment : Fragment(R.layout.fragment_alarm_edit) {
             ), ForegroundColorSpan(requireContext().getColor(R.color.primary_600))
         )
         _binding.apply {
-            ivThumbnail.isVisible = alarmMedia?.isRingtone?.not() ?: true
+            ivThumbnail.isVisible = alarmMedia?.isRingtone?.not() ?: false
 
             if (alarmMedia == null) {
                 tvMediaTitle.text = getString(R.string.alarm_media_required_notice)

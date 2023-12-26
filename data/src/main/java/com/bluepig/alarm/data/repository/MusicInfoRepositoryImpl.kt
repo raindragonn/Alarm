@@ -8,6 +8,7 @@ import com.bluepig.alarm.domain.entity.music.MusicInfo
 import com.bluepig.alarm.domain.repository.MusicInfoRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
+import java.util.Locale
 import javax.inject.Inject
 
 
@@ -19,9 +20,15 @@ class MusicInfoRepositoryImpl @Inject constructor(
 ) : MusicInfoRepository {
     override suspend fun getFileList(query: String, offSet: Int): List<MusicInfo> =
         withContext(_dispatcher) {
+            val locale = if (Locale.getDefault() == Locale.KOREA) {
+                "ko"
+            } else {
+                "en"
+            }
             val response = _searchApi.getSongList(
                 query = query,
                 offset = offSet,
+                locale = locale
             )
 
             response.musicInfoRespons.map(MusicInfoMapper::mapToEntity)

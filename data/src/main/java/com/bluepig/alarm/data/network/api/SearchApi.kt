@@ -10,6 +10,7 @@ interface SearchApi {
     suspend fun getSongList(
         @Query("query") query: String,
         @Query("offset") offset: Int = 0,
+        @Query("locale") locale: String,
         @Query(BuildConfig.SEARCH_API_OPTION1) option1: Int = BuildConfig.SEARCH_API_OPTION1_VALUE.toInt(),
         @Query(BuildConfig.SEARCH_API_OPTION2) option2: String = BuildConfig.SEARCH_API_OPTION2_VALUE,
         @Query(BuildConfig.SEARCH_API_OPTION3) option3: String = BuildConfig.SEARCH_API_OPTION3_VALUE,

@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bluepig.alarm.domain.entity.music.MusicInfo
 import com.bluepig.alarm.domain.result.resultLoading
-import com.bluepig.alarm.domain.usecase.SearchFile
+import com.bluepig.alarm.domain.usecase.SearchMusicInfo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -13,7 +13,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MusicSearchViewModel @Inject constructor(
-    private val _searchFile: SearchFile,
+    private val _searchMusicInfo: SearchMusicInfo,
 ) : ViewModel() {
 
     private val _musicInfoList: MutableStateFlow<Result<List<MusicInfo>>> =
@@ -23,7 +23,7 @@ class MusicSearchViewModel @Inject constructor(
     fun search(query: String = "") {
         viewModelScope.launch {
             _musicInfoList.emit(resultLoading())
-            _musicInfoList.emit(_searchFile.invoke(query))
+            _musicInfoList.emit(_searchMusicInfo.invoke(query))
         }
     }
 }
