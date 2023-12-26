@@ -13,6 +13,8 @@ import com.bluepig.alarm.util.ext.inflater
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdLoader
 import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdSize
+import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.nativead.NativeAd
 import com.google.android.gms.ads.nativead.NativeAdOptions
@@ -93,6 +95,19 @@ class AdsManager {
                         .build()
                 ).build()
             adLoader.loadAd(AdRequest.Builder().build())
+        }
+    }
+
+    fun loadBanner(container: ViewGroup) {
+        kotlin.runCatching {
+            val context = _context ?: return@runCatching
+            val adView = AdView(context).apply {
+                setAdSize(AdSize.BANNER)
+                adUnitId = context.getString(R.string.ads_alarm_banner)
+            }
+            adView.loadAd(AdRequest.Builder().build())
+            container.removeAllViews()
+            container.addView(adView)
         }
     }
 
