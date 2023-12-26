@@ -55,6 +55,6 @@
         <item name="android:background">@drawable/ripple_week_selected</item>
         <item name="android:clickable">true</item>
         <item name="android:gravity">center</item>
-        <item name="android:padding">@dimen/base_spacing_2</item>
+        <item name="android:padding">0dp</item>
     </style>
 </resources>

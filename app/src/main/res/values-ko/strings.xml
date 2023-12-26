@@ -1,0 +1,74 @@
+<resources>
+    <string name="chennel_name_media_download">미디어 다운로드</string>
+    <string name="chennel_description_media_download">인터넷 없이 재생을 위한 미디어 다운로드</string>
+
+    <string name="alarm_emoji">⏰</string>
+    <string name="alarm_preview">미리보기</string>
+    <string name="alarm_media_guide">알람음</string>
+    <string name="alarm_edit">알람 수정</string>
+    <string name="alarm_create">알람 생성</string>
+    <string name="alarm_end">알람 종료</string>
+    <string name="alarm_preview_end">미리보기 종료</string>
+    <string name="alarm_remove">알람 삭제</string>
+    <string name="alarm_inactive_notice">모든 알람이 꺼진 상태입니다.</string>
+    <string name="alarm_add_notice">알람을 추가해 주세요!</string>
+    <string name="alarm_tts_guide">메모 읽어주고 알람 시작하기</string>
+    <string name="alarm_vibration_guide">진동 설정</string>
+    <string name="alarm_media_required_notice">알람음을 선택해주세요!</string>
+    <string name="alarm_media_select_title">알람음 설정</string>
+    <string name="alarm_media_select">"검색    >"</string>
+
+    <string name="play">재생</string>
+    <string name="pause">멈춤</string>
+
+    <string name="ok">확인</string>
+    <string name="cancel">취소</string>
+    <string name="save">저장</string>
+    <string name="choice">선택</string>
+    <string name="song">노래</string>
+    <string name="ringtone">벨소리</string>
+    <string name="youtube">유튜브</string>
+    <string name="title">제목</string>
+
+    <string name="volume">볼륨</string>
+    <string name="volume_auto_increase_guide">볼륨 서서히 높히기</string>
+
+    <string name="week_sun">일</string>
+    <string name="week_mon">월</string>
+    <string name="week_tues">화</string>
+    <string name="week_wed">수</string>
+    <string name="week_thu">목</string>
+    <string name="week_fri">금</string>
+    <string name="week_sat">토</string>
+
+    <string name="repeat_week">반복 요일</string>
+    <string name="week_not_select_guide">한번만 울리기</string>
+    <string name="week_weekend_guide">주말 반복</string>
+    <string name="week_weekday_guide">주중 반복</string>
+    <string name="week_everyday_guide">매일 반복</string>
+    <string name="week_guide">" 반복"</string>
+
+    <string name="memo">메모</string>
+    <string name="memo_hint">메모를 입력해주세요.</string>
+
+    <string name="day_remaining_guide">%d일 후에 알람이 울립니다.</string>
+    <string name="hour_remaining_guide">%d시간 %d분 후에 알람이 울립니다.</string>
+    <string name="minute_remaining_guide">%d분 후에 알람이 울립니다.</string>
+    <string name="soon_remaining_guide">알람이 곧 울립니다.</string>
+
+    <string name="alert_request_permission_title">권한이 필요합니다!</string>
+    <string name="alert_request_permission_text_post_notification">원활한 알람을 위해 알림 권한이 필요합니다.</string>
+    <string name="alert_request_permission_text_system_alert_window">원활한 알람을 위해 다른앱 위에 표시 권한이 필요합니다.</string>
+    <string name="alert_request_permission_text_exact_alarm">원활한 알람을 위해 알람 및 리마인더 권한이 필요합니다.</string>
+
+    <string name="notification_message_media_downlaod">인터넷 없이 알람을 위한 다운로드 중</string>
+
+    <string name="hint_music_search">노래 혹은 가수 명으로 검색해주세요.</string>
+    <string name="hint_tube_search">영상 제목 혹은 url로 검색해주세요.</string>
+
+    <string name="toast_error_basic">문제가 발생했습니다! 다시 시도해주세요.</string>
+    <string name="toast_error_search_query_empty">검색어를 입력해주세요.</string>
+    <string name="toast_error_network">인터넷 연결을 확인해주세요.</string>
+    <string name="toast_error_not_select_alarm_media">알람음을 선택해주세요.</string>
+
+</resources>
