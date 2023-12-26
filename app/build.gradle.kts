@@ -70,6 +70,12 @@ android {
             resValue("string", "ads_main_bottom_native", debugJson["ADS_MAIN_BOTTOM_NATIVE"]!!)
             resValue("string", "ads_alarm_list_native", debugJson["ADS_ALARM_LIST_NATIVE"]!!)
             resValue("string", "ads_alarm_banner", debugJson["ADS_ALARM_BANNER"]!!)
+            resValue(
+                "string",
+                "ads_media_select_interstitial",
+                debugJson["ADS_MEDIA_SELECT_INTERSTITIAL"]!!
+            )
+
         }
     }
     compileOptions {

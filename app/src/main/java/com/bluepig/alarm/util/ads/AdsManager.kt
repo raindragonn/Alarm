@@ -1,5 +1,6 @@
 package com.bluepig.alarm.util.ads
 
+import android.app.Activity
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -10,14 +11,19 @@ import androidx.lifecycle.LifecycleOwner
 import com.bluepig.alarm.R
 import com.bluepig.alarm.databinding.MainBottomNativeLayoutBinding
 import com.bluepig.alarm.util.ext.inflater
+import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdLoader
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
+import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.interstitial.InterstitialAd
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.google.android.gms.ads.nativead.NativeAd
 import com.google.android.gms.ads.nativead.NativeAdOptions
+import timber.log.Timber
 
 class AdsManager {
     private var _activity: AppCompatActivity? = null
@@ -38,7 +44,12 @@ class AdsManager {
         get() = _activity?.lifecycle
             ?: _fragment?.lifecycle
 
+    private val _adRequest
+        get() = AdRequest.Builder().build()
+
     private val _lifeCycleObserverListener = mutableListOf<LifecycleObserver>()
+
+    private var _interstitialAd: InterstitialAd? = null
 
     fun loadBottomNativeAd(
         container: ViewGroup
@@ -65,7 +76,7 @@ class AdsManager {
                         // used here to specify individual options settings.
                         .build()
                 ).build()
-            adLoader.loadAd(AdRequest.Builder().build())
+            adLoader.loadAd(_adRequest)
         }
     }
 
@@ -94,7 +105,7 @@ class AdsManager {
                         // used here to specify individual options settings.
                         .build()
                 ).build()
-            adLoader.loadAd(AdRequest.Builder().build())
+            adLoader.loadAd(_adRequest)
         }
     }
 
@@ -105,10 +116,65 @@ class AdsManager {
                 setAdSize(AdSize.BANNER)
                 adUnitId = context.getString(R.string.ads_alarm_banner)
             }
-            adView.loadAd(AdRequest.Builder().build())
+            adView.loadAd(_adRequest)
             container.removeAllViews()
             container.addView(adView)
         }
+    }
+
+    fun loadInterstitial() {
+        kotlin.runCatching {
+            val context = _context ?: return@runCatching
+
+            InterstitialAd.load(
+                context,
+                context.getString(R.string.ads_media_select_interstitial),
+                _adRequest,
+                object : InterstitialAdLoadCallback() {
+                    override fun onAdFailedToLoad(p0: LoadAdError) {
+                        super.onAdFailedToLoad(p0)
+                        Timber.e("onAdFailedToLoad : ${p0.message}")
+                        if (_lifecycle?.currentState == Lifecycle.State.CREATED) {
+                            loadInterstitial()
+                        }
+                    }
+
+                    override fun onAdLoaded(ad: InterstitialAd) {
+                        super.onAdLoaded(ad)
+                        _interstitialAd = ad
+                    }
+                }
+            )
+        }
+    }
+
+    fun showInterstitial(
+        activity: Activity,
+        onShowed: () -> Unit,
+        onClose: () -> Unit,
+        onLoadFail: () -> Unit
+    ) {
+        _interstitialAd?.apply {
+            fullScreenContentCallback = object : FullScreenContentCallback() {
+                override fun onAdFailedToShowFullScreenContent(p0: AdError) {
+                    super.onAdFailedToShowFullScreenContent(p0)
+                    _interstitialAd = null
+                    onLoadFail.invoke()
+                }
+
+                override fun onAdDismissedFullScreenContent() {
+                    super.onAdDismissedFullScreenContent()
+                    _interstitialAd = null
+                    onClose.invoke()
+                }
+
+                override fun onAdShowedFullScreenContent() {
+                    super.onAdShowedFullScreenContent()
+                    onShowed.invoke()
+                }
+            }
+            show(activity)
+        } ?: onLoadFail.invoke()
     }
 
     fun release() {

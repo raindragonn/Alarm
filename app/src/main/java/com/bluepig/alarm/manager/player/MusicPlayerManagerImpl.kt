@@ -21,6 +21,7 @@ import com.bluepig.alarm.domain.result.NotFoundMediaItemException
 import com.bluepig.alarm.domain.result.NotFoundPlayerException
 import com.bluepig.alarm.manager.download.MediaDownloadManager
 import dagger.hilt.android.qualifiers.ApplicationContext
+import timber.log.Timber
 import javax.inject.Inject
 
 @UnstableApi
@@ -119,6 +120,10 @@ class MusicPlayerManagerImpl @Inject constructor(
     override fun getMediaItem(): MediaItem =
         _mediaItem ?: throw NotFoundMediaItemException
 
+    override fun pause() {
+        _player?.pause()
+    }
+
     override fun playEndPause() {
         _player?.let {
             if (it.isPlaying) {
@@ -163,10 +168,26 @@ class MusicPlayerManagerImpl @Inject constructor(
     }
 
     private inner class EventObserver : LifecycleEventObserver {
+        private var _isPaused = false
+
         override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
             when (event) {
-                Lifecycle.Event.ON_START -> _player?.play()
-                Lifecycle.Event.ON_STOP -> _player?.pause()
+                Lifecycle.Event.ON_RESUME -> {
+                    Timber.e("Lifecycle.Event.ON_RESUME")
+                    Timber.e("_isPaused : ${_isPaused}")
+                    if (_isPaused) {
+                        _player?.play()
+                    }
+                }
+
+                Lifecycle.Event.ON_PAUSE -> {
+                    Timber.e("Lifecycle.Event.ON_PAUSE")
+                    if (_player?.isPlaying == true) {
+                        _player?.pause()
+                        _isPaused = true
+                    }
+                }
+
                 Lifecycle.Event.ON_DESTROY -> release()
                 else -> {}
             }
