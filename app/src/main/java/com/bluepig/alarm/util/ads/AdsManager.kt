@@ -23,7 +23,6 @@ import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.google.android.gms.ads.nativead.NativeAd
 import com.google.android.gms.ads.nativead.NativeAdOptions
-import timber.log.Timber
 
 class AdsManager {
     private var _activity: AppCompatActivity? = null
@@ -133,7 +132,6 @@ class AdsManager {
                 object : InterstitialAdLoadCallback() {
                     override fun onAdFailedToLoad(p0: LoadAdError) {
                         super.onAdFailedToLoad(p0)
-                        Timber.e("onAdFailedToLoad : ${p0.message}")
                         if (_lifecycle?.currentState == Lifecycle.State.CREATED) {
                             loadInterstitial()
                         }
