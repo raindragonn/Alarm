@@ -4,7 +4,10 @@ import android.content.Context
 import android.media.AudioManager
 import androidx.media3.common.util.UnstableApi
 import com.bluepig.alarm.domain.alarm.BpAlarmManager
+import com.bluepig.alarm.domain.preferences.AppPreferences
 import com.bluepig.alarm.manager.alarm.BPAlarmManagerImpl
+import com.bluepig.alarm.manager.config.ConfigManager
+import com.bluepig.alarm.manager.config.ConfigManagerImpl
 import com.bluepig.alarm.manager.download.MediaDownloadManager
 import com.bluepig.alarm.manager.download.MediaDownloadManagerImpl
 import com.bluepig.alarm.manager.player.MusicPlayerManager
@@ -62,5 +65,12 @@ object ManagerModule {
         context: Context
     ): TtsPlayerManager {
         return TtsPlayerManagerImpl(context)
+    }
+
+    @Provides
+    fun providesConfigManage(
+        appPreferences: AppPreferences
+    ): ConfigManager {
+        return ConfigManagerImpl(appPreferences)
     }
 }

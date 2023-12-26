@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<defaults>
+    <entry>
+        <key>ads_switch</key>
+        <value>true</value>
+    </entry>
+    <entry>
+        <key>ads_alarm_banner_switch</key>
+        <value>true</value>
+    </entry>
+    <entry>
+        <key>ads_alarm_list_native_switch</key>
+        <value>true</value>
+    </entry>
+    <entry>
+        <key>ads_interstitial_music_click_switch</key>
+        <value>true</value>
+    </entry>
+    <entry>
+        <key>ads_main_bottom_native_switch</key>
+        <value>true</value>
+    </entry>
+    <entry>
+        <key>show_only_youtube_link</key>
+        <value>false</value>
+    </entry>
+    <entry>
+        <key>show_youtube_search</key>
+        <value>true</value>
+    </entry>
+</defaults>
