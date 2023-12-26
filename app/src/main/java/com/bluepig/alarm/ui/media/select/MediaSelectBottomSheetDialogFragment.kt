@@ -9,11 +9,14 @@ import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.media3.common.util.UnstableApi
+import androidx.navigation.NavController
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.bluepig.alarm.R
 import com.bluepig.alarm.databinding.DialogFragmentMediaSelectBinding
 import com.bluepig.alarm.domain.entity.alarm.media.AlarmMedia
 import com.bluepig.alarm.domain.entity.alarm.media.TubeMedia
+import com.bluepig.alarm.domain.entity.music.MusicInfo
 import com.bluepig.alarm.domain.result.LoadingException
 import com.bluepig.alarm.manager.player.MusicPlayerManager
 import com.bluepig.alarm.ui.edit.AlarmEditFragment
@@ -178,5 +181,29 @@ class MediaSelectBottomSheetDialogFragment :
     companion object {
         const val KEY_ARGS_MUSIC_INFO = "musicInfo"
         const val KEY_ARGS_ALARM_MEDIA = "alarmMedia"
+
+        private val _navOptions = NavOptions.Builder()
+            .setLaunchSingleTop(true)
+            .build()
+
+        fun openWithMedia(navController: NavController, media: AlarmMedia) {
+            navController.navigate(
+                R.id.MediaSelectBottomSheetDialogFragment,
+                bundleOf(
+                    KEY_ARGS_ALARM_MEDIA to media
+                ),
+                _navOptions
+            )
+        }
+
+        fun openWithMusicInfo(navController: NavController, musicInfo: MusicInfo) {
+            navController.navigate(
+                R.id.MediaSelectBottomSheetDialogFragment,
+                bundleOf(
+                    KEY_ARGS_MUSIC_INFO to musicInfo
+                ),
+                _navOptions
+            )
+        }
     }
 }

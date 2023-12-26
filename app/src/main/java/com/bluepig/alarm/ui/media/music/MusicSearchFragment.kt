@@ -3,7 +3,6 @@ package com.bluepig.alarm.ui.media.music
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
-import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -74,13 +73,8 @@ class MusicSearchFragment : Fragment(R.layout.fragment_music_search) {
     }
 
     @SuppressLint("UnsafeOptInUsageError")
-    private fun itemClick(file: MusicInfo) {
-        findNavController().navigate(
-            R.id.MediaSelectBottomSheetDialogFragment,
-            bundleOf(
-                MediaSelectBottomSheetDialogFragment.KEY_ARGS_MUSIC_INFO to file
-            )
-        )
+    private fun itemClick(info: MusicInfo) {
+        MediaSelectBottomSheetDialogFragment.openWithMusicInfo(findNavController(), info)
     }
 
     private fun setLoadingVisible(isVisible: Boolean) {

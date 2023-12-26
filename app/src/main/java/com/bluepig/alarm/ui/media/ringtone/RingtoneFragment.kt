@@ -2,7 +2,6 @@ package com.bluepig.alarm.ui.media.ringtone
 
 import android.os.Bundle
 import android.view.View
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -50,11 +49,6 @@ class RingtoneFragment : Fragment(R.layout.fragment_ringtone) {
     }
 
     private fun onClickRingtone(media: RingtoneMedia) {
-        findNavController().navigate(
-            R.id.MediaSelectBottomSheetDialogFragment,
-            bundleOf(
-                MediaSelectBottomSheetDialogFragment.KEY_ARGS_ALARM_MEDIA to media
-            )
-        )
+        MediaSelectBottomSheetDialogFragment.openWithMedia(findNavController(), media)
     }
 }
