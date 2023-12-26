@@ -29,7 +29,9 @@ class AlarmListFragment : Fragment(R.layout.fragment_alarm_list) {
     private val _binding: FragmentAlarmListBinding by viewBinding(FragmentAlarmListBinding::bind)
     private val _vm: AlarmListViewModel by viewModels()
     private val _nativeAdAdapter: NativeAdsAdapter by lazy {
-        NativeAdsAdapter()
+        NativeAdsAdapter {
+            // TODO: store 열기
+        }
     }
     private val _alarmAdapter: AlarmAdapter by lazy {
         AlarmAdapter(
@@ -41,6 +43,13 @@ class AlarmListFragment : Fragment(R.layout.fragment_alarm_list) {
 
     @Inject
     lateinit var timeGuideManager: TimeGuideManager
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        _adsManager.loadAlarmListNativeAd {
+            _nativeAdAdapter.submitList(listOf(it))
+        }
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -56,18 +65,15 @@ class AlarmListFragment : Fragment(R.layout.fragment_alarm_list) {
 
     private fun initViews() {
         _binding.rvAlarm.adapter = ConcatAdapter(_nativeAdAdapter, _alarmAdapter)
-
         _binding.btnAlarmCreate.setOnClickListener {
             val action =
                 AlarmListFragmentDirections.actionAlarmListFragmentToAlarmEditFragment(null)
             findNavController().navigate(action)
         }
-        _adsManager.loadAlarmListNativeAd {
-            _nativeAdAdapter.submitList(listOf(it))
-        }
     }
 
     override fun onDestroy() {
+        _nativeAdAdapter.setEmpty()
         _adsManager.release()
         super.onDestroy()
     }

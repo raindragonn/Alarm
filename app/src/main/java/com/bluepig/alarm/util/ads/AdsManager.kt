@@ -1,6 +1,5 @@
 package com.bluepig.alarm.util.ads
 
-import android.content.Context
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -17,7 +16,6 @@ import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.nativead.NativeAd
 import com.google.android.gms.ads.nativead.NativeAdOptions
-import timber.log.Timber
 
 class AdsManager {
     private var _activity: AppCompatActivity? = null
@@ -31,28 +29,28 @@ class AdsManager {
         _fragment = fragment
     }
 
-    private val _context: Context
-        get() = _activity
-            ?: _fragment?.requireContext()
-            ?: throw Exception()
+    private val _context
+        get() = _activity ?: _fragment?.context
 
     private val _lifecycle
         get() = _activity?.lifecycle
-            ?: _fragment?.viewLifecycleOwner?.lifecycle
-            ?: throw Exception()
+            ?: _fragment?.lifecycle
+
     private val _lifeCycleObserverListener = mutableListOf<LifecycleObserver>()
 
     fun loadBottomNativeAd(
         container: ViewGroup
     ) {
         kotlin.runCatching {
+            val context = _context ?: return@runCatching
+
             val adLoader =
                 AdLoader.Builder(
-                    _context,
-                    _context.getString(R.string.ads_main_bottom_native)
+                    context,
+                    context.getString(R.string.ads_main_bottom_native)
                 ).forNativeAd { ad: NativeAd ->
                     val lifecycleObserver = DestroyListener(ad)
-                    _lifecycle.addObserver(lifecycleObserver)
+                    _lifecycle?.addObserver(lifecycleObserver)
                     _lifeCycleObserverListener.add(lifecycleObserver)
                     applyBottomNativeAd(container, ad)
                 }.withAdListener(object : AdListener() {
@@ -73,13 +71,15 @@ class AdsManager {
         loadedListener: (NativeAd) -> Unit
     ) {
         kotlin.runCatching {
+            val context = _context ?: return@runCatching
+
             val adLoader =
                 AdLoader.Builder(
-                    _context,
-                    _context.getString(R.string.ads_alarm_list_native)
+                    context,
+                    context.getString(R.string.ads_alarm_list_native)
                 ).forNativeAd { ad: NativeAd ->
                     val lifecycleObserver = DestroyListener(ad)
-                    _lifecycle.addObserver(lifecycleObserver)
+                    _lifecycle?.addObserver(lifecycleObserver)
                     _lifeCycleObserverListener.add(lifecycleObserver)
                     loadedListener.invoke(ad)
                 }.withAdListener(object : AdListener() {
@@ -98,12 +98,12 @@ class AdsManager {
 
     fun release() {
         _lifeCycleObserverListener.forEach {
-            _lifecycle.removeObserver(it)
+            _lifecycle?.removeObserver(it)
         }
     }
 
     private fun applyBottomNativeAd(container: ViewGroup, ad: NativeAd) {
-        val adview = MainBottomNativeLayoutBinding.inflate(_context.inflater).apply {
+        val adview = MainBottomNativeLayoutBinding.inflate(container.inflater).apply {
             adHeadline.text = ad.headline
         }
 
@@ -118,7 +118,6 @@ class AdsManager {
 private class DestroyListener(private val nativeAd: NativeAd) : LifecycleEventObserver {
     override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
         if (event == Lifecycle.Event.ON_DESTROY) {
-            Timber.d("ad Destroy")
             nativeAd.destroy()
         }
     }

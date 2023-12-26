@@ -10,11 +10,28 @@ class NativeAdsViewHolder(
     private val _binding: ItemAlarmNativeLayoutBinding
 ) : RecyclerView.ViewHolder(_binding.root) {
 
+    fun bindEmpty(onclickButton: () -> Unit) {
+        _binding.apply {
+            adBadge.isVisible = false
+            adIcon.isVisible = false
+            adHeadline.text = "리뷰 쓰러 가기"
+            adBody.text = "앱이 마음에 드신다면 칭찬을, 불편한 점이나 건의사항이 있다면 남겨주세요"
+            adStoreButton.isVisible = true
+            adStoreButton.text = "스토어"
+            adStoreButton.setOnClickListener { onclickButton.invoke() }
+        }
+    }
+
     fun bind(nativeAd: NativeAd) {
         _binding.apply {
             val adview = nativeAdView
+            adBadge.isVisible = true
+
             adHeadline.text = nativeAd.headline
+            adview.headlineView = adHeadline
+
             adBody.text = nativeAd.body
+            adview.bodyView = adBody
 
             nativeAd.icon?.uri?.let {
                 adIcon.load(it)
@@ -23,16 +40,13 @@ class NativeAdsViewHolder(
             } ?: kotlin.run {
                 adIcon.isVisible = false
             }
-            nativeAd.store?.let {
+            nativeAd.callToAction?.let {
                 adStoreButton.text = it
-                adview.storeView = adStoreButton
+                adview.callToActionView = adStoreButton
                 adStoreButton.isVisible = true
             } ?: kotlin.run {
                 adStoreButton.isVisible = false
             }
-
-            adview.callToActionView = adview
-            adview.headlineView = adHeadline
 
             adview.setNativeAd(nativeAd)
         }

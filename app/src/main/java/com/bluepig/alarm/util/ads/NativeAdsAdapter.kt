@@ -8,7 +8,16 @@ import com.bluepig.alarm.util.ext.inflater
 import com.google.android.gms.ads.nativead.NativeAd
 
 
-class NativeAdsAdapter : ListAdapter<NativeAd, NativeAdsViewHolder>(differ) {
+class NativeAdsAdapter(
+    private val _onClickStoreButton: () -> Unit
+) : ListAdapter<NativeAd?, NativeAdsViewHolder>(differ) {
+    init {
+        submitList(listOf(null))
+    }
+
+    fun setEmpty() {
+        submitList(listOf(null))
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NativeAdsViewHolder {
         val binding = ItemAlarmNativeLayoutBinding.inflate(parent.inflater, parent, false)
@@ -16,11 +25,15 @@ class NativeAdsAdapter : ListAdapter<NativeAd, NativeAdsViewHolder>(differ) {
     }
 
     override fun onBindViewHolder(holder: NativeAdsViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        getItem(position)?.let {
+            holder.bind(it)
+        } ?: run {
+            holder.bindEmpty(_onClickStoreButton)
+        }
     }
 
     companion object {
-        private val differ = object : DiffUtil.ItemCallback<NativeAd>() {
+        private val differ = object : DiffUtil.ItemCallback<NativeAd?>() {
             override fun areItemsTheSame(oldItem: NativeAd, newItem: NativeAd): Boolean {
                 return oldItem.headline == newItem.headline
             }
