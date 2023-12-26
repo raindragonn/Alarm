@@ -21,6 +21,7 @@ google-material = "1.10.0"
 google-hilt = "2.46"
 google-services = "4.4.0"
 google-playservices-auth = "20.7.0"
+google-playservices-ads = "22.5.0"
 google-youtube = "v3-rev222-1.25.0"
 google-api-client = "2.2.0"
 
@@ -48,6 +49,7 @@ google-material = { group = "com.google.android.material", name = "material", ve
 google-hilt = { group = "com.google.dagger", name = "hilt-android", version.ref = "google-hilt" }
 google-hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "google-hilt" }
 google-playservices-auth = { group = "com.google.android.gms", name = "play-services-auth", version.ref = "google-playservices-auth" }
+google-playservices-ads = { group = "com.google.android.gms", name = "play-services-ads", version.ref = "google-playservices-ads" }
 google-youtube = { group = "com.google.apis", name = "google-api-services-youtube", version.ref = "google-youtube" }
 google-api-client = { group = "com.google.api-client", name = "google-api-client-android", version.ref = "google-api-client" }
 

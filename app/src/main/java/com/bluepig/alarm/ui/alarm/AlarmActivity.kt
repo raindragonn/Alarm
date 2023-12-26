@@ -21,6 +21,7 @@ import com.bluepig.alarm.domain.entity.alarm.Alarm
 import com.bluepig.alarm.domain.entity.alarm.media.TubeMedia
 import com.bluepig.alarm.manager.player.MusicPlayerManager
 import com.bluepig.alarm.manager.player.TtsPlayerManager
+import com.bluepig.alarm.util.ads.AdsManager
 import com.bluepig.alarm.util.ext.audioManager
 import com.bluepig.alarm.util.ext.isConnectedToInternet
 import com.bluepig.alarm.util.ext.setThumbnail
@@ -57,14 +58,14 @@ class AlarmActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(_binding.root)
-
-        _vm.setDefaultVolume(audioManager.getStreamVolume(AudioManager.STREAM_MUSIC))
-        initAlarmMedia()
-
         showOverLockscreen()
         disableBackButton()
+
+        setContentView(_binding.root)
+        _vm.setDefaultVolume(audioManager.getStreamVolume(AudioManager.STREAM_MUSIC))
+        initPlayerManager()
         observing()
+        AdsManager(this).loadBanner(_binding.adFrame)
     }
 
     override fun onResume() {
@@ -239,7 +240,7 @@ class AlarmActivity : AppCompatActivity() {
         }
     }
 
-    private fun initAlarmMedia() {
+    private fun initPlayerManager() {
         playerManager.init(
             lifecycle,
             stateChangeListener = ::onPlayingStateChanged,

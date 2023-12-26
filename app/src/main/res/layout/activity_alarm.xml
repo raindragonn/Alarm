@@ -89,4 +89,10 @@
         app:layout_constraintTop_toBottomOf="@id/media_barrier"
         app:layout_constraintWidth_percent="0.6" />
 
+    <FrameLayout
+        android:id="@+id/ad_frame"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

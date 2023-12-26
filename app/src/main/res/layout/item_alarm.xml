@@ -6,6 +6,7 @@
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="@dimen/base_spacing_2"
     android:layout_marginVertical="@dimen/base_spacing_1"
+    android:foreground="@drawable/ripple_rectangle_point"
     android:background="@color/surface"
     app:cardCornerRadius="@dimen/base_spacing_1">
 

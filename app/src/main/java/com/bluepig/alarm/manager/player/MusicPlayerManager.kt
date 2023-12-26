@@ -18,5 +18,6 @@ interface MusicPlayerManager {
     fun getMediaItem(): MediaItem
     fun isLoading(): Boolean
     fun playEndPause()
+    fun pause()
     fun release()
 }

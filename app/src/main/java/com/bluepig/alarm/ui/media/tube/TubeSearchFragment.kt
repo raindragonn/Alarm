@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -110,12 +109,7 @@ class TubeSearchFragment : Fragment(R.layout.fragment_tube_search) {
     }
 
     private fun onItemClick(tubeMedia: TubeMedia) {
-        findNavController().navigate(
-            R.id.MediaSelectBottomSheetDialogFragment,
-            bundleOf(
-                MediaSelectBottomSheetDialogFragment.KEY_ARGS_ALARM_MEDIA to tubeMedia
-            )
-        )
+        MediaSelectBottomSheetDialogFragment.openWithMedia(findNavController(), tubeMedia)
     }
 
     private fun requestOauth(throwable: Throwable) {

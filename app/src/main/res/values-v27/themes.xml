@@ -1,19 +1,19 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!-- Base application theme. -->
     <style name="Base.Theme.Alarm" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="android:statusBarColor">@color/surface</item>
-        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightStatusBar">true</item>
 
         <item name="android:windowAnimationStyle">@null</item>
         <item name="android:windowBackground">@color/background</item>
         <item name="android:navigationBarColor">@color/surface</item>
-        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">false</item>
+        <item name="android:windowLightNavigationBar">true</item>
 
         <item name="android:textColorPrimary">@color/point</item>
 
         <item name="colorPrimary">@color/primary_600</item>
         <item name="colorPrimaryVariant">@color/primary_700</item>
         <item name="colorPrimaryDark">@color/primary_900</item>
-        <item name="colorOnPrimary">@color/point</item>
+        <item name="colorOnPrimary">@color/base</item>
     </style>
 </resources>

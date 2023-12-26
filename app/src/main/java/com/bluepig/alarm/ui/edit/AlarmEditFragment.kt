@@ -12,6 +12,7 @@ import android.widget.SeekBar
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.clearFragmentResultListener
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -57,6 +58,11 @@ class AlarmEditFragment : Fragment(R.layout.fragment_alarm_edit) {
     override fun onResume() {
         super.onResume()
         BpLogger.logScreenView(AlarmEditFragment::class.java.simpleName)
+    }
+
+    override fun onDestroyView() {
+        clearFragmentResultListener(REQUEST_ALARM_MEDIA)
+        super.onDestroyView()
     }
 
     private fun initViews() = with(_binding) {
