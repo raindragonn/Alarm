@@ -3,6 +3,9 @@ package com.bluepig.alarm.ui.main
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.offline.DownloadService
 import com.bluepig.alarm.databinding.ActivityMainBinding
@@ -13,7 +16,7 @@ import com.bluepig.alarm.util.ads.AdsManager
 import com.bluepig.alarm.util.logger.BpLogger
 import com.bluepig.alarm.util.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
-import timber.log.Timber
+import kotlinx.coroutines.launch
 
 @UnstableApi
 @AndroidEntryPoint
@@ -32,9 +35,13 @@ class MainActivity : AppCompatActivity() {
             _vm.refresh()
         }
         PermissionHelper.checkSystemAlertPermission(this, _binding.root)
-        startDownloadService()
 
         _adsManager.loadBottomNativeAd(_binding.adFrame)
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.CREATED) {
+                startDownloadService()
+            }
+        }
     }
 
     override fun onResume() {
@@ -43,7 +50,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onDestroy() {
-        Timber.d("activity Destroy")
         _adsManager.release()
         super.onDestroy()
     }
