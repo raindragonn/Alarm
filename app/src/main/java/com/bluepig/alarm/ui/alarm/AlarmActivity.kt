@@ -284,6 +284,16 @@ class AlarmActivity : AppCompatActivity() {
                 )
             }
 
+            override fun onStateChange(
+                youTubePlayer: YouTubePlayer,
+                state: PlayerConstants.PlayerState
+            ) {
+                super.onStateChange(youTubePlayer, state)
+                if (state == PlayerConstants.PlayerState.ENDED) {
+                    youTubePlayer.seekTo(0F)
+                }
+            }
+
             override fun onError(youTubePlayer: YouTubePlayer, error: PlayerConstants.PlayerError) {
                 super.onError(youTubePlayer, error)
                 BpLogger.logException(Exception("$error"))

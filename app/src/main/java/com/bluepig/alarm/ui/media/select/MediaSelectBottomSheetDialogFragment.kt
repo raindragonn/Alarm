@@ -46,6 +46,7 @@ class MediaSelectBottomSheetDialogFragment :
     )
     private val _vm: MediaSelectViewModel by viewModels()
     private val _adsManager by lazy { AdsManager(this) }
+    private var _youtubePlayer: YouTubePlayer? = null
 
     @Inject
     lateinit var playerManager: MusicPlayerManager
@@ -82,6 +83,7 @@ class MediaSelectBottomSheetDialogFragment :
         btnPlay.setOnClickListener { playerManager.playEndPause() }
         btnSelect.setOnClickListener {
             playerManager.pause()
+            _youtubePlayer?.pause()
             _adsManager.showInterstitial(requireActivity(),
                 onShowed = {
                     setLoadingState(true)
@@ -139,6 +141,7 @@ class MediaSelectBottomSheetDialogFragment :
             ivThumbnail.isVisible = isLoading.not()
             btnPlay.isVisible = isLoading.not()
             btnSelect.isVisible = isLoading.not()
+            yp.isVisible = isLoading.not()
         }
     }
 
@@ -167,6 +170,7 @@ class MediaSelectBottomSheetDialogFragment :
         viewLifecycleOwner.lifecycle.addObserver(yp)
         val listener = object : AbstractYouTubePlayerListener() {
             override fun onReady(youTubePlayer: YouTubePlayer) {
+                _youtubePlayer = youTubePlayer
                 val controller = DefaultPlayerUiController(yp, youTubePlayer).apply {
                     showFullscreenButton(false)
                     showYouTubeButton(false)
