@@ -17,13 +17,16 @@ import com.bluepig.alarm.util.logger.BpLogger
 import com.bluepig.alarm.util.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @UnstableApi
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private val _binding: ActivityMainBinding by viewBinding(ActivityMainBinding::inflate)
     private val _vm: MainViewModel by viewModels()
-    private val _adsManager by lazy { AdsManager(this) }
+
+    @Inject
+    lateinit var adsManager: AdsManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,8 +38,7 @@ class MainActivity : AppCompatActivity() {
             _vm.refresh()
         }
         PermissionHelper.checkSystemAlertPermission(this, _binding.root)
-
-        _adsManager.loadBottomNativeAd(_binding.adFrame)
+        adsManager.loadBottomNativeAd(lifecycle, _binding.adFrame)
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.CREATED) {
                 startDownloadService()
@@ -47,11 +49,6 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         BpLogger.logScreenView(MainActivity::class.java.simpleName)
-    }
-
-    override fun onDestroy() {
-        _adsManager.release()
-        super.onDestroy()
     }
 
     private fun startDownloadService() {

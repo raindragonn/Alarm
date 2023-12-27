@@ -56,6 +56,9 @@ class AlarmActivity : AppCompatActivity() {
     @Inject
     lateinit var ttsPlayerManager: TtsPlayerManager
 
+    @Inject
+    lateinit var adsManager: AdsManager
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         showOverLockscreen()
@@ -65,12 +68,17 @@ class AlarmActivity : AppCompatActivity() {
         _vm.setDefaultVolume(audioManager.getStreamVolume(AudioManager.STREAM_MUSIC))
         initPlayerManager()
         observing()
-        AdsManager(this).loadBanner(_binding.adFrame)
+        adsManager.loadBanner(_binding.adFrame)
     }
 
     override fun onResume() {
         super.onResume()
         BpLogger.logScreenView(AlarmActivity::class.java.simpleName)
+    }
+
+    override fun onDestroy() {
+        release()
+        super.onDestroy()
     }
 
     private fun observing() {
@@ -107,11 +115,6 @@ class AlarmActivity : AppCompatActivity() {
                 }
             }
         }
-    }
-
-    override fun onDestroy() {
-        release()
-        super.onDestroy()
     }
 
     private fun release() {
