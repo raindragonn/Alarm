@@ -13,7 +13,6 @@ import androidx.navigation.fragment.findNavController
 import com.bluepig.alarm.R
 import com.bluepig.alarm.databinding.FragmentTubeSearchBinding
 import com.bluepig.alarm.domain.entity.alarm.media.TubeMedia
-import com.bluepig.alarm.domain.preferences.AppPreferences
 import com.bluepig.alarm.domain.result.isLoading
 import com.bluepig.alarm.ui.media.select.MediaSelectBottomSheetDialogFragment
 import com.bluepig.alarm.util.ext.setOnEnterListener
@@ -39,9 +38,6 @@ class TubeSearchFragment : Fragment(R.layout.fragment_tube_search) {
 
     @Inject
     lateinit var credential: GoogleAccountCredential
-
-    @Inject
-    lateinit var appPref: AppPreferences
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -77,12 +73,13 @@ class TubeSearchFragment : Fragment(R.layout.fragment_tube_search) {
     }
 
     private fun checkOAuthLogin(): Boolean {
-        return if (appPref.selectedAccountName.isNullOrBlank()) {
+        val savedSelectName = _vm.getSavedSelectName()
+        return if (savedSelectName.isNullOrBlank()) {
             val intent = credential.newChooseAccountIntent()
             _credentialLauncher.launch(intent)
             false
         } else {
-            credential.selectedAccountName = appPref.selectedAccountName
+            credential.selectedAccountName = savedSelectName
             true
         }
     }
@@ -90,7 +87,7 @@ class TubeSearchFragment : Fragment(R.layout.fragment_tube_search) {
     private fun credentialCallBack(result: ActivityResult) {
         val accountName = result.data?.getStringExtra(AccountManager.KEY_ACCOUNT_NAME) ?: return
         credential.selectedAccountName = accountName
-        appPref.selectedAccountName = accountName
+        _vm.setSavedSelectName(accountName)
         _vm.search(_binding.etSearch.text.toString())
     }
 

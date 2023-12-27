@@ -42,11 +42,10 @@
                 app:layout_constraintTop_toTopOf="@+id/ad_icon"
                 app:layout_goneMarginStart="0dp"
                 app:layout_goneMarginTop="@dimen/base_spacing_1"
-                tools:text="headLine" />
+                tools:text="@tools:sample/lorem/random" />
 
             <ImageView
                 android:id="@+id/ad_icon"
-                style="@style/TextAppearance.Alarm.HeadLine2"
                 android:layout_width="@dimen/base_spacing_8"
                 android:layout_height="@dimen/base_spacing_8"
                 android:layout_marginTop="@dimen/base_spacing_1"
@@ -64,6 +63,7 @@
                 android:ellipsize="end"
                 android:maxLines="2"
                 android:minLines="2"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/ad_store_button"
                 app:layout_constraintStart_toEndOf="@id/ad_icon"
                 app:layout_constraintTop_toBottomOf="@id/ad_headline"

@@ -8,7 +8,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class SearchFile @Inject constructor(
+class SearchMusicInfo @Inject constructor(
     @IoDispatcher
     private val _dispatcher: CoroutineDispatcher,
     private val _repository: MusicInfoRepository

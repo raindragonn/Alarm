@@ -45,20 +45,24 @@ class MediaSelectBottomSheetDialogFragment :
         DialogFragmentMediaSelectBinding::bind
     )
     private val _vm: MediaSelectViewModel by viewModels()
-    private val _adsManager by lazy { AdsManager(this) }
+    private var _youtubePlayer: YouTubePlayer? = null
 
     @Inject
     lateinit var playerManager: MusicPlayerManager
 
+    @Inject
+    lateinit var adsManager: AdsManager
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        _adsManager.loadInterstitial()
+        adsManager.loadInterstitial(lifecycle)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        playerManager.init(viewLifecycleOwner.lifecycle,
+        playerManager.init(
+            viewLifecycleOwner.lifecycle,
             stateChangeListener = ::onPlayingStateChange,
             errorListener = { showErrorToast(it) })
         initViews()
@@ -81,8 +85,8 @@ class MediaSelectBottomSheetDialogFragment :
         btnClose.setOnClickListener { findNavController().popBackStack() }
         btnPlay.setOnClickListener { playerManager.playEndPause() }
         btnSelect.setOnClickListener {
-            playerManager.pause()
-            _adsManager.showInterstitial(requireActivity(),
+            adsManager.showInterstitial(
+                requireActivity(),
                 onShowed = {
                     setLoadingState(true)
                 }, onClose = {
@@ -139,6 +143,11 @@ class MediaSelectBottomSheetDialogFragment :
             ivThumbnail.isVisible = isLoading.not()
             btnPlay.isVisible = isLoading.not()
             btnSelect.isVisible = isLoading.not()
+            yp.isVisible = isLoading.not()
+            if (isLoading) {
+                playerManager.pause()
+                _youtubePlayer?.pause()
+            }
         }
     }
 
@@ -167,6 +176,7 @@ class MediaSelectBottomSheetDialogFragment :
         viewLifecycleOwner.lifecycle.addObserver(yp)
         val listener = object : AbstractYouTubePlayerListener() {
             override fun onReady(youTubePlayer: YouTubePlayer) {
+                _youtubePlayer = youTubePlayer
                 val controller = DefaultPlayerUiController(yp, youTubePlayer).apply {
                     showFullscreenButton(false)
                     showYouTubeButton(false)

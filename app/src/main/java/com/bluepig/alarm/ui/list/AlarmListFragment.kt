@@ -39,14 +39,16 @@ class AlarmListFragment : Fragment(R.layout.fragment_alarm_list) {
             ::onItemSwitchClick
         )
     }
-    private val _adsManager by lazy { AdsManager(this) }
+
+    @Inject
+    lateinit var adsManager: AdsManager
 
     @Inject
     lateinit var timeGuideManager: TimeGuideManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        _adsManager.loadAlarmListNativeAd {
+        adsManager.loadAlarmListNativeAd(lifecycle) {
             _nativeAdAdapter.submitList(listOf(it))
         }
     }
@@ -74,7 +76,6 @@ class AlarmListFragment : Fragment(R.layout.fragment_alarm_list) {
 
     override fun onDestroy() {
         _nativeAdAdapter.setEmpty()
-        _adsManager.release()
         super.onDestroy()
     }
 

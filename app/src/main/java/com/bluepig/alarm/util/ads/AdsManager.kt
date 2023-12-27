@@ -1,16 +1,18 @@
 package com.bluepig.alarm.util.ads
 
 import android.app.Activity
+import android.content.Context
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import com.bluepig.alarm.R
 import com.bluepig.alarm.databinding.MainBottomNativeLayoutBinding
+import com.bluepig.alarm.domain.preferences.AppPreferences
+import com.bluepig.alarm.domain.util.CalendarHelper
 import com.bluepig.alarm.util.ext.inflater
+import com.bluepig.alarm.util.logger.BpLogger
 import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdLoader
@@ -23,47 +25,69 @@ import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.google.android.gms.ads.nativead.NativeAd
 import com.google.android.gms.ads.nativead.NativeAdOptions
+import dagger.hilt.android.qualifiers.ApplicationContext
+import javax.inject.Inject
 
-class AdsManager {
-    private var _activity: AppCompatActivity? = null
-    private var _fragment: Fragment? = null
-
-    constructor(activity: AppCompatActivity) {
-        _activity = activity
-    }
-
-    constructor(fragment: Fragment) {
-        _fragment = fragment
-    }
-
-    private val _context
-        get() = _activity ?: _fragment?.context
-
-    private val _lifecycle
-        get() = _activity?.lifecycle
-            ?: _fragment?.lifecycle
+class AdsManager @Inject constructor(
+    @ApplicationContext
+    private val _context: Context,
+    private val _appPref: AppPreferences,
+) {
+    private var _lifecycle: Lifecycle? = null
+    private var _lifeCycleObserver: LifecycleObserver? = null
 
     private val _adRequest
         get() = AdRequest.Builder().build()
 
-    private val _lifeCycleObserverListener = mutableListOf<LifecycleObserver>()
-
     private var _interstitialAd: InterstitialAd? = null
 
+    private fun setLifeCycle(lifecycle: Lifecycle) {
+        _lifeCycleObserver?.let { observer ->
+            _lifecycle?.removeObserver(observer)
+        }
+        _lifeCycleObserver = null
+        _lifecycle = lifecycle
+    }
+
+    private val _isBottomNativeEnabled
+        get() = _appPref.adsSwitch && _appPref.adsMainBottomNativeSwitch
+
+    private val _isListNativeEnabled
+        get() = _appPref.adsSwitch && _appPref.adsAlarmListNativeSwitch
+
+    private val _isBannerEnabled
+        get() = _appPref.adsSwitch && _appPref.adsAlarmBannerSwitch
+
+    private val _isInterstitialEnabled
+        get() = _appPref.adsSwitch && _appPref.adsInterstitialMusicClickSwitch
+
+    private fun checkInterstitialEnabled(): Boolean {
+        val enabled = _isInterstitialEnabled
+        val savedTime = _appPref.lastInterstitialShowTime
+        val now = CalendarHelper.now.timeInMillis
+        val isOverTime = now - savedTime > 60 * 60 * 1000
+
+        return enabled && isOverTime
+    }
+
     fun loadBottomNativeAd(
+        lifecycle: Lifecycle,
         container: ViewGroup
     ) {
-        kotlin.runCatching {
-            val context = _context ?: return@runCatching
+        if (_isBottomNativeEnabled.not()) return
 
+        kotlin.runCatching {
+            setLifeCycle(lifecycle)
             val adLoader =
                 AdLoader.Builder(
-                    context,
-                    context.getString(R.string.ads_main_bottom_native)
+                    _context,
+                    _context.getString(R.string.ads_main_bottom_native)
                 ).forNativeAd { ad: NativeAd ->
-                    val lifecycleObserver = DestroyListener(ad)
-                    _lifecycle?.addObserver(lifecycleObserver)
-                    _lifeCycleObserverListener.add(lifecycleObserver)
+                    _lifecycle?.apply {
+                        val lifecycleObserver = DestroyListener(ad)
+                        addObserver(lifecycleObserver)
+                        _lifeCycleObserver = lifecycleObserver
+                    }
                     applyBottomNativeAd(container, ad)
                 }.withAdListener(object : AdListener() {
                     override fun onAdFailedToLoad(adError: LoadAdError) {
@@ -76,23 +100,29 @@ class AdsManager {
                         .build()
                 ).build()
             adLoader.loadAd(_adRequest)
+        }.onFailure {
+            BpLogger.logException(it)
         }
     }
 
     fun loadAlarmListNativeAd(
+        lifecycle: Lifecycle,
         loadedListener: (NativeAd) -> Unit
     ) {
-        kotlin.runCatching {
-            val context = _context ?: return@runCatching
+        if (_isListNativeEnabled.not()) return
 
+        kotlin.runCatching {
+            setLifeCycle(lifecycle)
             val adLoader =
                 AdLoader.Builder(
-                    context,
-                    context.getString(R.string.ads_alarm_list_native)
+                    _context,
+                    _context.getString(R.string.ads_alarm_list_native)
                 ).forNativeAd { ad: NativeAd ->
-                    val lifecycleObserver = DestroyListener(ad)
-                    _lifecycle?.addObserver(lifecycleObserver)
-                    _lifeCycleObserverListener.add(lifecycleObserver)
+                    _lifecycle?.apply {
+                        val lifecycleObserver = DestroyListener(ad)
+                        addObserver(lifecycleObserver)
+                        _lifeCycleObserver = lifecycleObserver
+                    }
                     loadedListener.invoke(ad)
                 }.withAdListener(object : AdListener() {
                     override fun onAdFailedToLoad(adError: LoadAdError) {
@@ -105,35 +135,40 @@ class AdsManager {
                         .build()
                 ).build()
             adLoader.loadAd(_adRequest)
+        }.onFailure {
+            BpLogger.logException(it)
         }
     }
 
     fun loadBanner(container: ViewGroup) {
+        if (_isBannerEnabled.not()) return
+
         kotlin.runCatching {
-            val context = _context ?: return@runCatching
-            val adView = AdView(context).apply {
+            val adView = AdView(_context).apply {
                 setAdSize(AdSize.BANNER)
                 adUnitId = context.getString(R.string.ads_alarm_banner)
             }
             adView.loadAd(_adRequest)
             container.removeAllViews()
             container.addView(adView)
+        }.onFailure {
+            BpLogger.logException(it)
         }
     }
 
-    fun loadInterstitial() {
-        kotlin.runCatching {
-            val context = _context ?: return@runCatching
+    fun loadInterstitial(lifecycle: Lifecycle) {
+        if (!checkInterstitialEnabled()) return
 
+        kotlin.runCatching {
             InterstitialAd.load(
-                context,
-                context.getString(R.string.ads_media_select_interstitial),
+                _context,
+                _context.getString(R.string.ads_media_select_interstitial),
                 _adRequest,
                 object : InterstitialAdLoadCallback() {
                     override fun onAdFailedToLoad(p0: LoadAdError) {
                         super.onAdFailedToLoad(p0)
-                        if (_lifecycle?.currentState == Lifecycle.State.CREATED) {
-                            loadInterstitial()
+                        if (lifecycle.currentState == Lifecycle.State.CREATED) {
+                            loadInterstitial(lifecycle)
                         }
                     }
 
@@ -143,6 +178,8 @@ class AdsManager {
                     }
                 }
             )
+        }.onFailure {
+            BpLogger.logException(it)
         }
     }
 
@@ -152,6 +189,11 @@ class AdsManager {
         onClose: () -> Unit,
         onLoadFail: () -> Unit
     ) {
+        if (!checkInterstitialEnabled()) {
+            onLoadFail.invoke()
+            return
+        }
+
         _interstitialAd?.apply {
             fullScreenContentCallback = object : FullScreenContentCallback() {
                 override fun onAdFailedToShowFullScreenContent(p0: AdError) {
@@ -163,6 +205,7 @@ class AdsManager {
                 override fun onAdDismissedFullScreenContent() {
                     super.onAdDismissedFullScreenContent()
                     _interstitialAd = null
+                    _appPref.lastInterstitialShowTime = CalendarHelper.now.timeInMillis
                     onClose.invoke()
                 }
 
@@ -173,12 +216,6 @@ class AdsManager {
             }
             show(activity)
         } ?: onLoadFail.invoke()
-    }
-
-    fun release() {
-        _lifeCycleObserverListener.forEach {
-            _lifecycle?.removeObserver(it)
-        }
     }
 
     private fun applyBottomNativeAd(container: ViewGroup, ad: NativeAd) {

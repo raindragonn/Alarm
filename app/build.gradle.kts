@@ -57,7 +57,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            resValue("string", "app_name", AppConfiguration.appName)
+            resValue("string", "app_name", "@string/app_name_default")
         }
         debug {
             signingConfig = signingConfigs["debug"]
@@ -65,7 +65,7 @@ android {
             isDebuggable = true
             applicationIdSuffix = ".debug"
 
-            resValue("string", "app_name", AppConfiguration.appName + AppConfiguration.debugSuffix)
+            resValue("string", "app_name", "@string/app_name_dev")
             resValue("string", "ads_app_id", debugJson["ADS_APP_ID"]!!)
             resValue("string", "ads_main_bottom_native", debugJson["ADS_MAIN_BOTTOM_NATIVE"]!!)
             resValue("string", "ads_alarm_list_native", debugJson["ADS_ALARM_LIST_NATIVE"]!!)
@@ -126,6 +126,7 @@ dependencies {
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics.ktx)
     implementation(libs.firebase.crashlytics.ktx)
+    implementation(libs.firebase.config.ktx)
 
     implementation(libs.coil)
     implementation(libs.timber)

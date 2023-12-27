@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name_default">미디어 알람</string>
+    <string name="app_name_dev">미디어 알람_DEBUG</string>
+</resources>
