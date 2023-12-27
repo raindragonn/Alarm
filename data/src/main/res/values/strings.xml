@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name_default">Media Alarm</string>
+    <string name="app_name_dev">Media Alarm_DEBUG</string>
+</resources>

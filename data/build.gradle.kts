@@ -37,10 +37,10 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            resValue("string", "app_name", AppConfiguration.appName)
+            resValue("string", "app_name", "@string/app_name_default")
         }
         debug {
-            resValue("string", "app_name", AppConfiguration.appName + AppConfiguration.debugSuffix)
+            resValue("string", "app_name", "@string/app_name_dev")
         }
     }
     compileOptions {

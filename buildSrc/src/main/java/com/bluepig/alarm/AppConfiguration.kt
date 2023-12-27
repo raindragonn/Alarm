@@ -1,8 +1,6 @@
 package com.bluepig.alarm
 
 object AppConfiguration {
-    const val appName = "Alarm"
-    const val debugSuffix = "_debug"
     const val compileSdk = 34
     const val targetSdk = 34
     const val minSdk = 24
