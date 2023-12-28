@@ -15,10 +15,6 @@ class NativeAdsAdapter(
         submitList(listOf(null))
     }
 
-    fun setEmpty() {
-        submitList(listOf(null))
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NativeAdsViewHolder {
         val binding = ItemAlarmNativeLayoutBinding.inflate(parent.inflater, parent, false)
         return NativeAdsViewHolder.create(binding)
