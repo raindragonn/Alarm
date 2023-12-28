@@ -3,6 +3,7 @@ package com.bluepig.alarm.util.ads
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
+import com.bluepig.alarm.R
 import com.bluepig.alarm.databinding.ItemAlarmNativeLayoutBinding
 import com.google.android.gms.ads.nativead.NativeAd
 
@@ -12,18 +13,23 @@ class NativeAdsViewHolder(
 
     fun bindEmpty(onclickButton: () -> Unit) {
         _binding.apply {
-            adBadge.isVisible = false
-            adIcon.isVisible = false
-            adHeadline.text = "리뷰 쓰러 가기"
-            adBody.text = "앱이 마음에 드신다면 칭찬을, 불편한 점이나 건의사항이 있다면 남겨주세요"
-            adStoreButton.isVisible = true
-            adStoreButton.text = "스토어"
-            adStoreButton.setOnClickListener { onclickButton.invoke() }
+            nativeAdView.destroy()
+            nativeAdView.isVisible = false
+
+            val context = _binding.root.context
+            clReview.isVisible = true
+            tvHeadline.text = context.getString(R.string.review_request_title)
+            tvBody.text = context.getString(R.string.review_request_body)
+            btnStore.text = context.getString(R.string.store)
+            btnStore.setOnClickListener { onclickButton.invoke() }
         }
     }
 
     fun bind(nativeAd: NativeAd) {
         _binding.apply {
+            clReview.isVisible = false
+            nativeAdView.isVisible = true
+
             val adview = nativeAdView
             adBadge.isVisible = true
 

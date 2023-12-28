@@ -31,6 +31,7 @@
             android:configChanges="orientation|screenSize|screenLayout"
             android:excludeFromRecents="true"
             android:exported="false"
+            android:hardwareAccelerated="true"
             android:launchMode="singleTask"
             android:noHistory="true"
             android:showOnLockScreen="true" />

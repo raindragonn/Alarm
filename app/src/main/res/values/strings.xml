@@ -31,6 +31,7 @@
     <string name="ringtone">ringtone</string>
     <string name="youtube">youtube</string>
     <string name="title">title</string>
+    <string name="store">store</string>
 
     <string name="volume">volume</string>
     <string name="volume_auto_increase_guide">Gradually increase the volume</string>
@@ -73,4 +74,6 @@
     <string name="toast_error_network">Please check your internet connection.</string>
     <string name="toast_error_not_select_alarm_media">Please select an alarm sound.</string>
 
+    <string name="review_request_title">Go to write a review</string>
+    <string name="review_request_body">If you like the app please leave a praise and if you have any inconveniences or suggestions please leave a comment.</string>
 </resources>
