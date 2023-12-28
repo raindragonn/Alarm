@@ -186,7 +186,7 @@ class AlarmActivity : AppCompatActivity() {
     @Suppress("DEPRECATION")
     private fun startVibration(alarm: Alarm) = lifecycleScope.launch {
         if (alarm.memoTtsEnabled) return@launch
-        if (alarm.hasVibration.not()) return@launch
+        if (!alarm.hasVibration) return@launch
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             vibrator.vibrate(VibrationEffect.createWaveform(VIBRATION_PATTERN, 0))
         } else {
@@ -195,7 +195,7 @@ class AlarmActivity : AppCompatActivity() {
     }
 
     private fun setTts(alarm: Alarm) {
-        if (alarm.memoTtsEnabled.not()) return
+        if (!alarm.memoTtsEnabled) return
         // start Tts
         ttsPlayerManager.play(alarm.memo) {
             val ttsOverAlarm = alarm.copy(memoTtsEnabled = false)

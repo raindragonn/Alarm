@@ -74,7 +74,7 @@ class AdsManager @Inject constructor(
         lifecycle: Lifecycle,
         container: ViewGroup
     ) {
-        if (_isBottomNativeEnabled.not()) return
+        if (!_isBottomNativeEnabled) return
 
         kotlin.runCatching {
             setLifeCycle(lifecycle)
@@ -109,7 +109,7 @@ class AdsManager @Inject constructor(
         lifecycle: Lifecycle,
         loadedListener: (NativeAd) -> Unit
     ) {
-        if (_isListNativeEnabled.not()) return
+        if (!_isListNativeEnabled) return
 
         kotlin.runCatching {
             setLifeCycle(lifecycle)
@@ -141,7 +141,7 @@ class AdsManager @Inject constructor(
     }
 
     fun loadBanner(container: ViewGroup) {
-        if (_isBannerEnabled.not()) return
+        if (!_isBannerEnabled) return
 
         kotlin.runCatching {
             val adView = AdView(_context).apply {

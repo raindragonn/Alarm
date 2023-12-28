@@ -26,7 +26,7 @@ fun Set<Week>.getGuideText(context: Context): String {
         this == weekEntries.filter { it.isWeekend }
             .toSet() -> context.getString(R.string.week_weekend_guide)
 
-        this == weekEntries.filter { it.isWeekend.not() }
+        this == weekEntries.filter { !it.isWeekend }
             .toSet() -> context.getString(R.string.week_weekday_guide)
 
         this == weekEntries.toSet() -> context.getString(R.string.week_everyday_guide)
@@ -37,7 +37,7 @@ fun Set<Week>.getGuideText(context: Context): String {
 
 @ColorInt
 fun Set<Week>.tintColor(context: Context, isActive: Boolean): Int {
-    if (isActive.not()) {
+    if (!isActive) {
         return context.getColor(R.color.disable)
     }
     return if (this.all { it.isWeekend } && this.isNotEmpty()) {

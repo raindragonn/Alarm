@@ -26,7 +26,7 @@ data class Alarm(
     }
 
     fun getActiveCheckedAlarm(): Alarm {
-        if (isActive.not()) return this
+        if (!isActive) return this
         val now = CalendarHelper.now
         val hasExpired = now.after(CalendarHelper.fromTimeInMillis(timeInMillis))
         val hasActive = repeatWeek.isNotEmpty() || !hasExpired
