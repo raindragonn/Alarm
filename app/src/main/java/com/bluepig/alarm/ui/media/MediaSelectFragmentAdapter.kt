@@ -9,13 +9,21 @@ import com.bluepig.alarm.ui.media.tube.TubeSearchFragment
 
 class MediaSelectFragmentAdapter(
     parent: Fragment,
+    useYoutube: Boolean,
 ) : FragmentStateAdapter(parent) {
 
-    private val _fragments = mapOf(
-        parent.getString(R.string.youtube) to TubeSearchFragment(),
-        parent.getString(R.string.song) to MusicSearchFragment(),
-        parent.getString(R.string.ringtone) to RingtoneFragment(),
-    )
+    private val _fragments = if (useYoutube) {
+        mapOf(
+            parent.getString(R.string.youtube) to TubeSearchFragment(),
+            parent.getString(R.string.song) to MusicSearchFragment(),
+            parent.getString(R.string.ringtone) to RingtoneFragment(),
+        )
+    } else {
+        mapOf(
+            parent.getString(R.string.song) to MusicSearchFragment(),
+            parent.getString(R.string.ringtone) to RingtoneFragment(),
+        )
+    }
 
     override fun getItemCount(): Int =
         _fragments.size

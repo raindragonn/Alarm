@@ -1,5 +1,6 @@
 package com.bluepig.alarm.manager.config
 
+import com.bluepig.alarm.BuildConfig
 import com.bluepig.alarm.R
 import com.bluepig.alarm.domain.preferences.AppPreferences
 import com.google.firebase.ktx.Firebase
@@ -15,7 +16,7 @@ class ConfigManagerImpl @Inject constructor(
             .apply {
                 setConfigSettingsAsync(
                     remoteConfigSettings {
-                        minimumFetchIntervalInSeconds = 3600
+                        minimumFetchIntervalInSeconds = if (BuildConfig.DEBUG) 0 else 3600
                     }
                 )
                 setDefaultsAsync(R.xml.remote_config_defaults)

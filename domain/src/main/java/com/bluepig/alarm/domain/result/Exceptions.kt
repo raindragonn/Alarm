@@ -2,6 +2,8 @@ package com.bluepig.alarm.domain.result
 
 object LoadingException : Exception("Could Not getting data for Loading State")
 
+object InitialException : Exception("Could Not getting data for Initial State")
+
 object NotFoundActiveAlarmException : Exception("Not Found Active Alarm")
 
 object NotFoundAlarmException : Exception("Not Found Alarm")

@@ -68,6 +68,7 @@
 
     <string name="hint_music_search">Please search by song or singer name.</string>
     <string name="hint_tube_search">Please search by video title or URL.</string>
+    <string name="hint_tube_url_search">Please search by URL.</string>
 
     <string name="toast_error_basic">There\'s a problem! please try again.</string>
     <string name="toast_error_search_query_empty">Please enter your search term.</string>
@@ -76,4 +77,5 @@
 
     <string name="review_request_title">Go to write a review</string>
     <string name="review_request_body">If you like the app please leave a praise and if you have any inconveniences or suggestions please leave a comment.</string>
+    <string name="empty_of_search_result">No results.</string>
 </resources>

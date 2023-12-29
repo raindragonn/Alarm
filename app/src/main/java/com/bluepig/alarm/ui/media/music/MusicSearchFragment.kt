@@ -62,6 +62,8 @@ class MusicSearchFragment : Fragment(R.layout.fragment_music_search) {
         result.onSuccess { list ->
             setLoadingVisible(false)
             _adapter.submitList(list)
+            _binding.tvSearchEmpty.isVisible = list.isEmpty()
+            _binding.rvSearch.isVisible = list.isNotEmpty()
         }.onFailure {
             if (it.isLoading) {
                 setLoadingVisible(true)

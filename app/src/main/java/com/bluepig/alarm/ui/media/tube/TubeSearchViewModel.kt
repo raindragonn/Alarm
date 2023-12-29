@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bluepig.alarm.domain.entity.alarm.media.TubeMedia
 import com.bluepig.alarm.domain.preferences.AppPreferences
+import com.bluepig.alarm.domain.result.resultInit
 import com.bluepig.alarm.domain.result.resultLoading
 import com.bluepig.alarm.domain.usecase.GetTubeMediaList
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,13 +20,13 @@ class TubeSearchViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _tubeList: MutableStateFlow<Result<List<TubeMedia>>> =
-        MutableStateFlow(Result.success(emptyList()))
+        MutableStateFlow(resultInit())
     val tubeList = _tubeList.asStateFlow()
 
-    fun search(query: String) {
+    fun search(query: String, onlyLinkSearch: Boolean) {
         viewModelScope.launch {
             _tubeList.emit(resultLoading())
-            _tubeList.emit(_getTubeMediaList.invoke(query))
+            _tubeList.emit(_getTubeMediaList.invoke(query, onlyLinkSearch))
         }
     }
 
