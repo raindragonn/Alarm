@@ -13,6 +13,7 @@ import androidx.media3.common.util.UnstableApi
 import androidx.media3.common.util.Util
 import androidx.media3.datasource.HttpDataSource.HttpDataSourceException
 import com.bluepig.alarm.R
+import com.bluepig.alarm.domain.result.InitialException
 import com.bluepig.alarm.domain.result.NotSelectAlarmMedia
 import com.bluepig.alarm.domain.result.SearchQueryEmptyException
 import com.bluepig.alarm.util.logger.BpLogger
@@ -39,13 +40,14 @@ val Context.userAgent
     get() = Util.getUserAgent(this, getString(R.string.app_name))
 
 fun Context.showErrorToast(throwable: Throwable?, moreAction: (() -> Unit)? = null) {
-    throwable?.let(BpLogger::logException)
     val errorTextId = when (throwable) {
         is SearchQueryEmptyException -> R.string.toast_error_search_query_empty
         is HttpDataSourceException, is SocketTimeoutException, is UnknownHostException -> R.string.toast_error_network
         is NotSelectAlarmMedia -> R.string.toast_error_not_select_alarm_media
+        is InitialException -> return
         else -> R.string.toast_error_basic
     }
+    throwable?.let(BpLogger::logException)
     Toast.makeText(this, getString(errorTextId), Toast.LENGTH_SHORT).show()
     moreAction?.invoke()
 }

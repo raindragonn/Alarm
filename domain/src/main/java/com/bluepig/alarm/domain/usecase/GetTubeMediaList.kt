@@ -16,13 +16,14 @@ class GetTubeMediaList @Inject constructor(
     private var _lastNextPageToken: String? = null
     private var _cachedList = mutableListOf<TubeMedia>()
 
-    suspend operator fun invoke(query: String) = withContext(_dispatcher) {
+    suspend operator fun invoke(query: String, onlyLinkSearch: Boolean) = withContext(_dispatcher) {
         kotlin.runCatching {
             val tubeForId = _repository.checkTubeMedia(query)
 
-            if (tubeForId != null) {
+            if (tubeForId != null || onlyLinkSearch) {
                 clearCache()
-                return@runCatching listOf(tubeForId)
+                return@runCatching tubeForId?.let { listOf<TubeMedia>(it) }
+                    ?: emptyList()
             } else {
                 val pair =
                     if (_lastQuery == query && _lastNextPageToken != null) {

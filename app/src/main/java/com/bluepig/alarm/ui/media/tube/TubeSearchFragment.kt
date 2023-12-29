@@ -13,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import com.bluepig.alarm.R
 import com.bluepig.alarm.databinding.FragmentTubeSearchBinding
 import com.bluepig.alarm.domain.entity.alarm.media.TubeMedia
+import com.bluepig.alarm.domain.preferences.AppPreferences
 import com.bluepig.alarm.domain.result.isLoading
 import com.bluepig.alarm.ui.media.select.MediaSelectBottomSheetDialogFragment
 import com.bluepig.alarm.util.ext.setOnEnterListener
@@ -39,6 +40,12 @@ class TubeSearchFragment : Fragment(R.layout.fragment_tube_search) {
     @Inject
     lateinit var credential: GoogleAccountCredential
 
+    @Inject
+    lateinit var appPreferences: AppPreferences
+
+    private val _onlyLinkSearch
+        get() = appPreferences.showOnlyYoutubeLink
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -52,16 +59,17 @@ class TubeSearchFragment : Fragment(R.layout.fragment_tube_search) {
 
     private fun initViews() = with(_binding) {
         rvSearch.adapter = _adapter
-
-
         rvSearch.setOnLoadMore {
-            _vm.search(etSearch.text.toString())
+            _vm.search(etSearch.text.toString(), _onlyLinkSearch)
         }
+
+        etSearch.hint =
+            if (_onlyLinkSearch) getString(R.string.hint_tube_url_search) else getString(R.string.hint_tube_search)
 
         etSearch.setOnEnterListener {
             if (checkOAuthLogin()) {
                 BpLogger.logMediaSearch(TubeMedia::class.java.simpleName, it)
-                _vm.search(it)
+                _vm.search(it, _onlyLinkSearch)
             }
         }
 
@@ -88,7 +96,7 @@ class TubeSearchFragment : Fragment(R.layout.fragment_tube_search) {
         val accountName = result.data?.getStringExtra(AccountManager.KEY_ACCOUNT_NAME) ?: return
         credential.selectedAccountName = accountName
         _vm.setSavedSelectName(accountName)
-        _vm.search(_binding.etSearch.text.toString())
+        _vm.search(_binding.etSearch.text.toString(), _onlyLinkSearch)
     }
 
     private fun searchListHandle(result: Result<List<TubeMedia>>) {
