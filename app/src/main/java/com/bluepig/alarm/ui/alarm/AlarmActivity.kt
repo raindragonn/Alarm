@@ -68,7 +68,7 @@ class AlarmActivity : AppCompatActivity() {
         _vm.setDefaultVolume(audioManager.getStreamVolume(AudioManager.STREAM_MUSIC))
         initPlayerManager()
         observing()
-        adsManager.loadBanner(_binding.adFrame)
+        adsManager.loadBanner(lifecycle, _binding.adFrame)
     }
 
     override fun onResume() {
