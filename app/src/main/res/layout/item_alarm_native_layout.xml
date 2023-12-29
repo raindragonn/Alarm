@@ -9,22 +9,89 @@
     android:background="@color/surface"
     app:cardCornerRadius="@dimen/base_spacing_1">
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_review"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="120dp"
+        android:paddingHorizontal="@dimen/base_spacing_2"
+        android:paddingVertical="@dimen/base_spacing_2"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/iv_icon"
+            android:layout_width="@dimen/base_spacing_8"
+            android:layout_height="@dimen/base_spacing_8"
+            android:src="@mipmap/ic_launcher"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_headline"
+            style="@style/TextAppearance.Alarm.Body6"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/base_spacing_1"
+            android:layout_marginEnd="@dimen/base_spacing_1"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:minLines="2"
+            android:text="@string/review_request_title"
+            app:layout_constraintBottom_toBottomOf="@id/iv_icon"
+            app:layout_constraintEnd_toStartOf="@id/btn_store"
+            app:layout_constraintStart_toEndOf="@+id/iv_icon"
+            app:layout_constraintTop_toTopOf="@+id/iv_icon"
+            app:layout_goneMarginStart="0dp"
+            app:layout_goneMarginTop="@dimen/base_spacing_1" />
+
+        <TextView
+            android:id="@+id/tv_body"
+            style="@style/TextAppearance.Alarm.Body10"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/base_spacing_1"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:minLines="2"
+            android:text="@string/review_request_body"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/iv_icon"
+            app:layout_goneMarginStart="0dp" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_store"
+            style="@style/Alarm.Base.TextButton.Primary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="@dimen/base_spacing_2"
+            android:text="@string/store"
+            app:layout_constraintBottom_toBottomOf="@id/iv_icon"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/iv_icon" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <com.google.android.gms.ads.nativead.NativeAdView
         android:id="@+id/native_ad_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        tools:visibility="visible">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="120dp"
+            android:layout_height="wrap_content"
+            android:minHeight="120dp"
             android:paddingHorizontal="@dimen/base_spacing_2"
             android:paddingVertical="@dimen/base_spacing_2">
 
+
             <ImageView
-                android:id="@+id/ad_badge"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_ad_badge"
+                android:id="@+id/ad_icon"
+                android:layout_width="@dimen/base_spacing_8"
+                android:layout_height="@dimen/base_spacing_8"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -36,7 +103,9 @@
                 android:layout_marginStart="@dimen/base_spacing_1"
                 android:layout_marginEnd="@dimen/base_spacing_1"
                 android:ellipsize="end"
-                android:maxLines="1"
+                android:maxLines="2"
+                android:minLines="2"
+                app:layout_constraintBottom_toBottomOf="@id/ad_icon"
                 app:layout_constraintEnd_toStartOf="@id/ad_store_button"
                 app:layout_constraintStart_toEndOf="@+id/ad_icon"
                 app:layout_constraintTop_toTopOf="@+id/ad_icon"
@@ -44,29 +113,19 @@
                 app:layout_goneMarginTop="@dimen/base_spacing_1"
                 tools:text="@tools:sample/lorem/random" />
 
-            <ImageView
-                android:id="@+id/ad_icon"
-                android:layout_width="@dimen/base_spacing_8"
-                android:layout_height="@dimen/base_spacing_8"
-                android:layout_marginTop="@dimen/base_spacing_1"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ad_badge" />
-
             <TextView
                 android:id="@+id/ad_body"
                 style="@style/TextAppearance.Alarm.Body10"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/base_spacing_1"
                 android:layout_marginTop="@dimen/base_spacing_1"
-                android:layout_marginEnd="@dimen/base_spacing_1"
                 android:ellipsize="end"
                 android:maxLines="2"
                 android:minLines="2"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/ad_store_button"
-                app:layout_constraintStart_toEndOf="@id/ad_icon"
-                app:layout_constraintTop_toBottomOf="@id/ad_headline"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/ad_icon"
                 app:layout_goneMarginStart="0dp"
                 tools:text="@tools:sample/lorem/random" />
 
@@ -77,12 +136,22 @@
                 android:layout_height="wrap_content"
                 android:paddingHorizontal="@dimen/base_spacing_2"
                 android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toBottomOf="@id/ad_icon"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintTop_toTopOf="@id/ad_icon"
                 tools:text="스토어"
                 tools:visibility="visible" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.gms.ads.nativead.NativeAdView>
+
+    <ImageView
+        android:id="@+id/ad_badge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/base_spacing_0.5"
+        android:layout_marginTop="@dimen/base_spacing_0.5"
+        android:src="@drawable/ic_ad_badge"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.cardview.widget.CardView>

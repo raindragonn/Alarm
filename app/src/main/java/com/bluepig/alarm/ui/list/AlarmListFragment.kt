@@ -30,7 +30,7 @@ class AlarmListFragment : Fragment(R.layout.fragment_alarm_list) {
     private val _vm: AlarmListViewModel by viewModels()
     private val _nativeAdAdapter: NativeAdsAdapter by lazy {
         NativeAdsAdapter {
-            // TODO: store 열기
+            // TODO: click to open store
         }
     }
     private val _alarmAdapter: AlarmAdapter by lazy {
@@ -74,9 +74,9 @@ class AlarmListFragment : Fragment(R.layout.fragment_alarm_list) {
         }
     }
 
-    override fun onDestroy() {
-        _nativeAdAdapter.setEmpty()
-        super.onDestroy()
+    override fun onDestroyView() {
+        _binding.rvAlarm.adapter = null
+        super.onDestroyView()
     }
 
     private fun observing() {

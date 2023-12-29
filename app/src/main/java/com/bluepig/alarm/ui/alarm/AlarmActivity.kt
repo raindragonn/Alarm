@@ -68,7 +68,7 @@ class AlarmActivity : AppCompatActivity() {
         _vm.setDefaultVolume(audioManager.getStreamVolume(AudioManager.STREAM_MUSIC))
         initPlayerManager()
         observing()
-        adsManager.loadBanner(_binding.adFrame)
+        adsManager.loadBanner(lifecycle, _binding.adFrame)
     }
 
     override fun onResume() {
@@ -118,6 +118,7 @@ class AlarmActivity : AppCompatActivity() {
     }
 
     private fun release() {
+        _binding.yp.release()
         playerManager.release()
         ttsPlayerManager.release()
         audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, _vm.getDefaultVolume(), 0)
@@ -186,7 +187,7 @@ class AlarmActivity : AppCompatActivity() {
     @Suppress("DEPRECATION")
     private fun startVibration(alarm: Alarm) = lifecycleScope.launch {
         if (alarm.memoTtsEnabled) return@launch
-        if (alarm.hasVibration.not()) return@launch
+        if (!alarm.hasVibration) return@launch
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             vibrator.vibrate(VibrationEffect.createWaveform(VIBRATION_PATTERN, 0))
         } else {
@@ -195,7 +196,7 @@ class AlarmActivity : AppCompatActivity() {
     }
 
     private fun setTts(alarm: Alarm) {
-        if (alarm.memoTtsEnabled.not()) return
+        if (!alarm.memoTtsEnabled) return
         // start Tts
         ttsPlayerManager.play(alarm.memo) {
             val ttsOverAlarm = alarm.copy(memoTtsEnabled = false)

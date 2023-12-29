@@ -31,6 +31,7 @@
     <string name="ringtone">벨소리</string>
     <string name="youtube">유튜브</string>
     <string name="title">제목</string>
+    <string name="store">스토어</string>
 
     <string name="volume">볼륨</string>
     <string name="volume_auto_increase_guide">볼륨 서서히 높히기</string>
@@ -72,5 +73,8 @@
     <string name="toast_error_search_query_empty">검색어를 입력해주세요.</string>
     <string name="toast_error_network">인터넷 연결을 확인해주세요.</string>
     <string name="toast_error_not_select_alarm_media">알람음을 선택해주세요.</string>
+
+    <string name="review_request_title">리뷰 쓰러 가기</string>
+    <string name="review_request_body">앱이 마음에 드신다면 칭찬을, 불편한 점이나 건의사항이 있다면 남겨주세요</string>
 
 </resources>

@@ -89,9 +89,7 @@ class MediaSelectBottomSheetDialogFragment :
                 requireActivity(),
                 onShowed = {
                     setLoadingState(true)
-                }, onClose = {
-                    openMedia()
-                }, onLoadFail = {
+                }, onCloseOrFailed = {
                     openMedia()
                 })
         }
@@ -138,12 +136,12 @@ class MediaSelectBottomSheetDialogFragment :
     private fun setLoadingState(isLoading: Boolean) {
         _binding.apply {
             pbLoading.isVisible = isLoading
-            tvTitle.isVisible = isLoading.not()
-            (playerView as View).isVisible = isLoading.not()
-            ivThumbnail.isVisible = isLoading.not()
-            btnPlay.isVisible = isLoading.not()
-            btnSelect.isVisible = isLoading.not()
-            yp.isVisible = isLoading.not()
+            tvTitle.isVisible = !isLoading
+            (playerView as View).isVisible = !isLoading
+            ivThumbnail.isVisible = !isLoading
+            btnPlay.isVisible = !isLoading
+            btnSelect.isVisible = !isLoading
+            yp.isVisible = !isLoading
             if (isLoading) {
                 playerManager.pause()
                 _youtubePlayer?.pause()
@@ -156,7 +154,7 @@ class MediaSelectBottomSheetDialogFragment :
             setLoadingState(false)
             ivThumbnail.isVisible = alarmMedia.isMusic
             yp.isVisible = alarmMedia.isTube
-            (playerView as View).isVisible = alarmMedia.isTube.not()
+            (playerView as View).isVisible = !alarmMedia.isTube
 
             tvTitle.text = alarmMedia.title
 
