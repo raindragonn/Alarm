@@ -118,6 +118,7 @@ class AlarmActivity : AppCompatActivity() {
     }
 
     private fun release() {
+        _binding.yp.release()
         playerManager.release()
         ttsPlayerManager.release()
         audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, _vm.getDefaultVolume(), 0)
