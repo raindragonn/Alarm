@@ -207,36 +207,36 @@ class AdsManager @Inject constructor(
     fun showInterstitial(
         activity: Activity,
         onShowed: () -> Unit,
-        onClose: () -> Unit,
-        onLoadFail: () -> Unit
+        onCloseOrFailed: () -> Unit
     ) {
         if (!checkInterstitialEnabled()) {
-            onLoadFail.invoke()
+            onCloseOrFailed.invoke()
             return
         }
+        kotlin.runCatching {
+            _interstitialAd?.apply {
+                fullScreenContentCallback = object : FullScreenContentCallback() {
+                    override fun onAdFailedToShowFullScreenContent(p0: AdError) {
+                        super.onAdFailedToShowFullScreenContent(p0)
+                        _interstitialAd = null
+                        onCloseOrFailed.invoke()
+                        fullScreenContentCallback = null
+                    }
 
-        _interstitialAd?.apply {
-            fullScreenContentCallback = object : FullScreenContentCallback() {
-                override fun onAdFailedToShowFullScreenContent(p0: AdError) {
-                    super.onAdFailedToShowFullScreenContent(p0)
-                    _interstitialAd = null
-                    onLoadFail.invoke()
+                    override fun onAdDismissedFullScreenContent() {
+                        super.onAdDismissedFullScreenContent()
+                        _interstitialAd = null
+                        _appPref.lastInterstitialShowTime = CalendarHelper.now.timeInMillis
+                        onCloseOrFailed.invoke()
+                        fullScreenContentCallback = null
+                    }
                 }
-
-                override fun onAdDismissedFullScreenContent() {
-                    super.onAdDismissedFullScreenContent()
-                    _interstitialAd = null
-                    _appPref.lastInterstitialShowTime = CalendarHelper.now.timeInMillis
-                    onClose.invoke()
-                }
-
-                override fun onAdShowedFullScreenContent() {
-                    super.onAdShowedFullScreenContent()
-                    onShowed.invoke()
-                }
-            }
-            show(activity)
-        } ?: onLoadFail.invoke()
+                onShowed.invoke()
+                show(activity)
+            } ?: onCloseOrFailed.invoke()
+        }.onFailure {
+            onCloseOrFailed.invoke()
+        }
     }
 
     private fun applyBottomNativeAd(container: ViewGroup, ad: NativeAd) {

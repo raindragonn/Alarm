@@ -89,9 +89,7 @@ class MediaSelectBottomSheetDialogFragment :
                 requireActivity(),
                 onShowed = {
                     setLoadingState(true)
-                }, onClose = {
-                    openMedia()
-                }, onLoadFail = {
+                }, onCloseOrFailed = {
                     openMedia()
                 })
         }
