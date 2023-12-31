@@ -1,5 +1,7 @@
 package com.bluepig.alarm.ui.list
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
@@ -29,9 +31,7 @@ class AlarmListFragment : Fragment(R.layout.fragment_alarm_list) {
     private val _binding: FragmentAlarmListBinding by viewBinding(FragmentAlarmListBinding::bind)
     private val _vm: AlarmListViewModel by viewModels()
     private val _nativeAdAdapter: NativeAdsAdapter by lazy {
-        NativeAdsAdapter {
-            // TODO: click to open store
-        }
+        NativeAdsAdapter(::openStore)
     }
     private val _alarmAdapter: AlarmAdapter by lazy {
         AlarmAdapter(
@@ -118,6 +118,17 @@ class AlarmListFragment : Fragment(R.layout.fragment_alarm_list) {
         val action =
             AlarmListFragmentDirections.actionAlarmListFragmentToAlarmEditFragment(alarm)
         findNavController().navigate(action)
+    }
+
+    private fun openStore() {
+        val packageName = requireContext().packageName
+        val intent = Intent(Intent.ACTION_VIEW).apply {
+            data = Uri.parse(
+                "https://play.google.com/store/apps/details?id=$packageName"
+            )
+            setPackage("com.android.vending")
+        }
+        startActivity(intent)
     }
 
     private fun onItemSwitchClick(alarm: Alarm) {
