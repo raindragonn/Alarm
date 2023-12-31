@@ -56,14 +56,14 @@ sealed interface Event {
             vibrationActive: Boolean,
             ttsActive: Boolean,
         ) = bundleOf(
-            IS_CREATED to isCreated,
-            TIME to time,
-            WEEKS to weeks,
-            MEDIA_TYPE to mediaType,
-            MEDIA_TITLE to mediaTitle,
-            VOLUME_INCREASE_ACTIVE to volumeIncreaseActive,
-            VIBRATION_ACTIVE to vibrationActive,
-            TTS_ACTIVE to ttsActive,
+            "${name}_$IS_CREATED" to isCreated,
+            "${name}_$TIME" to time,
+            "${name}_$WEEKS" to weeks,
+            "${name}_$MEDIA_TYPE" to mediaType,
+            "${name}_$MEDIA_TITLE" to mediaTitle,
+            "${name}_$VOLUME_INCREASE_ACTIVE" to volumeIncreaseActive,
+            "${name}_$VIBRATION_ACTIVE" to vibrationActive,
+            "${name}_$TTS_ACTIVE" to ttsActive,
         )
     }
 
@@ -85,8 +85,8 @@ sealed interface Event {
             type: String,
             searchText: String
         ) = bundleOf(
-            TYPE to type,
-            TEXT to searchText,
+            "${name}_$TYPE" to type,
+            "${name}_$TEXT" to searchText,
         )
     }
 
@@ -100,8 +100,8 @@ sealed interface Event {
         fun getBundle(
             alarmMedia: AlarmMedia
         ) = bundleOf(
-            TYPE to alarmMedia.javaClass.simpleName,
-            TITLE to alarmMedia.title,
+            "${name}_$TYPE" to alarmMedia.javaClass.simpleName,
+            "${name}_$TITLE" to alarmMedia.title,
         )
     }
 
@@ -127,10 +127,10 @@ sealed interface Event {
             mediaType: String,
             mediaTitle: String,
         ) = bundleOf(
-            FIRED_TIME to firedTime,
-            ALARM_TIME to alarmTime,
-            MEDIA_TYPE to mediaType,
-            MEDIA_TITLE to mediaTitle,
+            "${name}_$FIRED_TIME" to firedTime,
+            "${name}_$ALARM_TIME" to alarmTime,
+            "${name}_$MEDIA_TYPE" to mediaType,
+            "${name}_$MEDIA_TITLE" to mediaTitle,
         )
     }
 
@@ -149,10 +149,10 @@ sealed interface Event {
             mediaType: String,
             mediaTitle: String,
         ) = bundleOf(
-            CLOSE_TIME to closeTime,
-            ALARM_TIME to alarmTime,
-            MEDIA_TYPE to mediaType,
-            MEDIA_TITLE to mediaTitle,
+            "${name}_$CLOSE_TIME" to closeTime,
+            "${name}_$ALARM_TIME" to alarmTime,
+            "${name}_$MEDIA_TYPE" to mediaType,
+            "${name}_$MEDIA_TITLE" to mediaTitle,
         )
     }
 }

@@ -52,12 +52,22 @@ android {
         release {
             signingConfig = signingConfigs["release"]
             isMinifyEnabled = true
+            isShrinkResources = true
             isDebuggable = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
             resValue("string", "app_name", "@string/app_name_default")
+            resValue("string", "ads_app_id", debugJson["ADS_APP_ID"]!!)
+            resValue("string", "ads_main_bottom_native", debugJson["ADS_MAIN_BOTTOM_NATIVE"]!!)
+            resValue("string", "ads_alarm_list_native", debugJson["ADS_ALARM_LIST_NATIVE"]!!)
+            resValue("string", "ads_alarm_banner", debugJson["ADS_ALARM_BANNER"]!!)
+            resValue(
+                "string",
+                "ads_media_select_interstitial",
+                debugJson["ADS_MEDIA_SELECT_INTERSTITIAL"]!!
+            )
         }
         debug {
             signingConfig = signingConfigs["debug"]
@@ -75,7 +85,6 @@ android {
                 "ads_media_select_interstitial",
                 debugJson["ADS_MEDIA_SELECT_INTERSTITIAL"]!!
             )
-
         }
     }
     compileOptions {

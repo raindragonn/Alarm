@@ -22,7 +22,7 @@
             android:id="@+id/iv_icon"
             android:layout_width="@dimen/base_spacing_8"
             android:layout_height="@dimen/base_spacing_8"
-            android:src="@mipmap/ic_launcher"
+            android:src="@drawable/ic_launcher"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
