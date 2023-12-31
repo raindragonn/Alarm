@@ -1,29 +1,81 @@
 <resources>
-    <string name="app_name">Alarm</string>
-    <string name="chennel_name_media_download">미디어 다운로드</string>
-    <string name="chennel_description_media_download">인터넷 없이 재생을 위한 미디어 다운로드</string>
+    <string name="app_name_default">Media Alarm</string>
+    <string name="app_name_dev">Media Alarm_DEBUG</string>
+    <string name="chennel_name_media_download">media download</string>
+    <string name="chennel_description_media_download">Download media for playback without internet</string>
 
-    <string name="alarm_preview">미리보기</string>
-    <string name="alarm_media_guide">알림음</string>
+    <string name="alarm_emoji">⏰</string>
+    <string name="alarm_preview">Preview</string>
+    <string name="alarm_media_guide">alarm sound</string>
+    <string name="alarm_edit">Alarm modification</string>
+    <string name="alarm_create">Create alarm</string>
+    <string name="alarm_end">Alarm ends</string>
+    <string name="alarm_preview_end">End preview</string>
+    <string name="alarm_remove">Delete alarm</string>
+    <string name="alarm_inactive_notice">All alarms are turned off.</string>
+    <string name="alarm_add_notice">Please add an alarm!</string>
+    <string name="alarm_tts_guide">Read a note and start an alarm</string>
+    <string name="alarm_vibration_guide">Vibration settings</string>
+    <string name="alarm_media_required_notice">Please select an alarm sound!</string>
+    <string name="alarm_media_select_title">Alarm sound settings</string>
+    <string name="alarm_media_select">Search &gt;</string>
 
-    <string name="cancel">취소</string>
-    <string name="save">저장</string>
-    <string name="choice">선택</string>
+    <string name="play">play</string>
+    <string name="pause">stoppage</string>
 
-    <string name="week_sun">일</string>
-    <string name="week_mon">월</string>
-    <string name="week_tues">화</string>
-    <string name="week_wed">수</string>
-    <string name="week_thu">목</string>
-    <string name="week_fri">금</string>
-    <string name="week_sat">토</string>
-    <string name="week_no">한번만 울리기</string>
+    <string name="ok">check</string>
+    <string name="cancel">cancellation</string>
+    <string name="save">save</string>
+    <string name="choice">select</string>
+    <string name="song">song</string>
+    <string name="ringtone">ringtone</string>
+    <string name="youtube">youtube</string>
+    <string name="title">title</string>
+    <string name="store">store</string>
 
-    <string name="memo">메모</string>
-    <string name="memo_hint">메모를 입력해주세요.</string>
+    <string name="volume">volume</string>
+    <string name="volume_auto_increase_guide">Gradually increase the volume</string>
 
-    <string name="day_remaining_guide">%d일 후에 알람이 울립니다.</string>
-    <string name="hour_remaining_guide">%d시간 %d분 후에 알람이 울립니다.</string>
-    <string name="minute_remaining_guide">%d분 후에 알람이 울립니다.</string>
-    <string name="soon_remaining_guide">알람이 곧 울립니다.</string>
+    <string name="week_sun">Sun</string>
+    <string name="week_mon">Mon</string>
+    <string name="week_tues">Tues</string>
+    <string name="week_wed">Wed</string>
+    <string name="week_thu">Thurs</string>
+    <string name="week_fri">Fri</string>
+    <string name="week_sat">Sat</string>
+
+    <string name="repeat_week">repeat day</string>
+    <string name="week_not_select_guide">Ring once</string>
+    <string name="week_weekend_guide">repeat weekend</string>
+    <string name="week_weekday_guide">repeat during the week</string>
+    <string name="week_everyday_guide">repeat every day</string>
+    <string name="week_guide">" repeat"</string>
+
+    <string name="memo">memo</string>
+    <string name="memo_hint">Please enter a note.</string>
+
+    <string name="day_remaining_guide">The alarm will sound after %d days.</string>
+    <string name="hour_remaining_guide">The alarm will sound after %d hours and %d minutes.</string>
+    <string name="minute_remaining_guide">The alarm will sound in %d minutes.</string>
+    <string name="soon_remaining_guide">The alarm will sound soon.</string>
+
+    <string name="alert_request_permission_title">Permission required!</string>
+    <string name="alert_request_permission_text_post_notification">Notification permission is required for smooth alarming.</string>
+    <string name="alert_request_permission_text_system_alert_window">For smooth alarms, permission to display above other apps is required.</string>
+    <string name="alert_request_permission_text_exact_alarm">Alarm and reminder permissions are required for smooth alarming.</string>
+
+    <string name="notification_message_media_downlaod">Downloading for alarm without internet</string>
+
+    <string name="hint_music_search">Please search by song or singer name.</string>
+    <string name="hint_tube_search">Please search by video title or URL.</string>
+    <string name="hint_tube_url_search">Please search by URL.</string>
+
+    <string name="toast_error_basic">There\'s a problem! please try again.</string>
+    <string name="toast_error_search_query_empty">Please enter your search term.</string>
+    <string name="toast_error_network">Please check your internet connection.</string>
+    <string name="toast_error_not_select_alarm_media">Please select an alarm sound.</string>
+
+    <string name="review_request_title">Go to write a review</string>
+    <string name="review_request_body">If you like the app please leave a praise and if you have any inconveniences or suggestions please leave a comment.</string>
+    <string name="empty_of_search_result">No results.</string>
 </resources>

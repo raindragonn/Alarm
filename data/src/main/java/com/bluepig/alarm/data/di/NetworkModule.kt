@@ -2,8 +2,8 @@ package com.bluepig.alarm.data.di
 
 import com.bluepig.alarm.data.BuildConfig
 import com.bluepig.alarm.data.network.api.SearchApi
-import com.bluepig.alarm.data.network.parser.FilePageParser
-import com.bluepig.alarm.data.network.parser.FilePageParserImpl
+import com.bluepig.alarm.data.network.parser.MusicInfoPageParser
+import com.bluepig.alarm.data.network.parser.MusicInfoPageParserImpl
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides
@@ -62,8 +62,8 @@ object NetworkModule {
     @Provides
     @Singleton
     fun providesFilePageParser(
-    ): FilePageParser {
-        return FilePageParserImpl()
+    ): MusicInfoPageParser {
+        return MusicInfoPageParserImpl()
     }
 
 }

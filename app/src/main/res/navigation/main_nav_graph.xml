@@ -12,23 +12,8 @@
         tools:layout="@layout/fragment_alarm_list">
 
         <action
-            android:id="@+id/action_alarmListFragment_to_searchFragment"
-            app:destination="@id/searchFragment" />
-
-        <action
             android:id="@+id/action_alarmListFragment_to_alarmEditFragment"
             app:destination="@id/alarmEditFragment" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/searchFragment"
-        android:name="com.bluepig.alarm.ui.search.SearchFragment"
-        android:label="dialog_fragment_search"
-        tools:layout="@layout/fragment_search">
-
-        <action
-            android:id="@+id/action_searchFragment_to_selectBottomSheetDialogFragment"
-            app:destination="@id/fileSelectBottomSheetDialogFragment" />
     </fragment>
 
     <fragment
@@ -36,11 +21,6 @@
         android:name="com.bluepig.alarm.ui.edit.AlarmEditFragment"
         android:label="fragment_alarm_edit"
         tools:layout="@layout/fragment_alarm_edit">
-
-        <argument
-            android:name="songFile"
-            app:argType="com.bluepig.alarm.domain.entity.file.SongFile"
-            app:nullable="true" />
 
         <argument
             android:name="alarm"
@@ -52,20 +32,34 @@
             app:destination="@id/alarmListFragment"
             app:popUpTo="@id/alarmListFragment"
             app:popUpToInclusive="true" />
+
+        <action
+            android:id="@+id/action_alarmEditFragment_to_mediaSelectFragment"
+            app:destination="@id/mediaSelectFragment"
+            app:popUpTo="@id/alarmEditFragment"
+            app:popUpToInclusive="false" />
     </fragment>
 
     <dialog
-        android:id="@+id/fileSelectBottomSheetDialogFragment"
-        android:name="com.bluepig.alarm.ui.search.select.FileSelectBottomSheetDialogFragment"
-        android:label="FileSelectBottomSheetDialogFragment"
-        tools:layout="@layout/fragment_file_select">
-        <argument
-            android:name="basicFile"
-            app:argType="com.bluepig.alarm.domain.entity.file.BasicFile" />
+        android:id="@+id/MediaSelectBottomSheetDialogFragment"
+        android:name="com.bluepig.alarm.ui.media.select.MediaSelectBottomSheetDialogFragment"
+        android:label="MediaSelectBottomSheetDialogFragment"
+        tools:layout="@layout/fragment_media_select">
 
-        <action
-            android:id="@+id/action_fileSelectBottomSheetDialogFragment_to_alarmEditFragment"
-            app:destination="@id/alarmEditFragment" />
+        <argument
+            android:name="musicInfo"
+            app:argType="com.bluepig.alarm.domain.entity.music.MusicInfo"
+            app:nullable="true" />
+
+        <argument
+            android:name="alarmMedia"
+            app:argType="com.bluepig.alarm.domain.entity.alarm.media.AlarmMedia"
+            app:nullable="true" />
     </dialog>
 
+    <fragment
+        android:id="@+id/mediaSelectFragment"
+        android:name="com.bluepig.alarm.ui.media.MediaSelectFragment"
+        android:label="fragment_media_select"
+        tools:layout="@layout/fragment_media_select" />
 </navigation>

@@ -1,3 +1,4 @@
+import com.bluepig.alarm.AppConfiguration
 import groovy.json.JsonSlurper
 
 @Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
@@ -9,32 +10,37 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
     kotlin("kapt")
 }
-internal val jsonText = file("../key.stores/api.keys").readText()
-internal val apiJson = JsonSlurper().parseText(jsonText) as Map<String, String>
 
 android {
     namespace = "com.bluepig.alarm.data"
-    compileSdk = 33
+    compileSdk = AppConfiguration.compileSdk
 
     defaultConfig {
-        minSdk = 24
+        minSdk = AppConfiguration.minSdk
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
+        all {
+            val apiJson =
+                JsonSlurper().parseText(file("../key.stores/api.keys").readText()) as org.apache.groovy.json.internal.LazyMap
+
+            apiJson.entries.forEach {
+                buildConfigField("String", it.key, "\"${it.value}\"")
+            }
+        }
         release {
             isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            resValue("string", "app_name", "@string/app_name_default")
         }
         debug {
-            apiJson.entries.forEach {
-                buildConfigField("String", it.key, "\"${it.value}\"")
-            }
+            resValue("string", "app_name", "@string/app_name_dev")
         }
     }
     compileOptions {
@@ -52,6 +58,12 @@ android {
      */
     kapt {
         correctErrorTypes = true
+    }
+
+    packaging {
+        resources.excludes.add(
+            "META-INF/DEPENDENCIES"
+        )
     }
 }
 
@@ -77,6 +89,10 @@ dependencies {
     implementation(libs.okhttp3)
     implementation(libs.okhttp3.logging.intercepter)
     implementation(libs.jsoup)
+
+    implementation(libs.google.playservices.auth)
+    implementation(libs.google.youtube)
+    implementation(libs.google.api.client)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)

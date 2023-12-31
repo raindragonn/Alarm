@@ -1,56 +1,120 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingHorizontal="@dimen/base_spacing_2">
+    android:layout_marginHorizontal="@dimen/base_spacing_2"
+    android:layout_marginVertical="@dimen/base_spacing_1"
+    android:foreground="@drawable/ripple_rectangle_point"
+    android:background="@color/surface"
+    app:cardCornerRadius="@dimen/base_spacing_1">
 
-    <TextView
-        android:id="@+id/tv_time"
-        style="@style/TextAppearance.Alarm.Subtitle1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/base_spacing_2"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="07:00" />
-
-    <TextView
-        android:id="@+id/tv_meridiem"
-        style="@style/TextAppearance.Alarm.Body1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@id/tv_time"
-        app:layout_constraintStart_toEndOf="@id/tv_time"
-        tools:text="오전" />
-
-    <TextView
-        android:id="@+id/tv_title"
-        style="@style/TextAppearance.Alarm.Caption1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/base_spacing_1"
-        app:layout_constraintStart_toStartOf="@id/tv_time"
-        app:layout_constraintTop_toBottomOf="@id/tv_time"
-        tools:text="제목" />
-
-    <com.google.android.material.materialswitch.MaterialSwitch
-        android:id="@+id/switch_onOff"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <View
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/mono_300"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="@dimen/base_spacing_0.5"
-        app:layout_constraintTop_toBottomOf="@id/tv_title" />
+        android:layout_height="match_parent"
+        android:paddingHorizontal="@dimen/base_spacing_2"
+        android:paddingVertical="@dimen/base_spacing_2">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/tv_repeat_guide"
+            style="@style/TextAppearance.Alarm.Body7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawablePadding="@dimen/base_spacing_1"
+            app:drawableStartCompat="@drawable/shape_dot"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="주말" />
+
+        <TextView
+            android:id="@+id/tv_time"
+            style="@style/TextAppearance.Alarm.HeadLine2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/base_spacing_2"
+            android:layout_marginTop="@dimen/base_spacing_1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_repeat_guide"
+            tools:text="07:00" />
+
+        <TextView
+            android:id="@+id/tv_meridiem"
+            style="@style/TextAppearance.Alarm.Subtitle1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/base_spacing_1"
+            app:layout_constraintBottom_toBottomOf="@id/tv_time"
+            app:layout_constraintStart_toEndOf="@id/tv_time"
+            tools:text="오전" />
+
+        <TextView
+            android:id="@+id/tv_media_guide"
+            style="@style/TextAppearance.Alarm.Body5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/base_spacing_1"
+            android:text="@string/alarm_media_guide"
+            android:textColor="@color/alarm_guide_text"
+            app:layout_constraintStart_toStartOf="@id/tv_time"
+            app:layout_constraintTop_toBottomOf="@id/tv_time" />
+
+        <TextView
+            android:id="@+id/tv_media"
+            style="@style/TextAppearance.Alarm.Body5"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/base_spacing_1"
+            android:layout_marginTop="@dimen/base_spacing_1"
+            android:ellipsize="end"
+            android:maxLines="1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toEndOf="@id/tv_media_guide"
+            app:layout_constraintTop_toBottomOf="@id/tv_time"
+            tools:text="@tools:sample/lorem/random" />
+
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/group_memo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:constraint_referenced_ids="tv_memo, tv_memo_guide" />
+
+        <TextView
+            android:id="@+id/tv_memo_guide"
+            style="@style/TextAppearance.Alarm.Body5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/base_spacing_1"
+            android:text="@string/memo"
+            android:textColor="@color/alarm_guide_text"
+            app:layout_constraintStart_toStartOf="@id/tv_time"
+            app:layout_constraintTop_toBottomOf="@id/tv_media" />
+
+        <TextView
+            android:id="@+id/tv_memo"
+            style="@style/TextAppearance.Alarm.Body5"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/base_spacing_1"
+            android:layout_marginTop="@dimen/base_spacing_1"
+            android:ellipsize="end"
+            android:maxLines="1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toEndOf="@id/tv_memo_guide"
+            app:layout_constraintTop_toBottomOf="@id/tv_media"
+            tools:text="@tools:sample/lorem/random" />
+
+        <com.google.android.material.materialswitch.MaterialSwitch
+            android:id="@+id/switch_onOff"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            app:layout_constraintBottom_toBottomOf="@id/tv_time"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tv_time" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

@@ -11,8 +11,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import coil.load
+import coil.size.Scale
 import coil.transform.RoundedCornersTransformation
 import com.bluepig.alarm.R
+import com.google.android.material.materialswitch.MaterialSwitch
 
 val ViewGroup.inflater: LayoutInflater
     get() = LayoutInflater.from(context)
@@ -43,7 +45,7 @@ fun RecyclerView.setOnLoadMore(triggerLessCount: Int = 5, action: () -> Unit) {
         override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
             super.onScrollStateChanged(recyclerView, newState)
             val itemCount = lm.itemCount
-
+            if (itemCount <= triggerLessCount) return
             if (lm.findLastCompletelyVisibleItemPosition() >= itemCount - triggerLessCount) {
                 action()
             }
@@ -52,10 +54,14 @@ fun RecyclerView.setOnLoadMore(triggerLessCount: Int = 5, action: () -> Unit) {
     addOnScrollListener(scrollListener)
 }
 
-fun ImageView.setThumbnail(data: Any) {
-    val cornerRadius = resources.getDimension(R.dimen.base_spacing_1)
+fun ImageView.setThumbnail(data: Any, rounded: Boolean = true) {
     load(data) {
-        transformations(RoundedCornersTransformation(cornerRadius))
+        if (rounded) {
+            val cornerRadius = resources.getDimension(R.dimen.base_spacing_1)
+            transformations(RoundedCornersTransformation(cornerRadius))
+        } else {
+            scale(Scale.FILL)
+        }
         crossfade(true)
         val errorDrawable =
             ContextCompat.getDrawable(
@@ -74,4 +80,11 @@ fun ViewHolder.checkNoPosition(action: () -> Unit) {
     if (bindingAdapterPosition != RecyclerView.NO_POSITION) {
         action.invoke()
     }
+}
+
+fun MaterialSwitch.setDefaultColor() {
+    val colorStateList =
+        resources.getColorStateList(R.color.switch_track, null)
+    this.trackTintList = colorStateList
+    this.trackDecorationTintList = colorStateList
 }

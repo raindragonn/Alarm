@@ -1,6 +1,7 @@
 package com.bluepig.alarm.ui.view
 
 import android.content.Context
+import android.content.res.ColorStateList
 import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.res.ResourcesCompat
@@ -10,6 +11,13 @@ import com.bluepig.alarm.domain.entity.alarm.Week
 
 class WeekButton : AppCompatTextView {
     private lateinit var week: Week
+
+    private val _selectedForeground
+        get() = ResourcesCompat.getDrawable(
+            resources,
+            R.drawable.shape_week_selected_background,
+            null
+        )
 
     constructor(context: Context) : super(context, null)
     constructor(context: Context, attrs: AttributeSet?) : super(
@@ -43,17 +51,21 @@ class WeekButton : AppCompatTextView {
     fun getWeek(): Week = week
 
     fun setSelected() {
-        val selectedForeground =
-            ResourcesCompat.getDrawable(resources, R.drawable.shape_week_selected_background, null)
-        val selectedTextColor = ResourcesCompat.getColor(resources, R.color.primary_600, null)
-        foreground = selectedForeground
+        var selectedTextColor = ResourcesCompat.getColor(resources, R.color.primary_600, null)
+        if (week.isWeekend) {
+            foregroundTintList = ColorStateList.valueOf(context.getColor(R.color.misc_050))
+            background =
+                ResourcesCompat.getDrawable(resources, R.drawable.ripple_weekend_selected, null)
+            selectedTextColor = ResourcesCompat.getColor(resources, R.color.misc_050, null)
+        }
         setTextColor(selectedTextColor)
+        foreground = _selectedForeground
         invalidate()
         requestLayout()
     }
 
     fun unSelected() {
-        val unSelectedTextColor = ResourcesCompat.getColor(resources, R.color.button_text, null)
+        val unSelectedTextColor = ResourcesCompat.getColor(resources, R.color.text, null)
         setTextColor(unSelectedTextColor)
         foreground = null
         invalidate()

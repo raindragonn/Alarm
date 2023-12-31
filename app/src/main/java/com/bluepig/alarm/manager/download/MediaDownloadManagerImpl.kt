@@ -12,17 +12,17 @@ import androidx.media3.datasource.cache.Cache
 import androidx.media3.datasource.cache.CacheDataSource
 import androidx.media3.datasource.cache.NoOpCacheEvictor
 import androidx.media3.datasource.cache.SimpleCache
+import androidx.media3.exoplayer.offline.Download
 import androidx.media3.exoplayer.offline.DownloadHelper
 import androidx.media3.exoplayer.offline.DownloadManager
 import androidx.media3.exoplayer.offline.DownloadNotificationHelper
 import androidx.media3.exoplayer.offline.DownloadService
+import com.bluepig.alarm.domain.entity.alarm.media.MusicMedia
 import com.bluepig.alarm.notification.NotificationType
 import com.bluepig.alarm.service.MediaDownloadService
 import kotlinx.serialization.json.Json
-import timber.log.Timber
 import java.util.concurrent.Executor
 import javax.inject.Inject
-import com.bluepig.alarm.domain.entity.file.BasicFile as DomainFile
 
 @UnstableApi
 class MediaDownloadManagerImpl @Inject constructor(
@@ -68,28 +68,30 @@ class MediaDownloadManagerImpl @Inject constructor(
         }
     }
 
-    override fun getMediaItem(url: String, id: String): MediaItem {
-        val download = getDownloadManager().downloadIndex.getDownload(id)
+    override fun getMediaItem(musicMedia: MusicMedia): MediaItem {
+        val download = getDownloadManager().downloadIndex.getDownload(musicMedia.id)
         val downloadedUri = download?.request?.uri
-        Timber.d("$downloadedUri")
-
 
         return downloadedUri?.let {
             MediaItem.fromUri(it)
-        } ?: MediaItem.fromUri(url)
+        } ?: MediaItem.fromUri(musicMedia.fileUrl)
     }
 
-    override fun startDownload(mediaItem: MediaItem, file: DomainFile) {
+    override fun startDownload(musicMedia: MusicMedia) {
+        val mediaItem = getMediaItem(musicMedia)
         val downloadHelper = DownloadHelper.forMediaItem(
             _context,
             mediaItem
         )
+
+        if (getDownloadManager().downloadIndex.getDownload(musicMedia.id) != null) return
+
         val jsonString =
-            Json.encodeToString(DomainFile.serializer(), file)
+            Json.encodeToString(MusicMedia.serializer(), musicMedia)
         val data = Util.getUtf8Bytes(jsonString)
         val request =
             downloadHelper.getDownloadRequest(
-                file.id,
+                musicMedia.id,
                 data,
             )
 
@@ -102,12 +104,37 @@ class MediaDownloadManagerImpl @Inject constructor(
     }
 
     /**
-     * Get data source factory
+     * Get downloaded ids
      *
-     * 캐시를 이용하는 데이터 소스 팩토리.
-     * 데이터가 캐시되지 않은 경우 HttpDataSource를 이용해 요청된다.
-     *
+     * @return 현재 다운로드된 아이디 리스트를 반환한다.
      */
+    private fun getDownloadedIds(): List<String> {
+        val downloads = mutableListOf<Download>()
+        getDownloadManager().downloadIndex
+            .getDownloads().use {
+                if (it.moveToFirst()) {
+                    do {
+                        downloads.add(it.download)
+                    } while (it.moveToNext())
+                }
+            }
+        return downloads.map { it.request.id }
+    }
+
+    override fun removeDownload(musicMedias: List<MusicMedia>) {
+        val downloadedIds = getDownloadedIds().toSet()
+        val filesIds = musicMedias.map { it.id }.toSet()
+        downloadedIds.minus(filesIds)
+            .forEach {
+                DownloadService.sendRemoveDownload(
+                    _context,
+                    MediaDownloadService::class.java,
+                    it,
+                    false
+                )
+            }
+    }
+
     override fun getDataSourceFactory(): DataSource.Factory {
         return _datasourceFactory ?: CacheDataSource.Factory()
             .setCache(getDownloadCache())

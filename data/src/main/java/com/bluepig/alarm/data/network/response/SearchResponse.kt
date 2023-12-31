@@ -9,7 +9,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class SearchResponse(
     @SerialName("items")
-    val fileResponses: List<FileResponse>,
+    val musicInfoRespons: List<MusicInfoResponse>,
     @SerialName("totalCount")
     val totalCount: Int
 )

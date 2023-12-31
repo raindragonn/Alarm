@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:bottom="@dimen/base_spacing_0.5"
+        android:left="@dimen/base_spacing_0.5"
+        android:right="@dimen/base_spacing_0.5"
+        android:top="@dimen/base_spacing_0.5">
+        <shape android:shape="oval">
+            <size
+                android:width="@dimen/base_spacing_2"
+                android:height="@dimen/base_spacing_2" />
+            <solid android:color="@color/button_text" />
+        </shape>
+    </item>
+</layer-list>
