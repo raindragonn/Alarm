@@ -22,6 +22,9 @@
 
 -keepattributes Signature,SourceFile,LineNumberTable        # Keep file names and line numbers.
 -keep public class * extends java.lang.Exception  # Optional: Keep custom exceptions.
+-keepnames class androidx.navigation.fragment.NavHostFragment
+-keepnames class * extends android.os.Parcelable
+-keepnames class * extends java.io.Serializable
 
 #Google
 -keep class com.google.api.** {
