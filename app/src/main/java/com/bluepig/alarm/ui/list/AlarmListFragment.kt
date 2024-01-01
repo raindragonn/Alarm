@@ -17,6 +17,7 @@ import com.bluepig.alarm.domain.result.NotFoundAlarmException
 import com.bluepig.alarm.manager.timeguide.TimeGuideManager
 import com.bluepig.alarm.util.ads.AdsManager
 import com.bluepig.alarm.util.ads.NativeAdsAdapter
+import com.bluepig.alarm.util.ext.showErrorToast
 import com.bluepig.alarm.util.ext.viewLifeCycleScope
 import com.bluepig.alarm.util.ext.viewRepeatOnLifeCycle
 import com.bluepig.alarm.util.logger.BpLogger
@@ -121,14 +122,18 @@ class AlarmListFragment : Fragment(R.layout.fragment_alarm_list) {
     }
 
     private fun openStore() {
-        val packageName = requireContext().packageName
-        val intent = Intent(Intent.ACTION_VIEW).apply {
-            data = Uri.parse(
-                "https://play.google.com/store/apps/details?id=$packageName"
-            )
-            setPackage("com.android.vending")
+        kotlin.runCatching {
+            val packageName = requireContext().packageName
+            val intent = Intent(Intent.ACTION_VIEW).apply {
+                data = Uri.parse(
+                    "https://play.google.com/store/apps/details?id=$packageName"
+                )
+                setPackage("com.android.vending")
+            }
+            startActivity(intent)
+        }.onFailure {
+            showErrorToast(it)
         }
-        startActivity(intent)
     }
 
     private fun onItemSwitchClick(alarm: Alarm) {
