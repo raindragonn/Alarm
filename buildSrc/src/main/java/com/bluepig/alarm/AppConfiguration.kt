@@ -6,9 +6,9 @@ object AppConfiguration {
     const val minSdk = 24
     const val majorVersion = 1
     const val minorVersion = 0
-    const val patchVersion = 2
-    const val versionCode = 3
-    const val isTest = true
+    const val patchVersion = 3
+    const val versionCode = 4
+    const val isTest = false
 
     val versionName
         get() = "$majorVersion.$minorVersion.${patchVersion}${isTest.let { if (it) "_test" else "" }}"
