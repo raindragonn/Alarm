@@ -86,12 +86,10 @@ class MediaSelectBottomSheetDialogFragment :
         btnPlay.setOnClickListener { playerManager.playEndPause() }
         btnSelect.setOnClickListener {
             adsManager.showInterstitial(
-                requireActivity(),
-                onShowed = {
-                    setLoadingState(true)
-                }, onCloseOrFailed = {
-                    openMedia()
-                })
+                activity = requireActivity(),
+                onShowed = { setLoadingState(true) },
+                onCloseOrFailed = ::openMedia
+            )
         }
     }
 
@@ -116,7 +114,7 @@ class MediaSelectBottomSheetDialogFragment :
     }
 
     private fun observing() {
-        viewRepeatOnLifeCycle(Lifecycle.State.STARTED) {
+        viewRepeatOnLifeCycle(Lifecycle.State.CREATED) {
             _vm.musicMedia.stateIn(this).collect { result ->
                 result.onSuccess {
                     bindMedia(it)
