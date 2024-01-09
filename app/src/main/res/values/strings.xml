@@ -64,6 +64,11 @@
     <string name="alert_request_permission_text_system_alert_window">For smooth alarms, permission to display above other apps is required.</string>
     <string name="alert_request_permission_text_exact_alarm">Alarm and reminder permissions are required for smooth alarming.</string>
 
+    <string name="alert_request_oauth_title">Safe YouTube Integration Permission</string>
+    <string name="alert_request_oauth_description">Allow %s to connect with Google\'s Youtube API to search videos?\n\n%s does not collect any personal information in this process.</string>
+    <string name="alert_request_oauth_agree">INTEGRATE WITH %s</string>
+    <string name="alert_request_oauth_disagree">DO NOT INTEGRATE FOR NOW</string>
+
     <string name="notification_message_media_downlaod">Downloading for alarm without internet</string>
 
     <string name="hint_music_search">Please search by song or singer name.</string>

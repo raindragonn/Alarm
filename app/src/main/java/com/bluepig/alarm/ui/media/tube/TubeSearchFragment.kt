@@ -5,12 +5,14 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
 import com.bluepig.alarm.R
+import com.bluepig.alarm.databinding.DialogYoutubeNoticeBinding
 import com.bluepig.alarm.databinding.FragmentTubeSearchBinding
 import com.bluepig.alarm.domain.entity.alarm.media.TubeMedia
 import com.bluepig.alarm.domain.preferences.AppPreferences
@@ -84,7 +86,9 @@ class TubeSearchFragment : Fragment(R.layout.fragment_tube_search) {
         val savedSelectName = _vm.getSavedSelectName()
         return if (savedSelectName.isNullOrBlank()) {
             val intent = credential.newChooseAccountIntent()
-            _credentialLauncher.launch(intent)
+            openOauthNotice {
+                _credentialLauncher.launch(intent)
+            }
             false
         } else {
             credential.selectedAccountName = savedSelectName
@@ -97,6 +101,30 @@ class TubeSearchFragment : Fragment(R.layout.fragment_tube_search) {
         credential.selectedAccountName = accountName
         _vm.setSavedSelectName(accountName)
         _vm.search(_binding.etSearch.text.toString(), _onlyLinkSearch)
+    }
+
+    private fun openOauthNotice(action: () -> Unit) {
+        val dialogBinding = DialogYoutubeNoticeBinding.inflate(layoutInflater)
+        val dialog = AlertDialog.Builder(requireContext())
+            .setView(dialogBinding.root)
+            .create()
+
+        dialog.window?.setBackgroundDrawableResource(R.drawable.shape_rounded_background)
+
+        dialogBinding.apply {
+            val appName = getString(R.string.app_name)
+            tvDescription.text =
+                getString(R.string.alert_request_oauth_description, appName, appName)
+            btnAgree.text = getString(R.string.alert_request_oauth_agree, appName)
+            btnAgree.setOnClickListener {
+                dialog.dismiss()
+                action.invoke()
+            }
+            btnDisagree.setOnClickListener {
+                dialog.dismiss()
+            }
+        }
+        dialog.show()
     }
 
     private fun searchListHandle(result: Result<List<TubeMedia>>) {
@@ -121,6 +149,7 @@ class TubeSearchFragment : Fragment(R.layout.fragment_tube_search) {
 
     private fun requestOauth(throwable: Throwable) {
         if (throwable is UserRecoverableAuthIOException) {
+            _vm.setSavedSelectName("")
             val requestIntent = throwable.intent
             _credentialLauncher.launch(requestIntent)
         } else {
