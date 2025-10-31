@@ -2,8 +2,8 @@ package com.bluepig.alarm.ui.media.tube
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.bluepig.alarm.data.preference.AppPreferences
 import com.bluepig.alarm.domain.entity.alarm.media.TubeMedia
-import com.bluepig.alarm.domain.preferences.AppPreferences
 import com.bluepig.alarm.domain.result.resultInit
 import com.bluepig.alarm.domain.result.resultLoading
 import com.bluepig.alarm.domain.usecase.GetTubeMediaList

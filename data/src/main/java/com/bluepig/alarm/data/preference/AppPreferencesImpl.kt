@@ -3,7 +3,6 @@ package com.bluepig.alarm.data.preference
 import android.app.Activity
 import android.content.Context
 import androidx.core.content.edit
-import com.bluepig.alarm.domain.preferences.AppPreferences
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 

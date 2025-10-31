@@ -1,8 +1,8 @@
 package com.bluepig.alarm.data.di
 
 import android.content.Context
+import com.bluepig.alarm.data.preference.AppPreferences
 import com.bluepig.alarm.data.preference.AppPreferencesImpl
-import com.bluepig.alarm.domain.preferences.AppPreferences
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
 import com.google.api.client.util.ExponentialBackOff
 import com.google.api.services.youtube.YouTubeScopes

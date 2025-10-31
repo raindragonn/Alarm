@@ -1,4 +1,4 @@
-package com.bluepig.alarm.domain.preferences
+package com.bluepig.alarm.data.preference
 
 interface AppPreferences {
     var selectedAccountName: String?
