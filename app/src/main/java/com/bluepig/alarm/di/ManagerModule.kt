@@ -3,8 +3,8 @@ package com.bluepig.alarm.di
 import android.content.Context
 import android.media.AudioManager
 import androidx.media3.common.util.UnstableApi
+import com.bluepig.alarm.data.preference.AppPreferences
 import com.bluepig.alarm.domain.alarm.BpAlarmManager
-import com.bluepig.alarm.domain.preferences.AppPreferences
 import com.bluepig.alarm.manager.alarm.BPAlarmManagerImpl
 import com.bluepig.alarm.manager.config.ConfigManager
 import com.bluepig.alarm.manager.config.ConfigManagerImpl

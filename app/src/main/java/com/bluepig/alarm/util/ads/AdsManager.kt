@@ -8,8 +8,8 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import com.bluepig.alarm.R
+import com.bluepig.alarm.data.preference.AppPreferences
 import com.bluepig.alarm.databinding.MainBottomNativeLayoutBinding
-import com.bluepig.alarm.domain.preferences.AppPreferences
 import com.bluepig.alarm.domain.util.CalendarHelper
 import com.bluepig.alarm.util.ext.inflater
 import com.bluepig.alarm.util.logger.BpLogger

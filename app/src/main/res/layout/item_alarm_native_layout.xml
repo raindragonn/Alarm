@@ -110,7 +110,7 @@
                 app:layout_constraintStart_toEndOf="@+id/ad_icon"
                 app:layout_constraintTop_toTopOf="@+id/ad_icon"
                 app:layout_goneMarginStart="0dp"
-                app:layout_goneMarginTop="@dimen/base_spacing_1"
+                app:layout_goneMarginTop="@dimen/base_spacing_8"
                 tools:text="@tools:sample/lorem/random" />
 
             <TextView
@@ -125,7 +125,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/ad_icon"
+                app:layout_constraintTop_toBottomOf="@id/ad_headline"
                 app:layout_goneMarginStart="0dp"
                 tools:text="@tools:sample/lorem/random" />
 
@@ -136,9 +136,9 @@
                 android:layout_height="wrap_content"
                 android:paddingHorizontal="@dimen/base_spacing_2"
                 android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="@id/ad_icon"
+                app:layout_constraintBottom_toBottomOf="@id/ad_headline"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/ad_icon"
+                app:layout_constraintTop_toTopOf="@id/ad_headline"
                 tools:text="스토어"
                 tools:visibility="visible" />
 
