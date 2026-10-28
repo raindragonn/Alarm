@@ -8,11 +8,18 @@ plugins {
     alias(libs.plugins.androidx.navigation.safeargs)
 }
 
-val debugJson =
-    groovy.json.JsonSlurper()
-        .parseText(file("../key.stores/debug.keys").readText()) as Map<String, String>
-val releaseJson = groovy.json.JsonSlurper()
-    .parseText(file("../key.stores/release.keys").readText()) as Map<String, String>
+val adsKeys = listOf(
+    "ADS_APP_ID",
+    "ADS_MAIN_BOTTOM_NATIVE",
+    "ADS_ALARM_LIST_NATIVE",
+    "ADS_ALARM_BANNER",
+    "ADS_MEDIA_SELECT_INTERSTITIAL",
+)
+val secrets = localProperties(
+    listOf("debug", "release").flatMap { buildType ->
+        (listOf("KEY_ALIAS", "KEY_PASSWORD", "STORE_PASSWORD") + adsKeys).map { "$buildType.$it" }
+    }
+)
 
 android {
     namespace = "com.bluepig.alarm"
@@ -23,17 +30,14 @@ android {
         versionName = "1.1.1"
     }
     signingConfigs {
-        getByName("debug") {
-            keyAlias = debugJson["KEY_ALIAS"]
-            keyPassword = debugJson["KEY_PASSWORD"]
-            storeFile = file("../key.stores/debug.jks")
-            storePassword = debugJson["STORE_PASSWORD"]
-        }
-        create("release") {
-            keyAlias = releaseJson["KEY_ALIAS"]
-            keyPassword = releaseJson["KEY_PASSWORD"]
-            storeFile = file("../key.stores/release.jks")
-            storePassword = releaseJson["STORE_PASSWORD"]
+        listOf("debug", "release").forEach { buildType ->
+            maybeCreate(buildType).apply {
+                keyAlias = secrets.getValue("$buildType.KEY_ALIAS")
+                keyPassword = secrets.getValue("$buildType.KEY_PASSWORD")
+                storeFile = rootProject.file("key.stores/$buildType.jks").takeIf { it.exists() }
+                    ?: throw GradleException("key.stores/$buildType.jks 파일이 없습니다")
+                storePassword = secrets.getValue("$buildType.STORE_PASSWORD")
+            }
         }
     }
 
@@ -48,15 +52,7 @@ android {
                 "proguard-rules.pro"
             )
             resValue("string", "app_name", "@string/app_name_default")
-            resValue("string", "ads_app_id", releaseJson["ADS_APP_ID"]!!)
-            resValue("string", "ads_main_bottom_native", releaseJson["ADS_MAIN_BOTTOM_NATIVE"]!!)
-            resValue("string", "ads_alarm_list_native", releaseJson["ADS_ALARM_LIST_NATIVE"]!!)
-            resValue("string", "ads_alarm_banner", releaseJson["ADS_ALARM_BANNER"]!!)
-            resValue(
-                "string",
-                "ads_media_select_interstitial",
-                releaseJson["ADS_MEDIA_SELECT_INTERSTITIAL"]!!
-            )
+            adsKeys.forEach { resValue("string", it.lowercase(), secrets.getValue("release.$it")) }
         }
         debug {
             signingConfig = signingConfigs["debug"]
@@ -65,15 +61,7 @@ android {
             applicationIdSuffix = ".debug"
 
             resValue("string", "app_name", "@string/app_name_dev")
-            resValue("string", "ads_app_id", debugJson["ADS_APP_ID"]!!)
-            resValue("string", "ads_main_bottom_native", debugJson["ADS_MAIN_BOTTOM_NATIVE"]!!)
-            resValue("string", "ads_alarm_list_native", debugJson["ADS_ALARM_LIST_NATIVE"]!!)
-            resValue("string", "ads_alarm_banner", debugJson["ADS_ALARM_BANNER"]!!)
-            resValue(
-                "string",
-                "ads_media_select_interstitial",
-                debugJson["ADS_MEDIA_SELECT_INTERSTITIAL"]!!
-            )
+            adsKeys.forEach { resValue("string", it.lowercase(), secrets.getValue("debug.$it")) }
         }
     }
     buildFeatures {
