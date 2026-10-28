@@ -18,7 +18,7 @@ androidx-media3-exoplayer = "1.2.0"
 
 # Google
 google-material = "1.10.0"
-google-hilt = "2.46"
+google-hilt = "2.51"
 google-services = "4.4.0"
 google-playservices-auth = "20.7.0"
 google-playservices-ads = "22.5.0"
