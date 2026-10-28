@@ -19,3 +19,16 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+# Keep all classes in data module
+-keep class com.bluepig.alarm.data.** { *; }
+
+# Keep Hilt generated classes
+-keep class * extends dagger.hilt.** { *; }
+-keep class **_Factory { *; }
+-keep class **_MembersInjector { *; }
+
+# Keep Room classes
+-keep class * extends androidx.room.RoomDatabase { *; }
+-keep @androidx.room.Entity class * { *; }
+-keep @androidx.room.Dao interface * { *; }

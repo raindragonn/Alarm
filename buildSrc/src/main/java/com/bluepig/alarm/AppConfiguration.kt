@@ -7,7 +7,7 @@ object AppConfiguration {
     const val majorVersion = 1
     const val minorVersion = 1
     const val patchVersion = 1
-    const val versionCode = 9
+    const val versionCode = 10
     const val isTest = false
 
     val versionName
