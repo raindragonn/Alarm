@@ -1,10 +1,9 @@
-import com.bluepig.alarm.AppConfiguration
 import groovy.json.JsonSlurper
 
 plugins {
-    alias(libs.plugins.com.android.library)
+    id("alarm.android.library")
+    id("alarm.hilt")
     alias(libs.plugins.google.ksp)
-    alias(libs.plugins.google.hilt)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.androidx.room)
 }
@@ -15,11 +14,8 @@ room {
 
 android {
     namespace = "com.bluepig.alarm.data"
-    compileSdk = AppConfiguration.compileSdk
 
     defaultConfig {
-        minSdk = AppConfiguration.minSdk
-
         consumerProguardFiles("consumer-rules.pro")
     }
 
@@ -44,10 +40,6 @@ android {
             resValue("string", "app_name", "@string/app_name_dev")
         }
     }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-    }
     buildFeatures {
         buildConfig = true
         resValues = true
@@ -71,10 +63,6 @@ dependencies {
     // room
     implementation(libs.androidx.room)
     ksp(libs.androidx.room.compiler)
-
-    // hilt
-    implementation(libs.google.hilt)
-    ksp(libs.google.hilt.compiler)
 
     implementation(libs.retrofit2)
     implementation(libs.retrofit2.serialization.converter)

@@ -1,10 +1,7 @@
-import com.bluepig.alarm.AppConfiguration
-
 plugins {
-    alias(libs.plugins.com.android.application)
+    id("alarm.android.application")
+    id("alarm.hilt")
 
-    alias(libs.plugins.google.hilt)
-    alias(libs.plugins.google.ksp)
     alias(libs.plugins.google.services)
     alias(libs.plugins.firebase.crashlytics)
 
@@ -19,14 +16,11 @@ val releaseJson = groovy.json.JsonSlurper()
 
 android {
     namespace = "com.bluepig.alarm"
-    compileSdk = AppConfiguration.compileSdk
 
     defaultConfig {
         applicationId = "com.bluepig.alarm"
-        minSdk = AppConfiguration.minSdk
-        targetSdk = AppConfiguration.compileSdk
-        versionCode = AppConfiguration.versionCode
-        versionName = AppConfiguration.versionName
+        versionCode = 10
+        versionName = "1.1.1"
     }
     signingConfigs {
         getByName("debug") {
@@ -82,10 +76,6 @@ android {
             )
         }
     }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-    }
     buildFeatures {
         viewBinding = true
         buildConfig = true
@@ -116,8 +106,6 @@ dependencies {
     implementation(libs.androidx.media3.exoplayer.ui)
 
     implementation(libs.google.material)
-    implementation(libs.google.hilt)
-    ksp(libs.google.hilt.compiler)
 
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics.ktx)

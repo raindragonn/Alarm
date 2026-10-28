@@ -191,3 +191,6 @@ key.stores/
 
 # Claude Code
 CLAUDE.md
+
+# Kotlin
+.kotlin/
