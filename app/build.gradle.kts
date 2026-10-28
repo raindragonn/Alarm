@@ -30,8 +30,6 @@ android {
         targetSdk = AppConfiguration.compileSdk
         versionCode = AppConfiguration.versionCode
         versionName = AppConfiguration.versionName
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
     signingConfigs {
         getByName("debug") {
@@ -147,8 +145,6 @@ dependencies {
     implementation(libs.google.api.client)
 
     testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.test.ext.junit)
-    androidTestImplementation(libs.espresso.core)
 
     debugImplementation(libs.leak.canary)
 }

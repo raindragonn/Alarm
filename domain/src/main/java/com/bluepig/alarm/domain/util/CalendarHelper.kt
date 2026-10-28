@@ -8,8 +8,13 @@ import java.util.Locale
 
 
 object CalendarHelper {
+    // 테스트에서 현재 시각을 고정하는 용도
+    internal var currentTimeMillis: () -> Long = System::currentTimeMillis
+
     val now: Calendar
-        get() = Calendar.getInstance(Locale.getDefault())
+        get() = Calendar.getInstance(Locale.getDefault()).apply {
+            timeInMillis = currentTimeMillis()
+        }
 
     fun todayFromHourAndMinute(hourOfDay: Int, minute: Int): Calendar = now.apply {
         set(Calendar.HOUR_OF_DAY, hourOfDay)

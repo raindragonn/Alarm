@@ -8,7 +8,12 @@ plugins {
     alias(libs.plugins.google.ksp)
     alias(libs.plugins.google.hilt)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.androidx.room)
     kotlin("kapt")
+}
+
+room {
+    schemaDirectory("$projectDir/schemas")
 }
 
 android {
@@ -18,7 +23,6 @@ android {
     defaultConfig {
         minSdk = AppConfiguration.minSdk
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
     }
 
@@ -95,6 +99,6 @@ dependencies {
     implementation(libs.google.api.client)
 
     testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.test.ext.junit)
-    androidTestImplementation(libs.espresso.core)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.okhttp3.mockwebserver)
 }
