@@ -108,6 +108,7 @@ google-ksp = { id = "com.google.devtools.ksp", version.ref = "kotlin-ksp" }
 google-services = { id = "com.google.gms.google-services", version.ref = "google-services" }
 
 androidx-navigation-safeargs = { id = "androidx.navigation.safeargs.kotlin", version.ref = "androidx-navigation" }
+androidx-room = { id = "androidx.room", version.ref = "androidx-room" }
 
 firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebase-crashlytics" }
 

@@ -8,7 +8,12 @@ plugins {
     alias(libs.plugins.google.ksp)
     alias(libs.plugins.google.hilt)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.androidx.room)
     kotlin("kapt")
+}
+
+room {
+    schemaDirectory("$projectDir/schemas")
 }
 
 android {

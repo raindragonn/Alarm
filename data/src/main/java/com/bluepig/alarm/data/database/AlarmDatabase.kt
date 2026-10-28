@@ -13,7 +13,7 @@ import com.bluepig.alarm.data.database.data.AlarmData
 @Database(
     entities = [AlarmData::class],
     version = DatabaseConfig.VERSION,
-    exportSchema = false,
+    exportSchema = true,
 )
 @TypeConverters(
     WeekTypeConverter::class, AlarmMediaTypeConverter::class
