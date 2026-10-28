@@ -188,3 +188,6 @@ fabric.properties
 app/debug/
 app/release/
 key.stores/
+
+# Claude Code
+CLAUDE.md
