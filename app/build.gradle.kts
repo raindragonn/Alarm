@@ -1,9 +1,7 @@
 import com.bluepig.alarm.AppConfiguration
 
-@Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 plugins {
     alias(libs.plugins.com.android.application)
-    alias(libs.plugins.kotlin.android)
 
     alias(libs.plugins.google.hilt)
     alias(libs.plugins.google.ksp)
@@ -11,7 +9,6 @@ plugins {
     alias(libs.plugins.firebase.crashlytics)
 
     alias(libs.plugins.androidx.navigation.safeargs)
-    kotlin("kapt")
 }
 
 val debugJson =
@@ -89,19 +86,10 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
     buildFeatures {
         viewBinding = true
         buildConfig = true
-    }
-
-    /**
-     *  Hilt Allow references to generated code
-     */
-    kapt {
-        correctErrorTypes = true
+        resValues = true
     }
     packaging {
         resources.excludes.add(
@@ -123,12 +111,13 @@ dependencies {
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.recyclerview)
     implementation(libs.androidx.media3.exoplayer)
     implementation(libs.androidx.media3.exoplayer.ui)
 
     implementation(libs.google.material)
     implementation(libs.google.hilt)
-    kapt(libs.google.hilt.compiler)
+    ksp(libs.google.hilt.compiler)
 
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics.ktx)

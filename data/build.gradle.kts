@@ -1,15 +1,12 @@
 import com.bluepig.alarm.AppConfiguration
 import groovy.json.JsonSlurper
 
-@Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 plugins {
     alias(libs.plugins.com.android.library)
-    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.google.ksp)
     alias(libs.plugins.google.hilt)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.androidx.room)
-    kotlin("kapt")
 }
 
 room {
@@ -51,17 +48,9 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
     buildFeatures {
         buildConfig = true
-    }
-    /**
-     *  Hilt Allow references to generated code
-     */
-    kapt {
-        correctErrorTypes = true
+        resValues = true
     }
 
     packaging {
@@ -81,12 +70,11 @@ dependencies {
 
     // room
     implementation(libs.androidx.room)
-    implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)
 
     // hilt
     implementation(libs.google.hilt)
-    kapt(libs.google.hilt.compiler)
+    ksp(libs.google.hilt.compiler)
 
     implementation(libs.retrofit2)
     implementation(libs.retrofit2.serialization.converter)
