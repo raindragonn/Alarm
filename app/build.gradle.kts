@@ -26,7 +26,8 @@ android {
 
     defaultConfig {
         applicationId = "com.bluepig.alarm"
-        versionCode = 10
+        // CI 배포는 -PversionCode로 덮어씀 (기술 0010)
+        versionCode = providers.gradleProperty("versionCode").orNull?.toInt() ?: 10
         versionName = "1.1.1"
     }
     signingConfigs {

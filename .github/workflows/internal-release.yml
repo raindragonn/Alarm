@@ -1,0 +1,57 @@
+name: 내부 테스트 배포
+
+on:
+  push:
+    branches: [dev]
+
+permissions:
+  contents: read
+
+# 대기 중인 이전 실행은 취소되고 최신 병합만 올라감
+concurrency:
+  group: internal-release
+  cancel-in-progress: false
+
+jobs:
+  internal-release:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
+        with:
+          distribution: temurin
+          java-version: '17.0.21+9'
+      # 빌드 캐시·구성 캐시는 Actions 캐시에 넣지 않음 (기술 0013)
+      - uses: gradle/actions/setup-gradle@8da46b539cd8fe6ab27ca75128919a18d757604c # v6.4.1
+        with:
+          cache-provider: basic
+
+      - name: 비밀 파일 쓰기
+        env:
+          LOCAL_PROPERTIES: ${{ secrets.LOCAL_PROPERTIES }}
+          DEBUG_KEYSTORE_BASE64: ${{ secrets.DEBUG_KEYSTORE_BASE64 }}
+          RELEASE_KEYSTORE_BASE64: ${{ secrets.RELEASE_KEYSTORE_BASE64 }}
+          GOOGLE_SERVICES_RELEASE_JSON: ${{ secrets.GOOGLE_SERVICES_RELEASE_JSON }}
+        run: |
+          printf '%s\n' "$LOCAL_PROPERTIES" > local.properties
+          mkdir -p key.stores
+          printf '%s' "$DEBUG_KEYSTORE_BASE64" | base64 --decode > key.stores/debug.jks
+          printf '%s' "$RELEASE_KEYSTORE_BASE64" | base64 --decode > key.stores/release.jks
+          printf '%s' "$GOOGLE_SERVICES_RELEASE_JSON" > app/src/google-services.json
+
+      # versionCode = 10 + 이 워크플로 실행 번호 (기술 0010)
+      - name: release 번들 빌드
+        run: ./gradlew bundleRelease --no-build-cache -PversionCode=$((10 + GITHUB_RUN_NUMBER))
+
+      # 내부 테스트 트랙만 (기술 0002·0009)
+      - uses: r0adkll/upload-google-play@e738b9dd8f2476ea806d921b64aacd24f34515a5 # v1.1.5
+        with:
+          serviceAccountJsonPlainText: ${{ secrets.PLAY_SERVICE_ACCOUNT_JSON }}
+          packageName: com.bluepig.alarm
+          releaseFiles: app/build/outputs/bundle/release/app-release.aab
+          track: internal
+          status: completed
+          mappingFile: app/build/outputs/mapping/release/mapping.txt
