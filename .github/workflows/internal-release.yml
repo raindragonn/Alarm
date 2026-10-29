@@ -46,12 +46,13 @@ jobs:
       - name: release 번들 빌드
         run: ./gradlew bundleRelease --no-build-cache -PversionCode=$((10 + GITHUB_RUN_NUMBER))
 
-      # 내부 테스트 트랙만 (기술 0002·0009)
+      # 내부 테스트 트랙만 (기술 0002·0009). tracks가 비면 action은 production으로 올리므로
+      # 서비스 계정에는 테스트 트랙 출시 권한만 둠
       - uses: r0adkll/upload-google-play@e738b9dd8f2476ea806d921b64aacd24f34515a5 # v1.1.5
         with:
           serviceAccountJsonPlainText: ${{ secrets.PLAY_SERVICE_ACCOUNT_JSON }}
           packageName: com.bluepig.alarm
           releaseFiles: app/build/outputs/bundle/release/app-release.aab
-          track: internal
+          tracks: internal
           status: completed
           mappingFile: app/build/outputs/mapping/release/mapping.txt
