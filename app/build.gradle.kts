@@ -105,7 +105,6 @@ dependencies {
     implementation(libs.youtube.player.core)
     implementation(libs.youtube.player.ui)
 
-    implementation(libs.google.playservices.auth)
     implementation(libs.google.playservices.ads)
     implementation(libs.google.api.client)
 
