@@ -1,16 +1,19 @@
 package com.bluepig.alarm.util.ads
 
-import android.app.Activity
 import android.content.Context
 import android.view.ViewGroup
+import androidx.activity.ComponentActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.coroutineScope
+import androidx.lifecycle.lifecycleScope
 import com.bluepig.alarm.R
-import com.bluepig.alarm.data.preference.AppPreferences
 import com.bluepig.alarm.databinding.MainBottomNativeLayoutBinding
-import com.bluepig.alarm.domain.util.CalendarHelper
+import com.bluepig.alarm.domain.entity.config.AdPlacement
+import com.bluepig.alarm.domain.usecase.IsAdEnabled
+import com.bluepig.alarm.domain.usecase.MarkInterstitialShown
 import com.bluepig.alarm.util.ext.inflater
 import com.bluepig.alarm.util.logger.BpLogger
 import com.google.android.gms.ads.AdError
@@ -26,6 +29,8 @@ import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.google.android.gms.ads.nativead.NativeAd
 import com.google.android.gms.ads.nativead.NativeAdOptions
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 /**
@@ -33,13 +38,13 @@ import javax.inject.Inject
  * 현재 하나의 lifecycle 만 사용하도록 적용되어있음. 즉 하나의 광고를 사용 시 다른 광고는 사용 불가
  * 추 후 필요시 변경 예정
  * @property _context
- * @property _appPref
  * @constructor Create empty Ads manager
  */
 class AdsManager @Inject constructor(
     @ApplicationContext
     private val _context: Context,
-    private val _appPref: AppPreferences,
+    private val _isAdEnabled: IsAdEnabled,
+    private val _markInterstitialShown: MarkInterstitialShown,
 ) {
     private var _lifecycle: Lifecycle? = null
     private var _lifeCycleObserver: LifecycleObserver? = null
@@ -57,32 +62,11 @@ class AdsManager @Inject constructor(
         _lifecycle = lifecycle
     }
 
-    private val _isBottomNativeEnabled
-        get() = _appPref.adsSwitch && _appPref.adsMainBottomNativeSwitch
-
-    private val _isListNativeEnabled
-        get() = _appPref.adsSwitch && _appPref.adsAlarmListNativeSwitch
-
-    private val _isBannerEnabled
-        get() = _appPref.adsSwitch && _appPref.adsAlarmBannerSwitch
-
-    private val _isInterstitialEnabled
-        get() = _appPref.adsSwitch && _appPref.adsInterstitialMusicClickSwitch
-
-    private fun checkInterstitialEnabled(): Boolean {
-        val enabled = _isInterstitialEnabled
-        val savedTime = _appPref.lastInterstitialShowTime
-        val now = CalendarHelper.now.timeInMillis
-        val isOverTime = now - savedTime > 60 * 60 * 1000
-
-        return enabled && isOverTime
-    }
-
     fun loadBottomNativeAd(
         lifecycle: Lifecycle,
         container: ViewGroup
-    ) {
-        if (!_isBottomNativeEnabled) return
+    ) = lifecycle.coroutineScope.launch {
+        if (!_isAdEnabled(AdPlacement.MAIN_BOTTOM_NATIVE)) return@launch
 
         kotlin.runCatching {
             setLifeCycle(lifecycle)
@@ -118,8 +102,8 @@ class AdsManager @Inject constructor(
     fun loadAlarmListNativeAd(
         lifecycle: Lifecycle,
         loadedListener: (NativeAd) -> Unit
-    ) {
-        if (!_isListNativeEnabled) return
+    ) = lifecycle.coroutineScope.launch {
+        if (!_isAdEnabled(AdPlacement.ALARM_LIST_NATIVE)) return@launch
 
         kotlin.runCatching {
             setLifeCycle(lifecycle)
@@ -152,8 +136,8 @@ class AdsManager @Inject constructor(
         }
     }
 
-    fun loadBanner(lifecycle: Lifecycle, container: ViewGroup) {
-        if (!_isBannerEnabled) return
+    fun loadBanner(lifecycle: Lifecycle, container: ViewGroup) = lifecycle.coroutineScope.launch {
+        if (!_isAdEnabled(AdPlacement.ALARM_BANNER)) return@launch
         setLifeCycle(lifecycle)
 
         kotlin.runCatching {
@@ -177,8 +161,8 @@ class AdsManager @Inject constructor(
         }
     }
 
-    fun loadInterstitial(lifecycle: Lifecycle) {
-        if (!checkInterstitialEnabled()) return
+    fun loadInterstitial(lifecycle: Lifecycle): Job = lifecycle.coroutineScope.launch {
+        if (!_isAdEnabled(AdPlacement.MEDIA_SELECT_INTERSTITIAL)) return@launch
 
         kotlin.runCatching {
             InterstitialAd.load(
@@ -205,13 +189,13 @@ class AdsManager @Inject constructor(
     }
 
     fun showInterstitial(
-        activity: Activity,
+        activity: ComponentActivity,
         onShowed: () -> Unit,
         onCloseOrFailed: () -> Unit
-    ) {
-        if (!checkInterstitialEnabled()) {
+    ) = activity.lifecycleScope.launch {
+        if (!_isAdEnabled(AdPlacement.MEDIA_SELECT_INTERSTITIAL)) {
             onCloseOrFailed.invoke()
-            return
+            return@launch
         }
         kotlin.runCatching {
             _interstitialAd?.apply {
@@ -226,7 +210,7 @@ class AdsManager @Inject constructor(
                     override fun onAdDismissedFullScreenContent() {
                         super.onAdDismissedFullScreenContent()
                         _interstitialAd = null
-                        _appPref.lastInterstitialShowTime = CalendarHelper.now.timeInMillis
+                        activity.lifecycleScope.launch { _markInterstitialShown() }
                         onCloseOrFailed.invoke()
                         fullScreenContentCallback = null
                     }

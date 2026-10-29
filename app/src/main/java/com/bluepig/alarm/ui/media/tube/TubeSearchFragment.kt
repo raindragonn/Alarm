@@ -1,6 +1,7 @@
 package com.bluepig.alarm.ui.media.tube
 
 import android.accounts.AccountManager
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.activity.result.ActivityResult
@@ -12,23 +13,23 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
 import com.bluepig.alarm.R
-import com.bluepig.alarm.data.preference.AppPreferences
 import com.bluepig.alarm.databinding.DialogYoutubeNoticeBinding
 import com.bluepig.alarm.databinding.FragmentTubeSearchBinding
 import com.bluepig.alarm.domain.entity.alarm.media.TubeMedia
+import com.bluepig.alarm.domain.result.TubeAuthRequiredException
 import com.bluepig.alarm.domain.result.isLoading
 import com.bluepig.alarm.ui.media.select.MediaSelectBottomSheetDialogFragment
 import com.bluepig.alarm.util.ext.setOnEnterListener
 import com.bluepig.alarm.util.ext.setOnLoadMore
 import com.bluepig.alarm.util.ext.showErrorToast
+import com.bluepig.alarm.util.ext.viewLifeCycleScope
 import com.bluepig.alarm.util.ext.viewRepeatOnLifeCycle
 import com.bluepig.alarm.util.logger.BpLogger
 import com.bluepig.alarm.util.viewBinding
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
-import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException
+import com.google.android.gms.common.AccountPicker
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.stateIn
-import javax.inject.Inject
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class TubeSearchFragment : Fragment(R.layout.fragment_tube_search) {
@@ -38,15 +39,6 @@ class TubeSearchFragment : Fragment(R.layout.fragment_tube_search) {
     private val _credentialLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult(), ::credentialCallBack
     )
-
-    @Inject
-    lateinit var credential: GoogleAccountCredential
-
-    @Inject
-    lateinit var appPreferences: AppPreferences
-
-    private val _onlyLinkSearch
-        get() = appPreferences.showOnlyYoutubeLink
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -62,16 +54,24 @@ class TubeSearchFragment : Fragment(R.layout.fragment_tube_search) {
     private fun initViews() = with(_binding) {
         rvSearch.adapter = _adapter
         rvSearch.setOnLoadMore {
-            _vm.search(etSearch.text.toString(), _onlyLinkSearch)
+            _vm.search(etSearch.text.toString())
         }
 
-        etSearch.hint =
-            if (_onlyLinkSearch) getString(R.string.hint_tube_url_search) else getString(R.string.hint_tube_search)
+        viewLifeCycleScope.launch {
+            val hint = if (_vm.isOnlyLinkSearch()) {
+                R.string.hint_tube_url_search
+            } else {
+                R.string.hint_tube_search
+            }
+            etSearch.hint = getString(hint)
+        }
 
         etSearch.setOnEnterListener {
-            if (checkOAuthLogin()) {
-                BpLogger.logMediaSearch(TubeMedia::class.java.simpleName, it)
-                _vm.search(it, _onlyLinkSearch)
+            viewLifeCycleScope.launch {
+                if (checkOAuthLogin()) {
+                    BpLogger.logMediaSearch(TubeMedia::class.java.simpleName, it)
+                    _vm.search(it)
+                }
             }
         }
 
@@ -82,25 +82,33 @@ class TubeSearchFragment : Fragment(R.layout.fragment_tube_search) {
         }
     }
 
-    private fun checkOAuthLogin(): Boolean {
+    private suspend fun checkOAuthLogin(): Boolean {
         val savedSelectName = _vm.getSavedSelectName()
         return if (savedSelectName.isNullOrBlank()) {
-            val intent = credential.newChooseAccountIntent()
+            val intent = newChooseAccountIntent()
             openOauthNotice {
                 _credentialLauncher.launch(intent)
             }
             false
         } else {
-            credential.selectedAccountName = savedSelectName
             true
         }
     }
 
+    // GoogleAccountCredential.newChooseAccountIntent와 같은 값 (credential은 core:network에 있음)
+    private fun newChooseAccountIntent(): Intent = AccountPicker.newChooseAccountIntent(
+        AccountPicker.AccountChooserOptions.Builder()
+            .setAllowableAccountsTypes(listOf(GOOGLE_ACCOUNT_TYPE))
+            .setAlwaysShowAccountPicker(true)
+            .build()
+    )
+
     private fun credentialCallBack(result: ActivityResult) {
         val accountName = result.data?.getStringExtra(AccountManager.KEY_ACCOUNT_NAME) ?: return
-        credential.selectedAccountName = accountName
-        _vm.setSavedSelectName(accountName)
-        _vm.search(_binding.etSearch.text.toString(), _onlyLinkSearch)
+        viewLifeCycleScope.launch {
+            _vm.setSavedSelectName(accountName)
+            _vm.search(_binding.etSearch.text.toString())
+        }
     }
 
     private fun openOauthNotice(action: () -> Unit) {
@@ -148,9 +156,9 @@ class TubeSearchFragment : Fragment(R.layout.fragment_tube_search) {
     }
 
     private fun requestOauth(throwable: Throwable) {
-        if (throwable is UserRecoverableAuthIOException) {
-            _vm.setSavedSelectName("")
-            val requestIntent = throwable.intent
+        val requestIntent = (throwable as? TubeAuthRequiredException)?.resolution as? Intent
+        if (requestIntent != null) {
+            viewLifeCycleScope.launch { _vm.setSavedSelectName("") }
             _credentialLauncher.launch(requestIntent)
         } else {
             showErrorToast(throwable)
@@ -159,5 +167,9 @@ class TubeSearchFragment : Fragment(R.layout.fragment_tube_search) {
 
     private fun setLoadingVisible(isVisible: Boolean) {
         _binding.pbLoading.isVisible = isVisible
+    }
+
+    private companion object {
+        const val GOOGLE_ACCOUNT_TYPE = "com.google"
     }
 }

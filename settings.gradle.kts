@@ -16,5 +16,8 @@ dependencyResolutionManagement {
 
 rootProject.name = "Alarm"
 include(":app")
-include(":data")
-include(":domain")
+include(":core:domain")
+include(":core:data")
+include(":core:database")
+include(":core:network")
+include(":core:datastore")

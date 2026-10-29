@@ -39,4 +39,4 @@ jobs:
           printf '%s' "$GOOGLE_SERVICES_DEBUG_JSON" > app/src/debug/google-services.json
 
       - name: 단위 테스트·lint
-        run: ./gradlew :domain:test testDebugUnitTest lint --continue --no-build-cache
+        run: ./gradlew :core:domain:test testDebugUnitTest lint --continue --no-build-cache
