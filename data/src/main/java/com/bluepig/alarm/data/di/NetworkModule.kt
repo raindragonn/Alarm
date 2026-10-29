@@ -4,7 +4,6 @@ import com.bluepig.alarm.data.BuildConfig
 import com.bluepig.alarm.data.network.api.SearchApi
 import com.bluepig.alarm.data.network.parser.MusicInfoPageParser
 import com.bluepig.alarm.data.network.parser.MusicInfoPageParserImpl
-import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -14,6 +13,7 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
+import retrofit2.converter.kotlinx.serialization.asConverterFactory
 import javax.inject.Singleton
 
 @Module
