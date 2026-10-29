@@ -37,7 +37,7 @@ coil = "2.5.0"
 jsoup = "1.23.2"
 timber = "5.0.1"
 youtube-player = "13.0.0"
-leak-canary = "2.12"
+leak-canary = "2.14"
 
 # Test
 junit = "4.13.2"
