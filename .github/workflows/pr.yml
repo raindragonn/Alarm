@@ -1,0 +1,42 @@
+name: PR 검사
+
+on:
+  pull_request:
+    branches: [dev]
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
+        with:
+          distribution: temurin
+          java-version: '17.0.21+9'
+      # 빌드 캐시·구성 캐시는 Actions 캐시에 넣지 않음 (기술 0013)
+      - uses: gradle/actions/setup-gradle@8da46b539cd8fe6ab27ca75128919a18d757604c # v6.4.1
+        with:
+          cache-provider: basic
+
+      # fork PR에는 Secrets가 없어 다음 Gradle 단계에서 실패함 (기술 0012)
+      - name: 비밀 파일 쓰기
+        env:
+          LOCAL_PROPERTIES: ${{ secrets.LOCAL_PROPERTIES }}
+          DEBUG_KEYSTORE_BASE64: ${{ secrets.DEBUG_KEYSTORE_BASE64 }}
+          RELEASE_KEYSTORE_BASE64: ${{ secrets.RELEASE_KEYSTORE_BASE64 }}
+          GOOGLE_SERVICES_DEBUG_JSON: ${{ secrets.GOOGLE_SERVICES_DEBUG_JSON }}
+        run: |
+          printf '%s\n' "$LOCAL_PROPERTIES" > local.properties
+          mkdir -p key.stores app/src/debug
+          printf '%s' "$DEBUG_KEYSTORE_BASE64" | base64 --decode > key.stores/debug.jks
+          printf '%s' "$RELEASE_KEYSTORE_BASE64" | base64 --decode > key.stores/release.jks
+          printf '%s' "$GOOGLE_SERVICES_DEBUG_JSON" > app/src/debug/google-services.json
+
+      - name: 단위 테스트·lint
+        run: ./gradlew :domain:test testDebugUnitTest lint --continue --no-build-cache
