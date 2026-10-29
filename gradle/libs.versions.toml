@@ -22,12 +22,12 @@ google-material = "1.10.0"
 google-hilt = "2.60.1"
 google-services = "4.5.0"
 google-playservices-auth = "22.0.0"
-google-playservices-ads = "22.5.0"
+google-playservices-ads = "25.5.0"
 google-youtube = "v3-rev20261019-2.9.2"
 google-api-client = "2.9.2"
 
 #firebase
-firebase-bom = "32.7.0"
+firebase-bom = "35.1.0"
 firebase-crashlytics = "3.0.8"
 
 # ETC
@@ -58,9 +58,9 @@ google-api-client = { group = "com.google.api-client", name = "google-api-client
 
 #firebase
 firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebase-bom" }
-firebase-crashlytics-ktx = { group = "com.google.firebase", name = "firebase-crashlytics-ktx" }
-firebase-analytics-ktx = { group = "com.google.firebase", name = "firebase-analytics-ktx" }
-firebase-config-ktx = { group = "com.google.firebase", name = "firebase-config-ktx" }
+firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics" }
+firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics" }
+firebase-config = { group = "com.google.firebase", name = "firebase-config" }
 
 # AndroidX
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "androidx-core-ktx" }
