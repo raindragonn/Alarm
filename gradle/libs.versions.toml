@@ -15,7 +15,7 @@ androidx-room = "2.8.5"
 androidx-navigation = "2.9.7"
 androidx-fragment = "1.6.2"
 androidx-lifecycle = "2.6.2"
-androidx-media3-exoplayer = "1.2.0"
+androidx-media3-exoplayer = "1.11.1"
 
 # Google
 google-material = "1.10.0"
@@ -36,7 +36,7 @@ okhttp3 = "5.4.0"
 coil = "2.5.0"
 jsoup = "1.23.2"
 timber = "5.0.1"
-youtube-player = "12.1.0"
+youtube-player = "13.0.0"
 leak-canary = "2.12"
 
 # Test

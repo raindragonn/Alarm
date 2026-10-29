@@ -183,7 +183,7 @@ class MediaSelectBottomSheetDialogFragment :
                 )
             }
         }
-        val options = IFramePlayerOptions.Builder().controls(0).build()
+        val options = IFramePlayerOptions.Builder(requireContext()).controls(0).build()
         yp.initialize(listener, options)
     }
 
