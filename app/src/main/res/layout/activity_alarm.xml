@@ -31,14 +31,38 @@
         app:layout_constraintTop_toBottomOf="@id/tv_date"
         tools:text="2:09" />
 
+    <!-- 큰 화면에선 세로 고정이 무시돼 가로가 될 수 있음 → 미디어를 이 영역 안의 최대 크기로 줄여 종료 버튼이 화면에 남게 함 -->
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/gl_media_start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.2" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/gl_media_end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.8" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/gl_media_bottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.7" />
+
     <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
         android:id="@+id/yp"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="0dp"
         android:visibility="gone"
         app:enableAutomaticInitialization="false"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/gl_media_bottom"
         app:layout_constraintDimensionRatio="16:9"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_time"
         app:layout_constraintVertical_bias="0.2"
         tools:visibility="visible" />
@@ -47,13 +71,12 @@
         android:id="@+id/iv_thumbnail"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/gl_media_bottom"
         app:layout_constraintDimensionRatio="1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/gl_media_end"
+        app:layout_constraintStart_toEndOf="@id/gl_media_start"
         app:layout_constraintTop_toBottomOf="@id/tv_time"
         app:layout_constraintVertical_bias="0.2"
-        app:layout_constraintWidth_percent="0.6"
         tools:src="@drawable/ic_image_place_holder" />
 
     <androidx.constraintlayout.widget.Barrier
