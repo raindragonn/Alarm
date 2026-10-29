@@ -71,9 +71,8 @@ android {
         resValues = true
     }
     packaging {
-        resources.excludes.add(
-            "META-INF/DEPENDENCIES"
-        )
+        // google-api-client 2.x가 끌어오는 google-auth-library jar끼리 겹침
+        resources.excludes += listOf("META-INF/DEPENDENCIES", "META-INF/INDEX.LIST")
     }
 }
 

@@ -21,10 +21,10 @@ androidx-media3-exoplayer = "1.2.0"
 google-material = "1.10.0"
 google-hilt = "2.60.1"
 google-services = "4.5.0"
-google-playservices-auth = "20.7.0"
+google-playservices-auth = "22.0.0"
 google-playservices-ads = "22.5.0"
-google-youtube = "v3-rev222-1.25.0"
-google-api-client = "2.2.0"
+google-youtube = "v3-rev20261019-2.9.2"
+google-api-client = "2.9.2"
 
 #firebase
 firebase-bom = "32.7.0"
