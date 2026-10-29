@@ -1,42 +1,42 @@
-import com.bluepig.alarm.AppConfiguration
-import groovy.json.JsonSlurper
-
-@Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 plugins {
-    alias(libs.plugins.com.android.library)
-    alias(libs.plugins.kotlin.android)
+    id("alarm.android.library")
+    id("alarm.hilt")
     alias(libs.plugins.google.ksp)
-    alias(libs.plugins.google.hilt)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.androidx.room)
-    kotlin("kapt")
 }
 
 room {
     schemaDirectory("$projectDir/schemas")
 }
 
+val apiKeys = listOf(
+    "SEARCH_API_HOST",
+    "SEARCH_API_ENDPOINT",
+    "SEARCH_API_OPTION1",
+    "SEARCH_API_OPTION1_VALUE",
+    "SEARCH_API_OPTION2",
+    "SEARCH_API_OPTION2_VALUE",
+    "SEARCH_API_OPTION3",
+    "SEARCH_API_OPTION3_VALUE",
+    "SEARCH_API_OPTION4",
+    "SEARCH_API_OPTION4_VALUE",
+    "PARSING_DEFAULT_SELECT",
+    "PARSING_DEFAULT_ATTR",
+)
+val api = localProperties(apiKeys.map { "api.$it" })
+
 android {
     namespace = "com.bluepig.alarm.data"
-    compileSdk = AppConfiguration.compileSdk
 
     defaultConfig {
-        minSdk = AppConfiguration.minSdk
-
         consumerProguardFiles("consumer-rules.pro")
+        apiKeys.forEach { buildConfigField("String", it, "\"${api.getValue("api.$it")}\"") }
     }
 
     buildTypes {
-        all {
-            val apiJson =
-                JsonSlurper().parseText(file("../key.stores/api.keys").readText()) as org.apache.groovy.json.internal.LazyMap
-
-            apiJson.entries.forEach {
-                buildConfigField("String", it.key, "\"${it.value}\"")
-            }
-        }
         release {
-            isMinifyEnabled = true
+            isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -47,21 +47,9 @@ android {
             resValue("string", "app_name", "@string/app_name_dev")
         }
     }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-    }
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
     buildFeatures {
         buildConfig = true
-    }
-    /**
-     *  Hilt Allow references to generated code
-     */
-    kapt {
-        correctErrorTypes = true
+        resValues = true
     }
 
     packaging {
@@ -81,12 +69,7 @@ dependencies {
 
     // room
     implementation(libs.androidx.room)
-    implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)
-
-    // hilt
-    implementation(libs.google.hilt)
-    kapt(libs.google.hilt.compiler)
 
     implementation(libs.retrofit2)
     implementation(libs.retrofit2.serialization.converter)

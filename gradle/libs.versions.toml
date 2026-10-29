@@ -1,7 +1,7 @@
 [versions]
-android-gradle-plugin = "8.4.2"
-kotlin = "1.9.0"
-kotlin-ksp = "1.9.0-1.0.12"
+android-gradle-plugin = "9.5.0"
+kotlin = "2.4.21"
+kotlin-ksp = "2.3.12"
 kotlinx-json = "1.6.0"
 javax-inject = "1"
 kotlinx-coroutines-core = "1.7.3"
@@ -10,16 +10,17 @@ kotlinx-coroutines-core = "1.7.3"
 androidx-core-ktx = "1.12.0"
 androidx-appcompat = "1.6.1"
 androidx-constraintlayout = "2.1.4"
-androidx-room = "2.6.0"
-androidx-navigation = "2.7.5"
+androidx-recyclerview = "1.3.0"
+androidx-room = "2.8.5"
+androidx-navigation = "2.9.7"
 androidx-fragment = "1.6.2"
 androidx-lifecycle = "2.6.2"
 androidx-media3-exoplayer = "1.2.0"
 
 # Google
 google-material = "1.10.0"
-google-hilt = "2.51"
-google-services = "4.4.0"
+google-hilt = "2.60.1"
+google-services = "4.5.0"
 google-playservices-auth = "20.7.0"
 google-playservices-ads = "22.5.0"
 google-youtube = "v3-rev222-1.25.0"
@@ -27,7 +28,7 @@ google-api-client = "2.2.0"
 
 #firebase
 firebase-bom = "32.7.0"
-firebase-crashlytics = "2.9.9"
+firebase-crashlytics = "3.0.8"
 
 # ETC
 retrofit2 = "2.9.0"
@@ -43,6 +44,10 @@ leak-canary = "2.12"
 junit = "4.13.2"
 
 [libraries]
+# Build logic
+android-gradle-plugin = { group = "com.android.tools.build", name = "gradle", version.ref = "android-gradle-plugin" }
+kotlin-gradle-plugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
+
 # Google
 google-material = { group = "com.google.android.material", name = "material", version.ref = "google-material" }
 google-hilt = { group = "com.google.dagger", name = "hilt-android", version.ref = "google-hilt" }
@@ -62,10 +67,10 @@ firebase-config-ktx = { group = "com.google.firebase", name = "firebase-config-k
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "androidx-core-ktx" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "androidx-appcompat" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "androidx-constraintlayout" }
+androidx-recyclerview = { group = "androidx.recyclerview", name = "recyclerview", version.ref = "androidx-recyclerview" }
 androidx-fragment-ktx = { group = "androidx.fragment", name = "fragment-ktx", version.ref = "androidx-fragment" }
 androidx-room = { group = "androidx.room", name = "room-runtime", version.ref = "androidx-room" }
 androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "androidx-room" }
-androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "androidx-room" }
 androidx-navigation-fragment-ktx = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "androidx-navigation" }
 androidx-navigation-ui-ktx = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "androidx-navigation" }
 androidx-lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "androidx-lifecycle" }
@@ -96,7 +101,6 @@ okhttp3-mockwebserver = { group = "com.squareup.okhttp3", name = "mockwebserver"
 com-android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
 com-android-library = { id = "com.android.library", version.ref = "android-gradle-plugin" }
 
-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 
