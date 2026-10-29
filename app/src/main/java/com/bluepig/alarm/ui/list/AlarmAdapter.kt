@@ -1,5 +1,6 @@
 package com.bluepig.alarm.ui.list
 
+import android.annotation.SuppressLint
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -44,6 +45,8 @@ class AlarmAdapter(
                 return oldItem.id == newItem.id
             }
 
+            // AlarmMedia 구현은 모두 data class라 == 가 내용 비교 (lint 오탐)
+            @SuppressLint("DiffUtilEquals")
             override fun areContentsTheSame(oldItem: Alarm, newItem: Alarm): Boolean {
                 return oldItem.timeInMillis == newItem.timeInMillis
                         && oldItem.isActive == newItem.isActive
