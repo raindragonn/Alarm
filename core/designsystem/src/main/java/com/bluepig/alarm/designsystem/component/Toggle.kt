@@ -21,21 +21,22 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.bluepig.alarm.designsystem.theme.AlarmTheme
 
-/** v2/Toggle. 켜짐 = accent, 꺼짐 = fill + dim 테두리 */
+/**
+ * v2/Toggle. 켜짐 = accent, 꺼짐 = fill + dim 테두리.
+ * [onCheckedChange]가 null이면 그리기만 함 (라벨까지 행 전체를 toggleable로 만든 쪽이 처리)
+ */
 @Composable
 fun Toggle(
     checked: Boolean,
-    onCheckedChange: (Boolean) -> Unit,
+    onCheckedChange: ((Boolean) -> Unit)?,
     modifier: Modifier = Modifier,
 ) {
     val colors = AlarmTheme.colors
     val track by animateColorAsState(if (checked) colors.accent else colors.fill)
     val border by animateColorAsState(if (checked) Color.Transparent else colors.dim)
     val thumbOffset by animateDpAsState(if (checked) 24.dp else 4.dp)
-    Box(
-        modifier.toggleable(checked, role = Role.Switch, onValueChange = onCheckedChange),
-        contentAlignment = Alignment.Center,
-    ) {
+    val toggle = onCheckedChange?.let { Modifier.toggleable(checked, role = Role.Switch, onValueChange = it) }
+    Box(modifier.then(toggle ?: Modifier), contentAlignment = Alignment.Center) {
         Box(
             Modifier
                 .size(48.dp, 28.dp)
