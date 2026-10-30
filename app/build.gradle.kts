@@ -77,8 +77,9 @@ android {
 }
 
 dependencies {
-    implementation(project(":data"))
-    implementation(project(":domain"))
+    // core:data는 DI 바인딩용 (화면은 domain만 씀)
+    implementation(project(":core:data"))
+    implementation(project(":core:domain"))
 
     implementation(libs.kotlinx.serialization.json)
 
@@ -106,7 +107,6 @@ dependencies {
     implementation(libs.youtube.player.ui)
 
     implementation(libs.google.playservices.ads)
-    implementation(libs.google.api.client)
 
     testImplementation(libs.junit)
 

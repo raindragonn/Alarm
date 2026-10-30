@@ -3,8 +3,8 @@ package com.bluepig.alarm.di
 import android.content.Context
 import android.media.AudioManager
 import androidx.media3.common.util.UnstableApi
-import com.bluepig.alarm.data.preference.AppPreferences
 import com.bluepig.alarm.domain.alarm.BpAlarmManager
+import com.bluepig.alarm.domain.usecase.SaveAppConfig
 import com.bluepig.alarm.manager.alarm.BPAlarmManagerImpl
 import com.bluepig.alarm.manager.config.ConfigManager
 import com.bluepig.alarm.manager.config.ConfigManagerImpl
@@ -20,6 +20,9 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import javax.inject.Singleton
 
 @UnstableApi
@@ -69,8 +72,14 @@ object ManagerModule {
 
     @Provides
     fun providesConfigManage(
-        appPreferences: AppPreferences
+        saveAppConfig: SaveAppConfig,
+        appScope: CoroutineScope,
     ): ConfigManager {
-        return ConfigManagerImpl(appPreferences)
+        return ConfigManagerImpl(saveAppConfig, appScope)
     }
+
+    // 화면보다 오래 살아야 하는 작업용 (원격 설정 저장)
+    @Provides
+    @Singleton
+    fun providesAppScope(): CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
 }
