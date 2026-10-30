@@ -8,8 +8,6 @@ object LoadingException : Exception("Could Not getting data for Loading State")
 
 object InitialException : Exception("Could Not getting data for Initial State")
 
-object NotFoundActiveAlarmException : DomainException("Not Found Active Alarm")
-
 object NotFoundAlarmException : DomainException("Not Found Alarm")
 
 object NotSelectAlarmMedia : DomainException("Not Found SongFile")

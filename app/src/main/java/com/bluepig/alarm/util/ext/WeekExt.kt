@@ -1,7 +1,6 @@
 package com.bluepig.alarm.util.ext
 
 import android.content.Context
-import androidx.annotation.ColorInt
 import androidx.annotation.StringRes
 import com.bluepig.alarm.R
 import com.bluepig.alarm.domain.entity.alarm.Week
@@ -32,17 +31,5 @@ fun Set<Week>.getGuideText(context: Context): String {
         this == weekEntries.toSet() -> context.getString(R.string.week_everyday_guide)
 
         else -> sorted().joinToString(" ") { context.getString(it.stringId) } + context.getString(R.string.week_guide)
-    }
-}
-
-@ColorInt
-fun Set<Week>.tintColor(context: Context, isActive: Boolean): Int {
-    if (!isActive) {
-        return context.getColor(R.color.disable)
-    }
-    return if (this.all { it.isWeekend } && this.isNotEmpty()) {
-        context.getColor(R.color.misc_050)
-    } else {
-        context.getColor(R.color.primary_600)
     }
 }
