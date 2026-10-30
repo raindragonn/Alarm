@@ -27,6 +27,8 @@
     <string name="cancel">cancellation</string>
     <string name="save">save</string>
     <string name="choice">select</string>
+    <string name="back">Back</string>
+    <string name="close">Close</string>
     <string name="song">song</string>
     <string name="ringtone">ringtone</string>
     <string name="youtube">youtube</string>
