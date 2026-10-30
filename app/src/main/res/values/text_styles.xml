@@ -14,23 +14,23 @@
     </style>
 
     <style name="TextAppearance.Alarm.Base.Bold" parent="TextAppearance.Alarm.Base">
-        <item name="fontFamily">@font/pretendard_bold</item>
-        <item name="android:fontFamily">@font/pretendard_bold</item>
+        <item name="fontFamily">@font/designsystem_pretendard_bold</item>
+        <item name="android:fontFamily">@font/designsystem_pretendard_bold</item>
     </style>
 
     <style name="TextAppearance.Alarm.Base.SemiBold" parent="TextAppearance.Alarm.Base">
-        <item name="fontFamily">@font/pretendard_semibold</item>
-        <item name="android:fontFamily">@font/pretendard_semibold</item>
+        <item name="fontFamily">@font/designsystem_pretendard_semibold</item>
+        <item name="android:fontFamily">@font/designsystem_pretendard_semibold</item>
     </style>
 
     <style name="TextAppearance.Alarm.Base.Medium" parent="TextAppearance.Alarm.Base">
-        <item name="fontFamily">@font/pretendard_medium</item>
-        <item name="android:fontFamily">@font/pretendard_medium</item>
+        <item name="fontFamily">@font/designsystem_pretendard_medium</item>
+        <item name="android:fontFamily">@font/designsystem_pretendard_medium</item>
     </style>
 
     <style name="TextAppearance.Alarm.Base.Regular" parent="TextAppearance.Alarm.Base">
-        <item name="fontFamily">@font/pretendard_regular</item>
-        <item name="android:fontFamily">@font/pretendard_regular</item>
+        <item name="fontFamily">@font/designsystem_pretendard_regular</item>
+        <item name="android:fontFamily">@font/designsystem_pretendard_regular</item>
     </style>
 
     <style name="TextAppearance.Alarm.Base.Headline" parent="TextAppearance.Alarm.Base">
@@ -49,13 +49,13 @@
     </style>
 
     <style name="TextAppearance.Alarm.HeadLine2" parent="TextAppearance.Alarm.Base.Headline">
-        <item name="fontFamily">@font/pretendard_medium</item>
-        <item name="android:fontFamily">@font/pretendard_medium</item>
+        <item name="fontFamily">@font/designsystem_pretendard_medium</item>
+        <item name="android:fontFamily">@font/designsystem_pretendard_medium</item>
     </style>
 
     <style name="TextAppearance.Alarm.HeadLine3" parent="TextAppearance.Alarm.Base.Headline">
-        <item name="fontFamily">@font/pretendard_regular</item>
-        <item name="android:fontFamily">@font/pretendard_regular</item>
+        <item name="fontFamily">@font/designsystem_pretendard_regular</item>
+        <item name="android:fontFamily">@font/designsystem_pretendard_regular</item>
     </style>
 
     <style name="TextAppearance.Alarm.Subtitle1" parent="TextAppearance.Alarm.Base.SemiBold">
