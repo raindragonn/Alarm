@@ -7,19 +7,9 @@
     <string name="alarm_emoji">⏰</string>
     <string name="alarm_end">알람 종료</string>
     <string name="alarm_preview_end">미리보기 종료</string>
-    <string name="alarm_media_select_title">알람음 설정</string>
-
-    <string name="play">재생</string>
-    <string name="pause">멈춤</string>
 
     <string name="ok">확인</string>
     <string name="cancel">취소</string>
-    <string name="choice">선택</string>
-    <string name="back">뒤로 가기</string>
-    <string name="close">닫기</string>
-    <string name="song">노래</string>
-    <string name="ringtone">벨소리</string>
-    <string name="youtube">유튜브</string>
     <string name="store">스토어</string>
 
     <string name="week_sun">일</string>
@@ -41,16 +31,7 @@
     <string name="alert_request_permission_text_system_alert_window">원활한 알람을 위해 다른앱 위에 표시 권한이 필요합니다.</string>
     <string name="alert_request_permission_text_exact_alarm">원활한 알람을 위해 알람 및 리마인더 권한이 필요합니다.</string>
 
-    <string name="alert_request_oauth_title">안전한 유튜브 연동 권한</string>
-    <string name="alert_request_oauth_description">%s이 Google의 Youtube API를 연동하여 데이터를 탐색할 수 있도록 로그인을 하시겠습니까?\n\n%s은 이 과정에서 어떠한 개인정보도 수집하지 않습니다.</string>
-    <string name="alert_request_oauth_agree">%s과 유튜브 연동</string>
-    <string name="alert_request_oauth_disagree">연동하지 않겠습니다.</string>
-
     <string name="notification_message_media_downlaod">인터넷 없이 알람을 위한 다운로드 중</string>
-
-    <string name="hint_music_search">노래 혹은 가수 명으로 검색해주세요.</string>
-    <string name="hint_tube_search">영상 제목 혹은 url로 검색해주세요.</string>
-    <string name="hint_tube_url_search">url로 검색해주세요.</string>
 
     <string name="toast_error_basic">문제가 발생했습니다! 다시 시도해주세요.</string>
     <string name="toast_error_search_query_empty">검색어를 입력해주세요.</string>
@@ -60,6 +41,5 @@
     <string name="ad_headline">AD · %1$s</string>
     <string name="review_request_title">리뷰 쓰러 가기</string>
     <string name="review_request_body">앱이 마음에 드신다면 칭찬을, 불편한 점이나 건의사항이 있다면 남겨주세요</string>
-    <string name="empty_of_search_result">검색 결과가 없습니다.</string>
 
 </resources>

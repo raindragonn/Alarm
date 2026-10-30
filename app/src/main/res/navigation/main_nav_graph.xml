@@ -39,26 +39,8 @@
             app:popUpToInclusive="false" />
     </fragment>
 
-    <dialog
-        android:id="@+id/MediaSelectBottomSheetDialogFragment"
-        android:name="com.bluepig.alarm.ui.media.select.MediaSelectBottomSheetDialogFragment"
-        android:label="MediaSelectBottomSheetDialogFragment"
-        tools:layout="@layout/fragment_media_select">
-
-        <argument
-            android:name="musicInfo"
-            app:argType="com.bluepig.alarm.domain.entity.music.MusicInfo"
-            app:nullable="true" />
-
-        <argument
-            android:name="alarmMedia"
-            app:argType="com.bluepig.alarm.domain.entity.alarm.media.AlarmMedia"
-            app:nullable="true" />
-    </dialog>
-
     <fragment
         android:id="@+id/mediaSelectFragment"
         android:name="com.bluepig.alarm.ui.media.MediaSelectFragment"
-        android:label="fragment_media_select"
-        tools:layout="@layout/fragment_media_select" />
+        android:label="fragment_media_select" />
 </navigation>

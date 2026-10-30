@@ -3,7 +3,6 @@
     <dimen name="base_spacing_0.5">4dp</dimen>
     <dimen name="base_spacing_1">8dp</dimen>
     <dimen name="base_spacing_1.5">12dp</dimen>
-    <dimen name="base_spacing_2">16dp</dimen>
     <dimen name="base_spacing_2.5">20dp</dimen>
     <dimen name="base_spacing_3">24dp</dimen>
     <dimen name="base_spacing_3.5">28dp</dimen>
@@ -11,8 +10,6 @@
     <dimen name="base_spacing_4.5">36dp</dimen>
     <dimen name="base_spacing_5">40dp</dimen>
     <dimen name="base_spacing_5.5">44dp</dimen>
-    <dimen name="base_spacing_6">48dp</dimen>
     <dimen name="base_spacing_6.5">52dp</dimen>
-    <dimen name="base_spacing_7">56dp</dimen>
     <dimen name="base_spacing_7.5">60dp</dimen>
 </resources>

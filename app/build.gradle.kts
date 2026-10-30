@@ -84,6 +84,7 @@ dependencies {
     implementation(project(":core:designsystem"))
     implementation(project(":feature:list"))
     implementation(project(":feature:edit"))
+    implementation(project(":feature:media"))
 
     implementation(libs.kotlinx.serialization.json)
 
