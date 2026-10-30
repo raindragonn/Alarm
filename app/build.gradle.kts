@@ -71,9 +71,8 @@ android {
         resValues = true
     }
     packaging {
-        resources.excludes.add(
-            "META-INF/DEPENDENCIES"
-        )
+        // google-api-client 2.x가 끌어오는 google-auth-library jar끼리 겹침
+        resources.excludes += listOf("META-INF/DEPENDENCIES", "META-INF/INDEX.LIST")
     }
 }
 
@@ -97,16 +96,15 @@ dependencies {
     implementation(libs.google.material)
 
     implementation(platform(libs.firebase.bom))
-    implementation(libs.firebase.analytics.ktx)
-    implementation(libs.firebase.crashlytics.ktx)
-    implementation(libs.firebase.config.ktx)
+    implementation(libs.firebase.analytics)
+    implementation(libs.firebase.crashlytics)
+    implementation(libs.firebase.config)
 
     implementation(libs.coil)
     implementation(libs.timber)
     implementation(libs.youtube.player.core)
     implementation(libs.youtube.player.ui)
 
-    implementation(libs.google.playservices.auth)
     implementation(libs.google.playservices.ads)
     implementation(libs.google.api.client)
 

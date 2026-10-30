@@ -3,9 +3,9 @@ package com.bluepig.alarm.manager.config
 import com.bluepig.alarm.BuildConfig
 import com.bluepig.alarm.R
 import com.bluepig.alarm.data.preference.AppPreferences
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.remoteconfig.ktx.remoteConfig
-import com.google.firebase.remoteconfig.ktx.remoteConfigSettings
+import com.google.firebase.Firebase
+import com.google.firebase.remoteconfig.remoteConfig
+import com.google.firebase.remoteconfig.remoteConfigSettings
 import javax.inject.Inject
 
 class ConfigManagerImpl @Inject constructor(

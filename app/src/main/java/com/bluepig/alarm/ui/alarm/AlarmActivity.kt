@@ -315,7 +315,7 @@ class AlarmActivity : AppCompatActivity() {
 				playerManager.playDefaultAlarm()
 			}
 		}
-		val options = IFramePlayerOptions.Builder().controls(0).build()
+		val options = IFramePlayerOptions.Builder(this).controls(0).build()
 		yp.initialize(listener, true, options)
 	}
 

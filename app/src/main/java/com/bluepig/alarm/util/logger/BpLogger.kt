@@ -7,9 +7,9 @@ import com.bluepig.alarm.domain.entity.alarm.media.AlarmMedia
 import com.bluepig.alarm.domain.util.CalendarHelper
 import com.bluepig.alarm.util.ext.getGuideText
 import com.bluepig.alarm.util.logger.event.Event
-import com.google.firebase.analytics.ktx.analytics
-import com.google.firebase.crashlytics.ktx.crashlytics
-import com.google.firebase.ktx.Firebase
+import com.google.firebase.Firebase
+import com.google.firebase.analytics.analytics
+import com.google.firebase.crashlytics.crashlytics
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.Locale

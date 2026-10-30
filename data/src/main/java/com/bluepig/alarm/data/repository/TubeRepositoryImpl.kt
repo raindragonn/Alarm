@@ -7,7 +7,7 @@ import com.bluepig.alarm.domain.entity.alarm.media.TubeMedia
 import com.bluepig.alarm.domain.repository.TubeRepository
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
 import com.google.api.client.http.javanet.NetHttpTransport
-import com.google.api.client.json.jackson2.JacksonFactory
+import com.google.api.client.json.gson.GsonFactory
 import com.google.api.services.youtube.YouTube
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
@@ -23,7 +23,7 @@ class TubeRepositoryImpl @Inject constructor(
 ) : TubeRepository {
     private val _youtube: YouTube by lazy {
         YouTube.Builder(
-            NetHttpTransport(), JacksonFactory.getDefaultInstance(), _credential
+            NetHttpTransport(), GsonFactory.getDefaultInstance(), _credential
         ).setApplicationName(_context.getString(R.string.app_name))
             .build()
     }
@@ -36,7 +36,7 @@ class TubeRepositoryImpl @Inject constructor(
         withContext(_dispatcher) {
             val searchResponse = _youtube.search().list(YOUTUBE_PARTS).apply {
                 q = query
-                type = TYPE
+                type = listOf(TYPE)
                 videoCategoryId = CATEGORY
                 maxResults = MAX_RESULTS
                 videoLicense = VIDEO_LICENSE
@@ -61,7 +61,7 @@ class TubeRepositoryImpl @Inject constructor(
         val videoId = matchResult?.groupValues?.get(1) ?: return@withContext null
 
         val response = _youtube.videos().list(YOUTUBE_PARTS).apply {
-            id = videoId
+            id = listOf(videoId)
         }.execute()
         val item = response.items.firstOrNull() ?: return@withContext null
 
@@ -73,7 +73,7 @@ class TubeRepositoryImpl @Inject constructor(
     }
 
     companion object {
-        private val YOUTUBE_PARTS = listOf("id", "snippet").joinToString()
+        private val YOUTUBE_PARTS = listOf("id", "snippet")
         private const val TYPE = "video"
         private const val CATEGORY = "10"
         private const val MAX_RESULTS = 50L
