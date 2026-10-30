@@ -15,5 +15,4 @@
     <dimen name="base_spacing_6.5">52dp</dimen>
     <dimen name="base_spacing_7">56dp</dimen>
     <dimen name="base_spacing_7.5">60dp</dimen>
-    <dimen name="base_spacing_8">64dp</dimen>
 </resources>

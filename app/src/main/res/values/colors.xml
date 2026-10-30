@@ -11,7 +11,6 @@
     <color name="button_text">@color/base</color>
 
     <color name="icon">@color/point</color>
-    <color name="transparent">#00000000</color>
 
     <color name="alpha_16">#29FFFFFF</color>
     <color name="alpha_20">#33FFFFFF</color>
@@ -41,6 +40,5 @@
     <color name="primary_900">#1B5E20</color>
 
     <color name="misc_300">#AAADB9</color>
-    <color name="misc_050">#EB5757</color>
     <color name="misc_000">#F7FF93</color>
 </resources>

@@ -5,49 +5,37 @@ appId: com.bluepig.alarm.debug
 # 이전 실행이 남긴 알람과 겹치지 않게 메모를 매번 다르게
 - evalScript: ${output.memo = 'maestro-' + Date.now()}
 - launchApp
+# 설치 직후 첫 실행은 느림 (API 28 에뮬레이터)
+- extendedWaitUntil:
+    visible: "알람 생성|Create alarm|알람 추가|Add alarm"
+    timeout: 15000
 # 알람이 없으면 FAB 대신 빈 화면의 "알람 추가" 버튼
 - tapOn: "알람 생성|Create alarm|알람 추가|Add alarm"
-# 화면 가운데는 시각 선택기라 기본 스크롤이 시각만 돌림 → 아래쪽에서 밀어 올림
-- repeat:
-    while:
-      notVisible: "검색.*|(?i)search.*"
-    times: 5
-    commands:
-      - swipe:
-          start: 50%, 72%
-          end: 50%, 25%
-- tapOn: "검색.*|(?i)search.*"
+- scrollUntilVisible:
+    element: "알람음을 선택해 주세요|Select an alarm sound"
+- tapOn: "알람음을 선택해 주세요|Select an alarm sound"
 - tapOn: "벨소리|(?i)ringtone"
 - tapOn:
     childOf:
       id: ".*rv_ringtone"
 - tapOn: "선택|(?i)select"
-- repeat:
-    while:
-      notVisible: "메모를 입력해주세요\\.|Please enter a note\\."
-    times: 5
-    commands:
-      - swipe:
-          start: 50%, 72%
-          end: 50%, 25%
-- tapOn: "메모를 입력해주세요\\.|Please enter a note\\."
+- assertVisible:
+    id: "tv_media_title"
+- scrollUntilVisible:
+    element: "메모|Note"
+- tapOn: "메모|Note"
 - inputText: ${output.memo}
-- hideKeyboard
-- tapOn: "미리보기|(?i)preview"
+- tapOn: "확인|OK"
+- assertVisible: ${output.memo}
+- tapOn: "미리보기|Preview"
 - assertVisible: ${output.memo}
 - tapOn: "미리보기 종료|(?i)end preview"
-- tapOn: "저장|(?i)save"
+- tapOn: "저장|Save"
 # 목록은 시각 순이라 기존 알람이 많으면 새 알람이 아래에 있음
 - scrollUntilVisible:
     element: ${output.memo}
 - tapOn: ${output.memo}
-- repeat:
-    while:
-      notVisible: "알람 삭제|(?i)delete alarm"
-    times: 5
-    commands:
-      - swipe:
-          start: 50%, 72%
-          end: 50%, 25%
-- tapOn: "알람 삭제|(?i)delete alarm"
+- scrollUntilVisible:
+    element: "알람 삭제|Delete alarm"
+- tapOn: "알람 삭제|Delete alarm"
 - assertNotVisible: ${output.memo}

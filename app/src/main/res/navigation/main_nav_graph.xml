@@ -18,13 +18,13 @@
     <fragment
         android:id="@+id/alarmEditFragment"
         android:name="com.bluepig.alarm.ui.edit.AlarmEditFragment"
-        android:label="fragment_alarm_edit"
-        tools:layout="@layout/fragment_alarm_edit">
+        android:label="fragment_alarm_edit">
 
+        <!-- 새 알람은 -1 -->
         <argument
-            android:name="alarm"
-            app:argType="com.bluepig.alarm.domain.entity.alarm.Alarm"
-            app:nullable="true" />
+            android:name="alarmId"
+            android:defaultValue="-1L"
+            app:argType="long" />
 
         <action
             android:id="@+id/action_alarmEditFragment_to_alarmListFragment"

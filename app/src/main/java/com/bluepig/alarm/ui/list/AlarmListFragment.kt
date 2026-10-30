@@ -11,7 +11,6 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.bluepig.alarm.R
 import com.bluepig.alarm.designsystem.theme.AlarmTheme
-import com.bluepig.alarm.domain.entity.alarm.Alarm
 import com.bluepig.alarm.feature.list.AlarmListRoute
 import com.bluepig.alarm.util.ads.AdsManager
 import com.bluepig.alarm.util.ads.ListNativeAdRow
@@ -32,8 +31,8 @@ class AlarmListFragment : Fragment() {
             setContent {
                 AlarmTheme {
                     AlarmListRoute(
-                        onAddAlarm = { openEdit(null) },
-                        onAlarmClick = ::openEdit,
+                        onAddAlarm = { openEdit(-1) },
+                        onAlarmClick = { openEdit(it.id ?: -1) },
                         onAlarmSaved = { BpLogger.logAlarmSave(it, false, requireContext()) },
                         onAlarmsLoaded = BpLogger::logAlarmTotalCount,
                         nativeAd = { ListNativeAdRow(adsManager, ::openStore, it) },
@@ -47,11 +46,11 @@ class AlarmListFragment : Fragment() {
         BpLogger.logScreenView(AlarmListFragment::class.java.simpleName)
     }
 
-    private fun openEdit(alarm: Alarm?) {
+    private fun openEdit(alarmId: Long) {
         val navController = findNavController()
         // 연타로 두 번 이동하지 않게
         if (navController.currentDestination?.id != R.id.alarmListFragment) return
-        navController.navigate(AlarmListFragmentDirections.actionAlarmListFragmentToAlarmEditFragment(alarm))
+        navController.navigate(AlarmListFragmentDirections.actionAlarmListFragmentToAlarmEditFragment(alarmId))
     }
 
     private fun openStore() {
