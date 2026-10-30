@@ -38,6 +38,7 @@
         android:layout_height="wrap_content"
         android:padding="@dimen/base_spacing_1"
         android:src="@drawable/ic_close"
+        android:contentDescription="@string/close"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
