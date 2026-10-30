@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="list_next_alarm_in">다음 알람까지</string>
+    <string name="list_unit_day">일</string>
+    <string name="list_unit_hour">시간</string>
+    <string name="list_unit_minute">분</string>
+    <string name="list_when_today">오늘 %1$s</string>
+    <string name="list_when_tomorrow">내일(%1$s) %2$s</string>
+    <string name="list_when_date">%1$s %2$s</string>
+    <string name="list_all_off_title">모든 알람이 꺼져 있어요</string>
+    <string name="list_all_off_body">알람을 켜면 다음 알람까지 남은 시간이 여기에 보여요</string>
+    <string name="list_empty_title">아직 알람이 없어요</string>
+    <string name="list_empty_body">노래·벨소리·유튜브 영상으로\n첫 알람을 만들어 보세요</string>
+    <string name="list_add_alarm">알람 추가</string>
+    <string name="list_create_alarm">알람 생성</string>
+    <string name="list_once">한 번만</string>
+    <string name="list_save_failed">알람을 저장하지 못했어요</string>
+</resources>

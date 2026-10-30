@@ -8,8 +8,7 @@
     <fragment
         android:id="@+id/alarmListFragment"
         android:name="com.bluepig.alarm.ui.list.AlarmListFragment"
-        android:label="fragment_alarm_list"
-        tools:layout="@layout/fragment_alarm_list">
+        android:label="fragment_alarm_list">
 
         <action
             android:id="@+id/action_alarmListFragment_to_alarmEditFragment"

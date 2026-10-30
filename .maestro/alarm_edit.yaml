@@ -5,7 +5,8 @@ appId: com.bluepig.alarm.debug
 # 이전 실행이 남긴 알람과 겹치지 않게 메모를 매번 다르게
 - evalScript: ${output.memo = 'maestro-' + Date.now()}
 - launchApp
-- tapOn: "알람 생성|Create alarm"
+# 알람이 없으면 FAB 대신 빈 화면의 "알람 추가" 버튼
+- tapOn: "알람 생성|Create alarm|알람 추가|Add alarm"
 # 화면 가운데는 시각 선택기라 기본 스크롤이 시각만 돌림 → 아래쪽에서 밀어 올림
 - repeat:
     while:

@@ -1,5 +1,6 @@
 plugins {
     id("alarm.android.application")
+    id("alarm.android.compose")
     id("alarm.hilt")
 
     alias(libs.plugins.google.services)
@@ -80,6 +81,8 @@ dependencies {
     // core:data는 DI 바인딩용 (화면은 domain만 씀)
     implementation(project(":core:data"))
     implementation(project(":core:domain"))
+    implementation(project(":core:designsystem"))
+    implementation(project(":feature:list"))
 
     implementation(libs.kotlinx.serialization.json)
 
@@ -89,6 +92,7 @@ dependencies {
     implementation(libs.androidx.navigation.ui.ktx)
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.recyclerview)
     implementation(libs.androidx.media3.exoplayer)

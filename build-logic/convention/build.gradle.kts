@@ -5,6 +5,7 @@ plugins {
 dependencies {
     compileOnly(libs.android.gradle.plugin)
     compileOnly(libs.kotlin.gradle.plugin)
+    compileOnly(libs.compose.gradle.plugin)
 }
 
 gradlePlugin {
@@ -20,6 +21,14 @@ gradlePlugin {
         register("jvmLibrary") {
             id = "alarm.jvm.library"
             implementationClass = "JvmLibraryConventionPlugin"
+        }
+        register("androidCompose") {
+            id = "alarm.android.compose"
+            implementationClass = "AndroidComposeConventionPlugin"
+        }
+        register("androidFeature") {
+            id = "alarm.android.feature"
+            implementationClass = "AndroidFeatureConventionPlugin"
         }
         register("hilt") {
             id = "alarm.hilt"

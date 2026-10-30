@@ -12,8 +12,6 @@
     <string name="alarm_end">알람 종료</string>
     <string name="alarm_preview_end">미리보기 종료</string>
     <string name="alarm_remove">알람 삭제</string>
-    <string name="alarm_inactive_notice">모든 알람이 꺼진 상태입니다.</string>
-    <string name="alarm_add_notice">알람을 추가해 주세요!</string>
     <string name="alarm_tts_guide">메모 읽어주고 알람 시작하기</string>
     <string name="alarm_vibration_guide">진동 설정</string>
     <string name="alarm_media_required_notice">알람음을 선택해주세요!</string>
@@ -82,6 +80,7 @@
     <string name="toast_error_network">인터넷 연결을 확인해주세요.</string>
     <string name="toast_error_not_select_alarm_media">알람음을 선택해주세요.</string>
 
+    <string name="ad_headline">AD · %1$s</string>
     <string name="review_request_title">리뷰 쓰러 가기</string>
     <string name="review_request_body">앱이 마음에 드신다면 칭찬을, 불편한 점이나 건의사항이 있다면 남겨주세요</string>
     <string name="empty_of_search_result">검색 결과가 없습니다.</string>

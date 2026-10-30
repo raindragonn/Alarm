@@ -3,8 +3,8 @@
 
     <style name="TimePicker">
         <item name="android:includeFontPadding">false</item>
-        <item name="fontFamily">@font/pretendard_bold</item>
-        <item name="android:fontFamily">@font/pretendard_bold</item>
+        <item name="fontFamily">@font/designsystem_pretendard_bold</item>
+        <item name="android:fontFamily">@font/designsystem_pretendard_bold</item>
         <item name="android:textSize">30dp</item>
         <item name="colorControlNormal">@color/transparent</item>
         <item name="lineHeight">39dp</item>
