@@ -4,11 +4,9 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.WindowManager
-import android.widget.FrameLayout
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.IntentCompat
 import androidx.core.os.UserManagerCompat
 import androidx.lifecycle.lifecycleScope
@@ -18,23 +16,19 @@ import com.bluepig.alarm.feature.alarm.AlarmRingRoute
 import com.bluepig.alarm.feature.alarm.AlarmRingViewModel
 import com.bluepig.alarm.service.AlarmRingService
 import com.bluepig.alarm.service.AlarmRinging
-import com.bluepig.alarm.util.ads.AdsManager
 import com.bluepig.alarm.util.logger.BpLogger
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.dropWhile
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 /**
  * 잠금 화면 위 울림·미리보기 화면 (기술 0022). 화면은 feature:alarm, 소리는 AlarmRingService.
- * 잠금 화면 위 표시·화면 켜기·Direct Boot는 매니페스트 속성
+ * 잠금 화면 위 표시·화면 켜기·Direct Boot는 매니페스트 속성.
+ * 광고를 두지 않음: Play 잠금 화면 수익화 금지·YouTube API 정책 (제품 0007)
  */
 @AndroidEntryPoint
 class AlarmActivity : ComponentActivity() {
-    @Inject
-    lateinit var adsManager: AdsManager
-
     private val _previewAlarm: Alarm?
         get() = IntentCompat.getSerializableExtra(intent, AlarmRingViewModel.KEY_PREVIEW_ALARM, Alarm::class.java)
 
@@ -58,14 +52,6 @@ class AlarmActivity : ComponentActivity() {
                     onVideoPlaying = { AlarmRingService.videoPlaying(this) },
                     onVideoFailed = { AlarmRingService.videoFailed(this) },
                     onNotFound = ::dismiss,
-                    banner = { modifier ->
-                        AndroidView(
-                            factory = { context ->
-                                FrameLayout(context).also { adsManager.loadBanner(lifecycle, it) }
-                            },
-                            modifier = modifier,
-                        )
-                    },
                 )
             }
         }

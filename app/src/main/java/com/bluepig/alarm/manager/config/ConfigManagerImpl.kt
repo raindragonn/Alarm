@@ -38,10 +38,10 @@ class ConfigManagerImpl @Inject constructor(
 
     private fun readConfig() = AppConfig(
         adsSwitch = _remoteConfig.getBoolean("ads_switch"),
-        adsAlarmBannerSwitch = _remoteConfig.getBoolean("ads_alarm_banner_switch"),
         adsAlarmListNativeSwitch = _remoteConfig.getBoolean("ads_alarm_list_native_switch"),
         adsInterstitialMusicClickSwitch =
             _remoteConfig.getBoolean("ads_interstitial_music_click_switch"),
+        adsInterstitialAlarmSaveSwitch = _remoteConfig.getBoolean("ads_interstitial_alarm_save_switch"),
         adsMainBottomNativeSwitch = _remoteConfig.getBoolean("ads_main_bottom_native_switch"),
         showOnlyYoutubeLink = _remoteConfig.getBoolean("show_only_youtube_link"),
         showYoutubeSearch = _remoteConfig.getBoolean("show_youtube_search"),

@@ -16,7 +16,7 @@ import javax.inject.Inject
 /** 원격 설정에서 받아 저장해 둔 값 */
 data class RemoteConfigPreferences(
     val adsSwitch: Boolean,
-    val adsAlarmBannerSwitch: Boolean,
+    val adsInterstitialAlarmSaveSwitch: Boolean,
     val adsAlarmListNativeSwitch: Boolean,
     val adsInterstitialMusicClickSwitch: Boolean,
     val adsMainBottomNativeSwitch: Boolean,
@@ -54,7 +54,7 @@ internal class PreferencesLocalDataSourceImpl @Inject constructor(
     override suspend fun getRemoteConfig(): RemoteConfigPreferences = read().let {
         RemoteConfigPreferences(
             adsSwitch = it[ADS_SWITCH] ?: false,
-            adsAlarmBannerSwitch = it[ADS_ALARM_BANNER_SWITCH] ?: false,
+            adsInterstitialAlarmSaveSwitch = it[ADS_INTERSTITIAL_ALARM_SAVE_SWITCH] ?: false,
             adsAlarmListNativeSwitch = it[ADS_ALARM_LIST_NATIVE_SWITCH] ?: false,
             adsInterstitialMusicClickSwitch = it[ADS_INTERSTITIAL_MUSIC_CLICK_SWITCH] ?: false,
             adsMainBottomNativeSwitch = it[ADS_MAIN_BOTTOM_NATIVE_SWITCH] ?: false,
@@ -65,7 +65,7 @@ internal class PreferencesLocalDataSourceImpl @Inject constructor(
 
     override suspend fun setRemoteConfig(config: RemoteConfigPreferences) = write {
         it[ADS_SWITCH] = config.adsSwitch
-        it[ADS_ALARM_BANNER_SWITCH] = config.adsAlarmBannerSwitch
+        it[ADS_INTERSTITIAL_ALARM_SAVE_SWITCH] = config.adsInterstitialAlarmSaveSwitch
         it[ADS_ALARM_LIST_NATIVE_SWITCH] = config.adsAlarmListNativeSwitch
         it[ADS_INTERSTITIAL_MUSIC_CLICK_SWITCH] = config.adsInterstitialMusicClickSwitch
         it[ADS_MAIN_BOTTOM_NATIVE_SWITCH] = config.adsMainBottomNativeSwitch
@@ -107,7 +107,8 @@ internal class PreferencesLocalDataSourceImpl @Inject constructor(
     private companion object {
         val SELECTED_ACCOUNT_NAME_KEY = stringPreferencesKey("SELECTED_ACCOUNT_NAME_KEY")
         val ADS_SWITCH = booleanPreferencesKey("ADS_SWITCH")
-        val ADS_ALARM_BANNER_SWITCH = booleanPreferencesKey("ADS_ALARM_BANNER_SWITCH")
+        val ADS_INTERSTITIAL_ALARM_SAVE_SWITCH =
+            booleanPreferencesKey("ADS_INTERSTITIAL_ALARM_SAVE_SWITCH")
         val ADS_ALARM_LIST_NATIVE_SWITCH = booleanPreferencesKey("ADS_ALARM_LIST_NATIVE_SWITCH")
         val ADS_INTERSTITIAL_MUSIC_CLICK_SWITCH =
             booleanPreferencesKey("ADS_INTERSTITIAL_MUSIC_CLICK_SWITCH")

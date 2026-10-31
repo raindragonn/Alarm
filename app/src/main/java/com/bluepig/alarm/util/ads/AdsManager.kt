@@ -20,8 +20,6 @@ import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdLoader
 import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.AdSize
-import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.interstitial.InterstitialAd
@@ -136,33 +134,9 @@ class AdsManager @Inject constructor(
         }
     }
 
-    fun loadBanner(lifecycle: Lifecycle, container: ViewGroup) = lifecycle.coroutineScope.launch {
-        if (!_isAdEnabled(AdPlacement.ALARM_BANNER)) return@launch
-        setLifeCycle(lifecycle)
-
-        kotlin.runCatching {
-            val adView = AdView(_context).apply {
-                setAdSize(AdSize.BANNER)
-                adUnitId = context.getString(R.string.ads_alarm_banner)
-            }
-            adView.loadAd(_adRequest)
-            container.removeAllViews()
-            container.addView(adView)
-            _lifecycle?.apply {
-                val observer = DestroyListener {
-                    adView.destroy()
-                    container.removeAllViews()
-                }
-                addObserver(observer)
-                _lifeCycleObserver = observer
-            }
-        }.onFailure {
-            BpLogger.logException(it)
-        }
-    }
-
-    fun loadInterstitial(lifecycle: Lifecycle): Job = lifecycle.coroutineScope.launch {
-        if (!_isAdEnabled(AdPlacement.MEDIA_SELECT_INTERSTITIAL)) return@launch
+    // 저장 후 전면 광고도 알람음 선택과 같은 광고 단위를 씀
+    fun loadInterstitial(lifecycle: Lifecycle, placement: AdPlacement): Job = lifecycle.coroutineScope.launch {
+        if (!_isAdEnabled(placement)) return@launch
 
         kotlin.runCatching {
             InterstitialAd.load(
@@ -173,7 +147,7 @@ class AdsManager @Inject constructor(
                     override fun onAdFailedToLoad(p0: LoadAdError) {
                         super.onAdFailedToLoad(p0)
                         if (lifecycle.currentState == Lifecycle.State.CREATED) {
-                            loadInterstitial(lifecycle)
+                            loadInterstitial(lifecycle, placement)
                         }
                     }
 
@@ -190,10 +164,10 @@ class AdsManager @Inject constructor(
 
     fun showInterstitial(
         activity: ComponentActivity,
-        onShowed: () -> Unit,
+        placement: AdPlacement,
         onCloseOrFailed: () -> Unit
     ) = activity.lifecycleScope.launch {
-        if (!_isAdEnabled(AdPlacement.MEDIA_SELECT_INTERSTITIAL)) {
+        if (!_isAdEnabled(placement)) {
             onCloseOrFailed.invoke()
             return@launch
         }
@@ -215,7 +189,6 @@ class AdsManager @Inject constructor(
                         fullScreenContentCallback = null
                     }
                 }
-                onShowed.invoke()
                 show(activity)
             } ?: onCloseOrFailed.invoke()
         }.onFailure {

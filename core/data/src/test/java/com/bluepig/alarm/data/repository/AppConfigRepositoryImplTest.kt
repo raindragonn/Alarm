@@ -11,7 +11,7 @@ class AppConfigRepositoryImplTest {
     // 필드마다 값을 다르게 둬서 서로 바뀐 매핑을 잡는다
     private val config = AppConfig(
         adsSwitch = true,
-        adsAlarmBannerSwitch = false,
+        adsInterstitialAlarmSaveSwitch = false,
         adsAlarmListNativeSwitch = true,
         adsInterstitialMusicClickSwitch = false,
         adsMainBottomNativeSwitch = true,
@@ -20,7 +20,7 @@ class AppConfigRepositoryImplTest {
     )
     private val preferences = RemoteConfigPreferences(
         adsSwitch = true,
-        adsAlarmBannerSwitch = false,
+        adsInterstitialAlarmSaveSwitch = false,
         adsAlarmListNativeSwitch = true,
         adsInterstitialMusicClickSwitch = false,
         adsMainBottomNativeSwitch = true,

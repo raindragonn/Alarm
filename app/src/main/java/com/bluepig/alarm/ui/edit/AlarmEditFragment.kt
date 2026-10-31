@@ -15,20 +15,28 @@ import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
 import com.bluepig.alarm.R
 import com.bluepig.alarm.designsystem.theme.AlarmTheme
+import com.bluepig.alarm.domain.entity.config.AdPlacement
 import com.bluepig.alarm.domain.entity.alarm.media.AlarmMedia
 import com.bluepig.alarm.feature.edit.AlarmEditRoute
 import com.bluepig.alarm.ui.alarm.AlarmActivity
 import com.bluepig.alarm.util.PermissionHelper
+import com.bluepig.alarm.util.ads.AdsManager
 import com.bluepig.alarm.util.logger.BpLogger
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
-// 화면은 feature:edit. 인자 alarmId는 AlarmEditViewModel이 SavedStateHandle로 읽음 (기술 0021)
+// 화면은 feature:edit. 인자 alarmId는 AlarmEditViewModel이 SavedStateHandle로 읽음 (기술 0021).
+// 저장하면 전면 광고(1시간 1번)를 거쳐 목록으로 (제품 0008)
 @AndroidEntryPoint
 class AlarmEditFragment : Fragment() {
+    @Inject
+    lateinit var adsManager: AdsManager
+
     private var selectedMedia by mutableStateOf<AlarmMedia?>(null)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        adsManager.loadInterstitial(lifecycle, AdPlacement.ALARM_SAVE_INTERSTITIAL)
         setFragmentResultListener(REQUEST_ALARM_MEDIA) { _, bundle ->
             selectedMedia = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 bundle.getSerializable(KEY_ALARM_MEDIA, AlarmMedia::class.java)
@@ -54,8 +62,14 @@ class AlarmEditFragment : Fragment() {
                         },
                         onSaved = { alarm, isNew ->
                             BpLogger.logAlarmSave(alarm, isNew, requireContext())
-                            findNavController().navigate(
-                                AlarmEditFragmentDirections.actionAlarmEditFragmentToAlarmListFragment(),
+                            adsManager.showInterstitial(
+                                activity = requireActivity(),
+                                placement = AdPlacement.ALARM_SAVE_INTERSTITIAL,
+                                onCloseOrFailed = {
+                                    findNavController().navigate(
+                                        AlarmEditFragmentDirections.actionAlarmEditFragmentToAlarmListFragment(),
+                                    )
+                                },
                             )
                         },
                         onOpenExactAlarmSetting = { PermissionHelper.openExactAlarmSetting(requireContext()) },

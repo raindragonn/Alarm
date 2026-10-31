@@ -27,26 +27,29 @@ class IsAdEnabledTest {
         val config = allOnConfig.copy(
             adsMainBottomNativeSwitch = false,
             adsAlarmListNativeSwitch = true,
-            adsAlarmBannerSwitch = false,
+            adsInterstitialAlarmSaveSwitch = false,
         )
         val isAdEnabled = IsAdEnabled(FakeAppConfigRepository(config))
 
         assertFalse(isAdEnabled(AdPlacement.MAIN_BOTTOM_NATIVE))
         assertTrue(isAdEnabled(AdPlacement.ALARM_LIST_NATIVE))
-        assertFalse(isAdEnabled(AdPlacement.ALARM_BANNER))
+        assertTrue(isAdEnabled(AdPlacement.MEDIA_SELECT_INTERSTITIAL))
+        assertFalse(isAdEnabled(AdPlacement.ALARM_SAVE_INTERSTITIAL))
     }
 
     @Test
-    fun `전면 광고는 마지막으로 보인 뒤 1시간이 지나야 한다`() = runTest {
+    fun `전면 광고는 위치와 상관없이 마지막으로 보인 뒤 1시간이 지나야 한다`() = runTest {
         clock.setNow("2026-10-28T09:00")
         val repository = FakeAppConfigRepository()
         val isAdEnabled = IsAdEnabled(repository)
 
         repository.lastInterstitialShowTime = clock.millis("2026-10-28T08:00")
         assertFalse(isAdEnabled(AdPlacement.MEDIA_SELECT_INTERSTITIAL))
+        assertFalse(isAdEnabled(AdPlacement.ALARM_SAVE_INTERSTITIAL))
 
         repository.lastInterstitialShowTime = clock.millis("2026-10-28T07:59")
         assertTrue(isAdEnabled(AdPlacement.MEDIA_SELECT_INTERSTITIAL))
+        assertTrue(isAdEnabled(AdPlacement.ALARM_SAVE_INTERSTITIAL))
     }
 
     @Test

@@ -14,6 +14,7 @@ import com.bluepig.alarm.designsystem.theme.AlarmTheme
 import com.bluepig.alarm.domain.entity.alarm.media.AlarmMedia
 import com.bluepig.alarm.domain.entity.alarm.media.MusicMedia
 import com.bluepig.alarm.domain.entity.alarm.media.TubeMedia
+import com.bluepig.alarm.domain.entity.config.AdPlacement
 import com.bluepig.alarm.feature.media.MediaSelectRoute
 import com.bluepig.alarm.feature.media.MediaTab
 import com.bluepig.alarm.ui.edit.AlarmEditFragment
@@ -32,7 +33,7 @@ class MediaSelectFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        adsManager.loadInterstitial(lifecycle)
+        adsManager.loadInterstitial(lifecycle, AdPlacement.MEDIA_SELECT_INTERSTITIAL)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
@@ -63,7 +64,7 @@ class MediaSelectFragment : Fragment() {
         isSelecting = true
         adsManager.showInterstitial(
             activity = requireActivity(),
-            onShowed = {},
+            placement = AdPlacement.MEDIA_SELECT_INTERSTITIAL,
             onCloseOrFailed = {
                 BpLogger.logMediaSelect(media)
                 setFragmentResult(
