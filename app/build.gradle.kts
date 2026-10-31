@@ -85,6 +85,7 @@ dependencies {
     implementation(project(":feature:list"))
     implementation(project(":feature:edit"))
     implementation(project(":feature:media"))
+    implementation(project(":feature:alarm"))
 
     implementation(libs.kotlinx.serialization.json)
 
@@ -96,6 +97,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.lifecycle.service)
+    implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.recyclerview)
     implementation(libs.androidx.media3.exoplayer)

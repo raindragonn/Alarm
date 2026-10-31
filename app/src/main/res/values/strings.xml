@@ -5,8 +5,6 @@
     <string name="chennel_description_media_download">Download media for playback without internet</string>
 
     <string name="alarm_emoji">⏰</string>
-    <string name="alarm_end">Alarm ends</string>
-    <string name="alarm_preview_end">End preview</string>
 
     <string name="ok">check</string>
     <string name="cancel">cancellation</string>
