@@ -3,6 +3,7 @@ package com.bluepig.alarm.data.repository
 import com.bluepig.alarm.data.mapper.toData
 import com.bluepig.alarm.data.mapper.toDomain
 import com.bluepig.alarm.database.AlarmLocalDataSource
+import com.bluepig.alarm.datastore.PreferencesLocalDataSource
 import com.bluepig.alarm.domain.entity.alarm.Alarm
 import com.bluepig.alarm.domain.repository.AlarmRepository
 import kotlinx.coroutines.flow.Flow
@@ -11,6 +12,7 @@ import javax.inject.Inject
 
 internal class AlarmRepositoryImpl @Inject constructor(
     private val _localDataSource: AlarmLocalDataSource,
+    private val _preferences: PreferencesLocalDataSource,
 ) : AlarmRepository {
 
     override fun getAllAlarmFlow(): Flow<List<Alarm>> =
@@ -28,4 +30,8 @@ internal class AlarmRepositoryImpl @Inject constructor(
 
     override suspend fun deleteById(id: Long) =
         _localDataSource.deleteById(id)
+
+    override suspend fun getScheduledTimeZoneId(): String? = _preferences.getScheduledTimeZoneId()
+
+    override suspend fun setScheduledTimeZoneId(id: String) = _preferences.setScheduledTimeZoneId(id)
 }

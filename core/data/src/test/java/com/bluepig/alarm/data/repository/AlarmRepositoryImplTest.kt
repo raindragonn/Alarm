@@ -1,6 +1,7 @@
 package com.bluepig.alarm.data.repository
 
 import com.bluepig.alarm.data.fake.FakeAlarmLocalDataSource
+import com.bluepig.alarm.data.fake.FakePreferencesLocalDataSource
 import com.bluepig.alarm.domain.entity.alarm.Alarm
 import com.bluepig.alarm.domain.entity.alarm.Week.MONDAY
 import com.bluepig.alarm.domain.entity.alarm.media.TubeMedia
@@ -12,7 +13,7 @@ import org.junit.Test
 
 class AlarmRepositoryImplTest {
     private val localDataSource = FakeAlarmLocalDataSource()
-    private val repository = AlarmRepositoryImpl(localDataSource)
+    private val repository = AlarmRepositoryImpl(localDataSource, FakePreferencesLocalDataSource())
 
     private val alarm = Alarm(
         timeInMillis = 1_793_000_000_000,

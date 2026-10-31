@@ -31,10 +31,18 @@ interface PreferencesLocalDataSource {
     suspend fun setRemoteConfig(config: RemoteConfigPreferences)
     suspend fun getLastInterstitialShowTime(): Long
     suspend fun setLastInterstitialShowTime(timeInMillis: Long)
+    suspend fun getScheduledTimeZoneId(): String?
+    suspend fun setScheduledTimeZoneId(id: String)
+}
+
+/** 재부팅 후 첫 잠금 해제 전(Direct Boot)에는 credential storage의 파일을 열 수 없음 (C7) */
+internal fun interface CredentialStorage {
+    fun isAvailable(): Boolean
 }
 
 internal class PreferencesLocalDataSourceImpl @Inject constructor(
     private val _dataStore: DataStore<Preferences>,
+    private val _credentialStorage: CredentialStorage,
 ) : PreferencesLocalDataSource {
 
     override suspend fun getSelectedAccountName(): String? = read()[SELECTED_ACCOUNT_NAME_KEY]
@@ -72,13 +80,23 @@ internal class PreferencesLocalDataSourceImpl @Inject constructor(
         it[LAST_INTERSTITIAL_SHOW_TIME] = timeInMillis
     }
 
-    // 파일을 못 읽으면 기본값 (SharedPreferences와 같게)
-    private suspend fun read(): Preferences = _dataStore.data
-        .catch { if (it is IOException) emit(emptyPreferences()) else throw it }
-        .first()
+    override suspend fun getScheduledTimeZoneId(): String? = read()[SCHEDULED_TIME_ZONE_ID]
+
+    override suspend fun setScheduledTimeZoneId(id: String) = write {
+        it[SCHEDULED_TIME_ZONE_ID] = id
+    }
+
+    // 파일을 못 읽거나 잠금 해제 전이면 기본값 (SharedPreferences와 같게)
+    private suspend fun read(): Preferences {
+        if (!_credentialStorage.isAvailable()) return emptyPreferences()
+        return _dataStore.data
+            .catch { if (it is IOException) emit(emptyPreferences()) else throw it }
+            .first()
+    }
 
     // 쓰기 실패는 무시 (SharedPreferences.apply와 같게)
     private suspend fun write(transform: (MutablePreferences) -> Unit) {
+        if (!_credentialStorage.isAvailable()) return
         try {
             _dataStore.edit { transform(it) }
         } catch (_: IOException) {
@@ -97,5 +115,6 @@ internal class PreferencesLocalDataSourceImpl @Inject constructor(
         val LAST_INTERSTITIAL_SHOW_TIME = longPreferencesKey("LAST_INTERSTITIAL_SHOW_TIME")
         val SHOW_ONLY_YOUTUBE_LINK = booleanPreferencesKey("SHOW_ONLY_YOUTUBE_LINK")
         val SHOW_YOUTUBE_SEARCH = booleanPreferencesKey("SHOW_YOUTUBE_SEARCH")
+        val SCHEDULED_TIME_ZONE_ID = stringPreferencesKey("SCHEDULED_TIME_ZONE_ID")
     }
 }

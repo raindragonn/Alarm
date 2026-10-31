@@ -1,6 +1,7 @@
 package com.bluepig.alarm.datastore
 
 import android.content.Context
+import android.os.UserManager
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.SharedPreferencesMigration
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
@@ -33,5 +34,10 @@ internal abstract class DataStoreModule {
             migrations = listOf(SharedPreferencesMigration(context, "APP_PREF")),
             produceFile = { context.preferencesDataStoreFile("app_pref") },
         )
+
+        @Provides
+        fun providesCredentialStorage(@ApplicationContext context: Context) = CredentialStorage {
+            context.getSystemService(UserManager::class.java).isUserUnlocked
+        }
     }
 }
