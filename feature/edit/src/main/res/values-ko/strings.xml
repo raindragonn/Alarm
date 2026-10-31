@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="edit_title_create">알람 생성</string>
+    <string name="edit_title_edit">알람 수정</string>
+    <string name="edit_close">닫기</string>
+    <string name="edit_rings_in">%1$s 후에 울립니다</string>
+    <string name="edit_duration_day">%1$d일</string>
+    <string name="edit_duration_hour">%1$d시간</string>
+    <string name="edit_duration_minute">%1$d분</string>
+    <string name="edit_repeat">반복</string>
+    <string name="edit_repeat_once">한 번만</string>
+    <string name="edit_repeat_everyday">매일</string>
+    <string name="edit_repeat_weekdays">주중</string>
+    <string name="edit_repeat_weekends">주말</string>
+    <string name="edit_alarm_sound">알람음</string>
+    <string name="edit_select_sound">알람음을 선택해 주세요</string>
+    <string name="edit_sound_types">노래 · 벨소리 · 유튜브</string>
+    <string name="edit_type_song">노래</string>
+    <string name="edit_type_ringtone">벨소리</string>
+    <string name="edit_type_youtube">유튜브</string>
+    <string name="edit_volume">볼륨</string>
+    <string name="edit_volume_auto_increase">볼륨 서서히 높이기</string>
+    <string name="edit_vibration">진동</string>
+    <string name="edit_memo">메모</string>
+    <string name="edit_memo_none">없음</string>
+    <string name="edit_memo_hint">메모를 입력해주세요.</string>
+    <string name="edit_memo_tts">메모 읽어주고 시작하기</string>
+    <string name="edit_memo_tts_helper">메모를 입력하면 켤 수 있어요</string>
+    <string name="edit_delete">알람 삭제</string>
+    <string name="edit_preview">미리보기</string>
+    <string name="edit_save">저장</string>
+    <string name="edit_confirm">확인</string>
+    <string name="edit_cancel">취소</string>
+    <string name="edit_media_required">알람음을 선택해 주세요</string>
+    <string name="edit_save_failed">알람을 저장하지 못했어요</string>
+</resources>

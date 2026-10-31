@@ -3,6 +3,7 @@ package com.bluepig.alarm.di
 import android.content.Context
 import android.media.AudioManager
 import androidx.media3.common.util.UnstableApi
+import com.bluepig.alarm.domain.alarm.AlarmVolume
 import com.bluepig.alarm.domain.alarm.BpAlarmManager
 import com.bluepig.alarm.domain.usecase.SaveAppConfig
 import com.bluepig.alarm.manager.alarm.BPAlarmManagerImpl
@@ -52,6 +53,12 @@ object ManagerModule {
         @ApplicationContext context: Context
     ): AudioManager {
         return context.audioManager
+    }
+
+    // 알람음은 STREAM_MUSIC으로 재생함
+    @Provides
+    fun providesAlarmVolume(audioManager: AudioManager): AlarmVolume = object : AlarmVolume {
+        override fun maxVolume() = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC)
     }
 
     @Provides

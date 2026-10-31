@@ -1,302 +1,85 @@
 package com.bluepig.alarm.ui.edit
 
-import android.annotation.SuppressLint
-import android.media.AudioManager
 import android.os.Build
 import android.os.Bundle
-import android.text.ParcelableSpan
-import android.text.style.ForegroundColorSpan
-import android.text.style.TextAppearanceSpan
-import android.view.View
-import android.widget.SeekBar
-import androidx.core.view.isVisible
-import androidx.core.widget.doAfterTextChanged
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.clearFragmentResultListener
 import androidx.fragment.app.setFragmentResultListener
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
 import com.bluepig.alarm.R
-import com.bluepig.alarm.databinding.FragmentAlarmEditBinding
-import com.bluepig.alarm.domain.entity.alarm.Week
+import com.bluepig.alarm.designsystem.theme.AlarmTheme
 import com.bluepig.alarm.domain.entity.alarm.media.AlarmMedia
-import com.bluepig.alarm.domain.result.NotSelectAlarmMedia
-import com.bluepig.alarm.domain.util.CalendarHelper
-import com.bluepig.alarm.domain.util.hourOfDay
-import com.bluepig.alarm.domain.util.minute
+import com.bluepig.alarm.feature.edit.AlarmEditRoute
 import com.bluepig.alarm.ui.alarm.AlarmActivity
-import com.bluepig.alarm.util.ext.createSpan
-import com.bluepig.alarm.util.ext.getGuideText
-import com.bluepig.alarm.util.ext.setDefaultColor
-import com.bluepig.alarm.util.ext.setThumbnail
-import com.bluepig.alarm.util.ext.showErrorToast
-import com.bluepig.alarm.util.ext.viewLifeCycleScope
-import com.bluepig.alarm.util.ext.viewRepeatOnLifeCycle
 import com.bluepig.alarm.util.logger.BpLogger
-import com.bluepig.alarm.util.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.launch
-import javax.inject.Inject
 
+// 화면은 feature:edit. 인자 alarmId는 AlarmEditViewModel이 SavedStateHandle로 읽음 (기술 0021)
 @AndroidEntryPoint
-class AlarmEditFragment : Fragment(R.layout.fragment_alarm_edit) {
-    private val _binding: FragmentAlarmEditBinding by viewBinding(FragmentAlarmEditBinding::bind)
-    private val _vm: AlarmEditViewModel by viewModels()
+class AlarmEditFragment : Fragment() {
+    private var selectedMedia by mutableStateOf<AlarmMedia?>(null)
 
-    @Inject
-    lateinit var audioManager: AudioManager
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        initViews()
-        observing()
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setFragmentResultListener(REQUEST_ALARM_MEDIA) { _, bundle ->
+            selectedMedia = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                bundle.getSerializable(KEY_ALARM_MEDIA, AlarmMedia::class.java)
+            } else {
+                @Suppress("DEPRECATION")
+                bundle.getSerializable(KEY_ALARM_MEDIA) as? AlarmMedia
+            }
+        }
     }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
+        ComposeView(requireContext()).apply {
+            setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+            setContent {
+                AlarmTheme {
+                    AlarmEditRoute(
+                        selectedMedia = selectedMedia,
+                        onClose = { findNavController().popBackStack() },
+                        onSelectMedia = ::openMediaSelect,
+                        onPreview = {
+                            AlarmActivity.openPreView(requireContext(), it)
+                            BpLogger.logPreviewClick()
+                        },
+                        onSaved = { alarm, isNew ->
+                            BpLogger.logAlarmSave(alarm, isNew, requireContext())
+                            findNavController().navigate(
+                                AlarmEditFragmentDirections.actionAlarmEditFragmentToAlarmListFragment(),
+                            )
+                        },
+                        onDeleted = {
+                            BpLogger.logAlarmDelete()
+                            findNavController().popBackStack()
+                        },
+                    )
+                }
+            }
+        }
 
     override fun onResume() {
         super.onResume()
         BpLogger.logScreenView(AlarmEditFragment::class.java.simpleName)
     }
 
-    override fun onDestroyView() {
+    override fun onDestroy() {
         clearFragmentResultListener(REQUEST_ALARM_MEDIA)
-        super.onDestroyView()
-    }
-
-    private fun initViews() = with(_binding) {
-        tvTitle.text =
-            if (_vm.isEdit) getString(R.string.alarm_edit) else getString(R.string.alarm_create)
-
-        initTimePicker(_vm.timeInMillis.value)
-        initWeekButtons(_vm::setRepeatWeek)
-        initVolume(_vm.volume.value)
-        initVolumeAutoIncrease(_vm.volumeAutoIncrease.value)
-        initVibration(_vm.vibration.value)
-        initMemo(_vm.memo.value)
-        initMemoTts(_vm.memoTtsEnabled.value)
-        initDeleteButton()
-
-        btnBack.setOnClickListener { findNavController().popBackStack() }
-        btnMediaSelect.setOnClickListener { openMediaSelect() }
-        btnSave.setOnClickListener { saveAlarm() }
-        btnPreview.setOnClickListener { openPreview() }
-    }
-
-    private fun initWeekButtons(onClick: (Week) -> Unit) {
-        _binding.apply {
-            btnSunday.setOnclickWeek(onClick)
-            btnMonday.setOnclickWeek(onClick)
-            btnTuesday.setOnclickWeek(onClick)
-            btnWednesday.setOnclickWeek(onClick)
-            btnThursday.setOnclickWeek(onClick)
-            btnFriday.setOnclickWeek(onClick)
-            btnSaturday.setOnclickWeek(onClick)
-        }
-    }
-
-    private fun removeAlarm() = viewLifeCycleScope.launch {
-        _vm.removeAlarm().onSuccess {
-            BpLogger.logAlarmDelete()
-            findNavController().popBackStack()
-        }
-    }
-
-    private fun saveAlarm() = viewLifeCycleScope.launch {
-        _vm.saveAlarm().onSuccess {
-            BpLogger.logAlarmSave(it, !_vm.isEdit, requireContext())
-            val action =
-                AlarmEditFragmentDirections.actionAlarmEditFragmentToAlarmListFragment()
-            findNavController().navigate(action)
-        }.onFailure {
-            showErrorToast(it)
-        }
+        super.onDestroy()
     }
 
     private fun openMediaSelect() {
-        val action = AlarmEditFragmentDirections.actionAlarmEditFragmentToMediaSelectFragment()
-        findNavController().navigate(action)
-    }
-
-    private fun observing() = with(_vm) {
-        viewRepeatOnLifeCycle(Lifecycle.State.STARTED) {
-            launch {
-                repeatWeek
-                    .stateIn(this)
-                    .collect(::bindWeek)
-            }
-            launch {
-                alarmMedia
-                    .stateIn(this)
-                    .collect(::bindAlarmMedia)
-            }
-            launch {
-                getExpiredTime()
-                    .stateIn(this)
-                    .collect(_binding.tvTimeReminder::setText)
-            }
-        }
-
-        setFragmentResultListener(REQUEST_ALARM_MEDIA) { _, bundle ->
-            val alarmMedia = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                bundle.getSerializable(KEY_ALARM_MEDIA, AlarmMedia::class.java)
-            } else {
-                @Suppress("DEPRECATION")
-                bundle.getSerializable(KEY_ALARM_MEDIA) as AlarmMedia
-            }
-            setAlarmMedia(alarmMedia ?: return@setFragmentResultListener)
-        }
-    }
-
-    private fun openPreview() {
-        kotlin.runCatching {
-            _vm.getEditingAlarm() ?: throw NotSelectAlarmMedia
-        }.onSuccess { alarm ->
-            AlarmActivity.openPreView(requireContext(), alarm)
-            BpLogger.logPreviewClick()
-        }.onFailure {
-            showErrorToast(it)
-        }
-    }
-
-    private fun initTimePicker(timeInMillis: Long) {
-        _binding.apply {
-            timepicker.hour = CalendarHelper.fromTimeInMillis(timeInMillis).hourOfDay
-            timepicker.minute = CalendarHelper.fromTimeInMillis(timeInMillis).minute
-            timepicker.setOnTimeChangedListener { _, hourOfDay, minute ->
-                _vm.setTimeInMillis(hourOfDay, minute)
-            }
-        }
-    }
-
-    private fun bindWeek(setWeek: Set<Week>) {
-        _binding.apply {
-            val buttons = listOf(
-                btnSunday,
-                btnMonday,
-                btnTuesday,
-                btnWednesday,
-                btnThursday,
-                btnFriday,
-                btnSaturday,
-            )
-
-            buttons.forEach {
-                if (setWeek.contains(it.getWeek())) {
-                    it.setSelected()
-                } else {
-                    it.unSelected()
-                }
-            }
-            tvRepeat.text = setWeek.getGuideText(requireContext())
-        }
-    }
-
-    @SuppressLint("SetTextI18n")
-    private fun bindAlarmMedia(alarmMedia: AlarmMedia?) {
-        val highlightSpans = arrayOf<ParcelableSpan>(
-            TextAppearanceSpan(
-                requireContext(), R.style.TextAppearance_Alarm_Body2
-            ), ForegroundColorSpan(requireContext().getColor(R.color.primary_600))
-        )
-        _binding.apply {
-            ivThumbnail.isVisible = alarmMedia?.isRingtone?.not() ?: false
-
-            if (alarmMedia == null) {
-                tvMediaTitle.text = getString(R.string.alarm_media_required_notice)
-            } else {
-                alarmMedia.onMusic {
-                    tvMediaTitle.text = it.title
-                    val titleText = getString(R.string.title)
-                    tvMediaTitle.text = "$titleText  ${it.title}".createSpan(
-                        0, titleText.length, *highlightSpans
-                    )
-                    ivThumbnail.setThumbnail(it.thumbnail)
-
-                }.onRingtone {
-                    val ringtoneGuideText = getString(R.string.ringtone)
-                    tvMediaTitle.text = "$ringtoneGuideText  ${it.title}".createSpan(
-                        0, ringtoneGuideText.length, *highlightSpans
-                    )
-                }.onTube {
-                    tvMediaTitle.text = it.title
-                    val titleText = getString(R.string.title)
-                    tvMediaTitle.text = "$titleText  ${it.title}".createSpan(
-                        0, titleText.length, *highlightSpans
-                    )
-                    ivThumbnail.setThumbnail(it.thumbnail)
-                }
-            }
-
-        }
-    }
-
-    private fun initVolume(volume: Int) {
-        _binding.apply {
-            seekbarVolume.progress = volume
-            val maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC)
-            seekbarVolume.max = maxVolume
-            seekbarVolume.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-                override fun onProgressChanged(
-                    seekBar: SeekBar?, progress: Int, fromUser: Boolean
-                ) {
-                    _vm.setVolume(progress)
-                }
-
-                override fun onStartTrackingTouch(seekBar: SeekBar?) {}
-                override fun onStopTrackingTouch(seekBar: SeekBar?) {}
-            })
-        }
-    }
-
-    private fun initVolumeAutoIncrease(switch: Boolean) {
-        _binding.apply {
-            switchVolumeAutoIncrease.setDefaultColor()
-            switchVolumeAutoIncrease.isChecked = switch
-            switchVolumeAutoIncrease.setDefaultColor()
-            switchVolumeAutoIncrease.setOnCheckedChangeListener { _, isChecked ->
-                _vm.setVolumeAutoIncrease(isChecked)
-            }
-        }
-    }
-
-    private fun initVibration(switch: Boolean) {
-        _binding.apply {
-            switchVibration.setDefaultColor()
-            switchVibration.isChecked = switch
-            switchVibration.jumpDrawablesToCurrentState()
-            switchVibration.setOnCheckedChangeListener { _, isChecked ->
-                _vm.setVibration(isChecked)
-            }
-        }
-    }
-
-    private fun initMemo(memo: String) {
-        _binding.apply {
-            etMemo.setText(memo)
-            etMemo.doAfterTextChanged { _vm.setMemo(it.toString()) }
-        }
-    }
-
-    private fun initMemoTts(enabled: Boolean) {
-        _binding.apply {
-            switchTts.setDefaultColor()
-            switchTts.isChecked = enabled
-            switchTts.jumpDrawablesToCurrentState()
-            switchTts.setOnCheckedChangeListener { _, isChecked ->
-                _vm.setMemoTtsEnabled(isChecked)
-            }
-        }
-    }
-
-    private fun initDeleteButton() {
-        _binding.apply {
-            btnDelete.isVisible = _vm.isEdit
-            btnDelete.setOnClickListener {
-                removeAlarm()
-            }
-        }
+        val navController = findNavController()
+        if (navController.currentDestination?.id != R.id.alarmEditFragment) return
+        navController.navigate(AlarmEditFragmentDirections.actionAlarmEditFragmentToMediaSelectFragment())
     }
 
     companion object {

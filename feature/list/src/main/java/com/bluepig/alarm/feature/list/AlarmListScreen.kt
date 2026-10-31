@@ -17,8 +17,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Snackbar
-import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -47,6 +45,7 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import com.bluepig.alarm.designsystem.component.AlarmButton
+import com.bluepig.alarm.designsystem.component.AlarmSnackbarHost
 import com.bluepig.alarm.designsystem.theme.AlarmTheme
 import com.bluepig.alarm.designsystem.theme.Space
 import com.bluepig.alarm.domain.entity.alarm.Alarm
@@ -145,9 +144,7 @@ internal fun AlarmListScreen(
                 )
             }
         }
-        SnackbarHost(snackbarHostState, Modifier.align(Alignment.BottomCenter)) {
-            Snackbar(it, containerColor = colors.text, contentColor = colors.background)
-        }
+        AlarmSnackbarHost(snackbarHostState, Modifier.align(Alignment.BottomCenter))
     }
 }
 

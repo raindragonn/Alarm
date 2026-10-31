@@ -53,7 +53,7 @@ internal fun ListSummary(next: NextAlarmUi?, modifier: Modifier = Modifier) {
     }
 }
 
-/** 하루 이상이면 일·시간, 한 시간 이상이면 시간·분, 그 밖은 분 */
+/** 하루 이상이면 일·시간, 한 시간 이상이면 시간·분, 그 밖은 분. 뒷부분이 0이면 뺌 */
 private fun remainingParts(minutes: Long): List<Pair<Long, Int>> {
     val days = minutes / (24 * 60)
     val hours = minutes % (24 * 60) / 60
@@ -62,7 +62,7 @@ private fun remainingParts(minutes: Long): List<Pair<Long, Int>> {
         days > 0 -> listOf(days to R.string.list_unit_day, hours to R.string.list_unit_hour)
         hours > 0 -> listOf(hours to R.string.list_unit_hour, mins to R.string.list_unit_minute)
         else -> listOf(mins to R.string.list_unit_minute)
-    }
+    }.filterIndexed { index, (value, _) -> index == 0 || value > 0 }
 }
 
 /** 오늘 오전 7:00 / 내일(금) 오전 7:00 / 10월 31일 (토) 오전 7:00 */

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="edit_title_create">Create alarm</string>
+    <string name="edit_title_edit">Edit alarm</string>
+    <string name="edit_close">Close</string>
+    <string name="edit_rings_in">Rings in %1$s</string>
+    <string name="edit_duration_day">%1$d d</string>
+    <string name="edit_duration_hour">%1$d hr</string>
+    <string name="edit_duration_minute">%1$d min</string>
+    <string name="edit_repeat">Repeat</string>
+    <string name="edit_repeat_once">Once</string>
+    <string name="edit_repeat_everyday">Every day</string>
+    <string name="edit_repeat_weekdays">Weekdays</string>
+    <string name="edit_repeat_weekends">Weekends</string>
+    <string name="edit_alarm_sound">Alarm sound</string>
+    <string name="edit_select_sound">Select an alarm sound</string>
+    <string name="edit_sound_types">Song · Ringtone · YouTube</string>
+    <string name="edit_type_song">Song</string>
+    <string name="edit_type_ringtone">Ringtone</string>
+    <string name="edit_type_youtube">YouTube</string>
+    <string name="edit_volume">Volume</string>
+    <string name="edit_volume_auto_increase">Gradually increase volume</string>
+    <string name="edit_vibration">Vibration</string>
+    <string name="edit_memo">Note</string>
+    <string name="edit_memo_none">None</string>
+    <string name="edit_memo_hint">Please enter a note.</string>
+    <string name="edit_memo_tts">Read the note before the alarm</string>
+    <string name="edit_memo_tts_helper">Add a note to turn this on</string>
+    <string name="edit_delete">Delete alarm</string>
+    <string name="edit_preview">Preview</string>
+    <string name="edit_save">Save</string>
+    <string name="edit_confirm">OK</string>
+    <string name="edit_cancel">Cancel</string>
+    <string name="edit_media_required">Select an alarm sound</string>
+    <string name="edit_save_failed">Couldn\'t save the alarm</string>
+</resources>
