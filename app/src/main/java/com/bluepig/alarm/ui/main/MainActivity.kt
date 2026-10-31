@@ -6,6 +6,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -51,6 +52,11 @@ class MainActivity : AppCompatActivity() {
 	override fun onResume() {
 		super.onResume()
 		BpLogger.logScreenView(MainActivity::class.java.simpleName)
+	}
+
+	/** 유튜브 검색 결과처럼 광고를 두면 안 되는 화면에서 하단 광고를 숨김 (제품 0009) */
+	fun setBottomAdVisible(visible: Boolean) {
+		_binding.adFrame.isVisible = visible
 	}
 
 	private fun startDownloadService() {

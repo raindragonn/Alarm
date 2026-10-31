@@ -76,16 +76,19 @@ import com.bluepig.alarm.designsystem.R as DesignSystemR
 /**
  * @param onSelected 고른 알람음. 전면 광고를 거쳐 편집 화면으로 돌려주는 것은 app이 함
  * @param onSearched 분석 로그용
+ * @param onTabChanged 보이는 탭. 유튜브 탭에서 하단 광고를 숨기는 것은 app이 함
  */
 @Composable
 fun MediaSelectRoute(
     onBack: () -> Unit,
     onSelected: (AlarmMedia) -> Unit,
     onSearched: (tab: MediaTab, query: String) -> Unit,
+    onTabChanged: (MediaTab) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: MediaSelectViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    LaunchedEffect(uiState.tab) { onTabChanged(uiState.tab) }
     val snackbarHostState = remember { SnackbarHostState() }
     val previewFailed = stringResource(R.string.media_preview_failed)
     val accountLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {

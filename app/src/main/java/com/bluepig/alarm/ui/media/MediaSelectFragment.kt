@@ -18,12 +18,14 @@ import com.bluepig.alarm.domain.entity.config.AdPlacement
 import com.bluepig.alarm.feature.media.MediaSelectRoute
 import com.bluepig.alarm.feature.media.MediaTab
 import com.bluepig.alarm.ui.edit.AlarmEditFragment
+import com.bluepig.alarm.ui.main.MainActivity
 import com.bluepig.alarm.util.ads.AdsManager
 import com.bluepig.alarm.util.logger.BpLogger
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
-// 화면은 feature:media. 고르면 전면 광고(1시간 1번)를 거쳐 편집 화면에 돌려줌 (기술 0021)
+// 화면은 feature:media. 고르면 전면 광고(1시간 1번)를 거쳐 편집 화면에 돌려줌 (기술 0021).
+// 유튜브 탭에서는 하단 광고를 숨김 (제품 0009)
 @AndroidEntryPoint
 class MediaSelectFragment : Fragment() {
     @Inject
@@ -44,6 +46,7 @@ class MediaSelectFragment : Fragment() {
                     MediaSelectRoute(
                         onBack = { findNavController().popBackStack() },
                         onSelected = ::select,
+                        onTabChanged = { setBottomAdVisible(it != MediaTab.YouTube) },
                         onSearched = { tab, query ->
                             // 이전 로그와 같은 값 (MusicMedia·TubeMedia)
                             val type = if (tab == MediaTab.YouTube) TubeMedia::class else MusicMedia::class
@@ -53,6 +56,11 @@ class MediaSelectFragment : Fragment() {
                 }
             }
         }
+
+    override fun onDestroyView() {
+        setBottomAdVisible(true)
+        super.onDestroyView()
+    }
 
     override fun onResume() {
         super.onResume()
@@ -75,4 +83,6 @@ class MediaSelectFragment : Fragment() {
             },
         )
     }
+
+    private fun setBottomAdVisible(visible: Boolean) = (requireActivity() as MainActivity).setBottomAdVisible(visible)
 }
