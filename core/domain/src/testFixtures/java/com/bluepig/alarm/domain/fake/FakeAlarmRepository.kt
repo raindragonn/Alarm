@@ -26,4 +26,10 @@ class FakeAlarmRepository(vararg alarms: Alarm) : AlarmRepository {
     }
 
     override suspend fun getAllAlarms(): List<Alarm> = _alarms.value.values.toList()
+
+    var scheduledTimeZoneId: String? = null
+    override suspend fun getScheduledTimeZoneId() = scheduledTimeZoneId
+    override suspend fun setScheduledTimeZoneId(id: String) {
+        scheduledTimeZoneId = id
+    }
 }

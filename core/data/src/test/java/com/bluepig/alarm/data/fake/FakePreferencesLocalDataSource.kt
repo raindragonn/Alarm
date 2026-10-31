@@ -8,6 +8,7 @@ class FakePreferencesLocalDataSource(
     var remoteConfig: RemoteConfigPreferences =
         RemoteConfigPreferences(false, false, false, false, false, false, false),
     var lastInterstitialShowTime: Long = 0,
+    var scheduledTimeZoneId: String? = null,
 ) : PreferencesLocalDataSource {
     override suspend fun getSelectedAccountName() = accountName
     override suspend fun setSelectedAccountName(name: String) {
@@ -22,5 +23,10 @@ class FakePreferencesLocalDataSource(
     override suspend fun getLastInterstitialShowTime() = lastInterstitialShowTime
     override suspend fun setLastInterstitialShowTime(timeInMillis: Long) {
         lastInterstitialShowTime = timeInMillis
+    }
+
+    override suspend fun getScheduledTimeZoneId() = scheduledTimeZoneId
+    override suspend fun setScheduledTimeZoneId(id: String) {
+        scheduledTimeZoneId = id
     }
 }

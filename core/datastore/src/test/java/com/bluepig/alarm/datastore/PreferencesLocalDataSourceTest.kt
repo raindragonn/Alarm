@@ -24,7 +24,7 @@ class PreferencesLocalDataSourceTest {
 
     @Test
     fun `저장된 값이 없으면 기본값`() = runTest {
-        val dataSource = PreferencesLocalDataSourceImpl(dataStore())
+        val dataSource = PreferencesLocalDataSourceImpl(dataStore()) { true }
 
         assertNull(dataSource.getSelectedAccountName())
         assertEquals(0L, dataSource.getLastInterstitialShowTime())
@@ -49,7 +49,7 @@ class PreferencesLocalDataSourceTest {
             it[booleanPreferencesKey("SHOW_YOUTUBE_SEARCH")] = false
             it[longPreferencesKey("LAST_INTERSTITIAL_SHOW_TIME")] = 1_793_000_000_000
         }
-        val dataSource = PreferencesLocalDataSourceImpl(dataStore)
+        val dataSource = PreferencesLocalDataSourceImpl(dataStore) { true }
 
         assertEquals("user@example.com", dataSource.getSelectedAccountName())
         assertEquals(1_793_000_000_000, dataSource.getLastInterstitialShowTime())
@@ -69,7 +69,7 @@ class PreferencesLocalDataSourceTest {
 
     @Test
     fun `쓴 값을 다시 읽는다`() = runTest {
-        val dataSource = PreferencesLocalDataSourceImpl(dataStore())
+        val dataSource = PreferencesLocalDataSourceImpl(dataStore()) { true }
         val config = RemoteConfigPreferences(true, false, true, false, true, false, true)
 
         dataSource.setSelectedAccountName("")
@@ -79,5 +79,14 @@ class PreferencesLocalDataSourceTest {
         assertEquals("", dataSource.getSelectedAccountName())
         assertEquals(42L, dataSource.getLastInterstitialShowTime())
         assertEquals(config, dataSource.getRemoteConfig())
+    }
+
+    @Test
+    fun `잠금 해제 전에는 파일을 열지 않고 기본값`() = runTest {
+        val dataSource = PreferencesLocalDataSourceImpl(dataStore()) { false }
+
+        dataSource.setScheduledTimeZoneId("Asia/Seoul")
+
+        assertEquals(null, dataSource.getScheduledTimeZoneId())
     }
 }

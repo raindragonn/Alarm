@@ -5,8 +5,6 @@
     <string name="chennel_description_media_download">인터넷 없이 재생을 위한 미디어 다운로드</string>
 
     <string name="alarm_emoji">⏰</string>
-    <string name="alarm_end">알람 종료</string>
-    <string name="alarm_preview_end">미리보기 종료</string>
 
     <string name="ok">확인</string>
     <string name="cancel">취소</string>
@@ -28,8 +26,6 @@
 
     <string name="alert_request_permission_title">권한이 필요합니다!</string>
     <string name="alert_request_permission_text_post_notification">원활한 알람을 위해 알림 권한이 필요합니다.</string>
-    <string name="alert_request_permission_text_system_alert_window">원활한 알람을 위해 다른앱 위에 표시 권한이 필요합니다.</string>
-    <string name="alert_request_permission_text_exact_alarm">원활한 알람을 위해 알람 및 리마인더 권한이 필요합니다.</string>
 
     <string name="notification_message_media_downlaod">인터넷 없이 알람을 위한 다운로드 중</string>
 
@@ -42,4 +38,15 @@
     <string name="review_request_title">리뷰 쓰러 가기</string>
     <string name="review_request_body">앱이 마음에 드신다면 칭찬을, 불편한 점이나 건의사항이 있다면 남겨주세요</string>
 
+    <string name="channel_name_alarm_ring">알람</string>
+    <string name="channel_description_alarm_ring">알람이 울릴 때 알람 화면을 띄워요</string>
+    <string name="channel_name_alarm_preview">알람 미리보기</string>
+    <string name="channel_description_alarm_preview">알람을 미리 보는 동안 표시돼요</string>
+    <string name="channel_name_alarm_missed">놓친 알람</string>
+    <string name="channel_description_alarm_missed">휴대폰이 꺼져 있는 동안 지나간 알람</string>
+    <string name="notification_alarm_title">알람 %1$s</string>
+    <string name="notification_alarm_dismiss">끄기</string>
+    <string name="notification_preview_title">알람 미리보기 중</string>
+    <string name="notification_missed_title">놓친 알람</string>
+    <string name="notification_missed_text">휴대폰이 꺼져 있는 동안 %1$s 알람이 지나갔어요</string>
 </resources>

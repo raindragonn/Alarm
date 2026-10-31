@@ -8,6 +8,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontVariation
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.LineHeightStyle
+import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import com.bluepig.alarm.designsystem.R
 
@@ -47,7 +48,7 @@ private fun geist(weight: FontWeight, size: Int, lineHeight: Int) = Base.copy(
 /** 피그마 텍스트 스타일 `v2/…`. 한글 Pretendard, 숫자 Geist */
 @Immutable
 data class AlarmTypography(
-    val numClock: TextStyle = geist(FontWeight.Thin, 104, 112),
+    val numClock: TextStyle = geist(FontWeight.Thin, 104, 112).copy(letterSpacing = (-0.02).em),
     val numDisplay: TextStyle = geist(FontWeight.ExtraLight, 72, 76),
     val numWheel: TextStyle = geist(FontWeight.Normal, 56, 64),
     val numTime: TextStyle = geist(FontWeight.Light, 40, 44),

@@ -5,8 +5,6 @@
     <string name="chennel_description_media_download">Download media for playback without internet</string>
 
     <string name="alarm_emoji">⏰</string>
-    <string name="alarm_end">Alarm ends</string>
-    <string name="alarm_preview_end">End preview</string>
 
     <string name="ok">check</string>
     <string name="cancel">cancellation</string>
@@ -28,8 +26,6 @@
 
     <string name="alert_request_permission_title">Permission required!</string>
     <string name="alert_request_permission_text_post_notification">Notification permission is required for smooth alarming.</string>
-    <string name="alert_request_permission_text_system_alert_window">For smooth alarms, permission to display above other apps is required.</string>
-    <string name="alert_request_permission_text_exact_alarm">Alarm and reminder permissions are required for smooth alarming.</string>
 
     <string name="notification_message_media_downlaod">Downloading for alarm without internet</string>
 
@@ -41,4 +37,15 @@
     <string name="ad_headline">AD · %1$s</string>
     <string name="review_request_title">Go to write a review</string>
     <string name="review_request_body">If you like the app please leave a praise and if you have any inconveniences or suggestions please leave a comment.</string>
+    <string name="channel_name_alarm_ring">Alarm</string>
+    <string name="channel_description_alarm_ring">Shows the alarm screen when an alarm rings</string>
+    <string name="channel_name_alarm_preview">Alarm preview</string>
+    <string name="channel_description_alarm_preview">Shown while previewing an alarm</string>
+    <string name="channel_name_alarm_missed">Missed alarms</string>
+    <string name="channel_description_alarm_missed">Alarms that passed while the phone was off</string>
+    <string name="notification_alarm_title">Alarm %1$s</string>
+    <string name="notification_alarm_dismiss">Dismiss</string>
+    <string name="notification_preview_title">Previewing alarm</string>
+    <string name="notification_missed_title">Missed alarm</string>
+    <string name="notification_missed_text">%1$s alarm passed while the phone was off</string>
 </resources>

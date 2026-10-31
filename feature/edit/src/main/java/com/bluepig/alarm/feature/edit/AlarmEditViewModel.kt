@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.bluepig.alarm.domain.entity.alarm.Alarm
 import com.bluepig.alarm.domain.entity.alarm.Week
 import com.bluepig.alarm.domain.entity.alarm.media.AlarmMedia
+import com.bluepig.alarm.domain.usecase.CanScheduleExactAlarms
 import com.bluepig.alarm.domain.usecase.GetAlarmById
 import com.bluepig.alarm.domain.usecase.GetCurrentTime
 import com.bluepig.alarm.domain.usecase.GetExpiredTime
@@ -74,6 +75,9 @@ sealed interface AlarmEditEffect {
     data object MediaRequired : AlarmEditEffect
     data object SaveFailed : AlarmEditEffect
 
+    /** API 31·32에서 정확한 알람 권한이 꺼져 있어 저장하지 않음 (C6, 기술 0025) */
+    data object ExactAlarmPermissionRequired : AlarmEditEffect
+
     /** 열려는 알람이 지워졌음 */
     data object NotFound : AlarmEditEffect
 }
@@ -87,6 +91,7 @@ class AlarmEditViewModel @Inject constructor(
     private val _getExpiredTime: GetExpiredTime,
     private val _saveAlarm: SaveAlarm,
     private val _removeAlarm: RemoveAlarm,
+    private val _canScheduleExactAlarms: CanScheduleExactAlarms,
 ) : ViewModel() {
     private val _maxVolume = getMaxVolume()
     private val _draft = MutableStateFlow<AlarmDraft?>(null)
@@ -145,6 +150,7 @@ class AlarmEditViewModel @Inject constructor(
     fun onSave() = runOnce {
         val draft = _draft.value ?: return@runOnce
         val alarm = draft.toAlarm() ?: return@runOnce _effect.send(AlarmEditEffect.MediaRequired)
+        if (!_canScheduleExactAlarms()) return@runOnce _effect.send(AlarmEditEffect.ExactAlarmPermissionRequired)
         _saveAlarm(alarm)
             .onSuccess { _effect.send(AlarmEditEffect.Saved(it, draft.isNew)) }
             .onFailure { _effect.send(AlarmEditEffect.SaveFailed) }

@@ -33,4 +33,7 @@
     <string name="edit_cancel">Cancel</string>
     <string name="edit_media_required">Select an alarm sound</string>
     <string name="edit_save_failed">Couldn\'t save the alarm</string>
+    <string name="edit_exact_alarm_title">Allow alarms to ring on time</string>
+    <string name="edit_exact_alarm_body">Turn on \'Alarms &amp; reminders\' for Media Alarm in settings, then save again.</string>
+    <string name="edit_exact_alarm_open">Open settings</string>
 </resources>

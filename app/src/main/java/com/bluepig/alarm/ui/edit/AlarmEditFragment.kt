@@ -18,6 +18,7 @@ import com.bluepig.alarm.designsystem.theme.AlarmTheme
 import com.bluepig.alarm.domain.entity.alarm.media.AlarmMedia
 import com.bluepig.alarm.feature.edit.AlarmEditRoute
 import com.bluepig.alarm.ui.alarm.AlarmActivity
+import com.bluepig.alarm.util.PermissionHelper
 import com.bluepig.alarm.util.logger.BpLogger
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -57,6 +58,7 @@ class AlarmEditFragment : Fragment() {
                                 AlarmEditFragmentDirections.actionAlarmEditFragmentToAlarmListFragment(),
                             )
                         },
+                        onOpenExactAlarmSetting = { PermissionHelper.openExactAlarmSetting(requireContext()) },
                         onDeleted = {
                             BpLogger.logAlarmDelete()
                             findNavController().popBackStack()

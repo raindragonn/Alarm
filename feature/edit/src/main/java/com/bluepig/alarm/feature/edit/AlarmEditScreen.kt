@@ -72,9 +72,11 @@ fun AlarmEditRoute(
     onPreview: (Alarm) -> Unit,
     onSaved: (alarm: Alarm, isNew: Boolean) -> Unit,
     onDeleted: () -> Unit,
+    onOpenExactAlarmSetting: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: AlarmEditViewModel = hiltViewModel(),
 ) {
+    var showExactAlarmDialog by rememberSaveable { mutableStateOf(false) }
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
     val mediaRequired = stringResource(R.string.edit_media_required)
@@ -91,6 +93,7 @@ fun AlarmEditRoute(
                     AlarmEditEffect.MediaRequired -> snackbarHostState.showSnackbar(mediaRequired)
                     AlarmEditEffect.SaveFailed -> snackbarHostState.showSnackbar(saveFailed)
                     AlarmEditEffect.NotFound -> onClose()
+                    AlarmEditEffect.ExactAlarmPermissionRequired -> showExactAlarmDialog = true
                 }
             }
         }
@@ -114,6 +117,15 @@ fun AlarmEditRoute(
         snackbarHostState = snackbarHostState,
         modifier = modifier,
     )
+    if (showExactAlarmDialog) {
+        ExactAlarmDialog(
+            onOpenSetting = {
+                showExactAlarmDialog = false
+                onOpenExactAlarmSetting()
+            },
+            onDismiss = { showExactAlarmDialog = false },
+        )
+    }
 }
 
 internal class EditActions(

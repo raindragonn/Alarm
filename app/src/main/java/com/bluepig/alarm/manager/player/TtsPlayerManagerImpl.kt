@@ -21,6 +21,8 @@ class TtsPlayerManagerImpl(
             _tts?.language = Locale.getDefault()
             _lastMemo?.let(::speak)
         } else {
+            // 엔진을 못 쓰면 바로 알람음으로 넘어감 (안 부르면 알람음이 시작되지 않음)
+            _onSpeakDoneListener?.invoke()
             release()
         }
     }
