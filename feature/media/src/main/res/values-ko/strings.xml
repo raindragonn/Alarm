@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="media_title">알람음 설정</string>
+    <string name="media_back">뒤로 가기</string>
+    <string name="media_close">닫기</string>
+    <string name="media_clear">지우기</string>
+    <string name="media_type_song">노래</string>
+    <string name="media_type_ringtone">벨소리</string>
+    <string name="media_type_youtube">유튜브</string>
+    <string name="media_song_hint">노래나 가수 이름으로 검색</string>
+    <string name="media_song_idle_title">노래를 검색해 보세요</string>
+    <string name="media_song_idle_body">제목이나 가수 이름으로 찾을 수 있어요</string>
+    <string name="media_youtube_hint">영상 제목이나 링크로 검색</string>
+    <string name="media_youtube_link_hint">유튜브 링크를 붙여 넣으세요</string>
+    <string name="media_youtube_idle_title">유튜브 영상을 검색해 보세요</string>
+    <string name="media_youtube_idle_body">영상 제목이나 링크로 찾을 수 있어요</string>
+    <string name="media_youtube_link_idle_body">유튜브 앱에서 공유한 링크를 붙여 넣으세요</string>
+    <string name="media_empty_title">검색 결과가 없습니다</string>
+    <string name="media_empty_body">다른 검색어로 찾아보세요</string>
+    <string name="media_error_network">인터넷 연결을 확인해 주세요</string>
+    <string name="media_error_other">검색하지 못했어요</string>
+    <string name="media_retry">다시 시도</string>
+    <string name="media_ringtone_failed">벨소리 목록을 불러오지 못했어요</string>
+    <string name="media_preview_failed">알람음을 불러오지 못했어요</string>
+    <string name="media_play">재생</string>
+    <string name="media_pause">멈춤</string>
+    <string name="media_select">선택</string>
+    <string name="media_youtube_notice_title">안전한 유튜브 연동</string>
+    <string name="media_youtube_notice_body">미디어 알람이 Google의 YouTube API로 영상을 검색할 수 있도록 로그인할까요?\n\n이 과정에서 개인정보는 수집하지 않아요.</string>
+    <string name="media_youtube_notice_agree">미디어 알람과 유튜브 연동</string>
+    <string name="media_youtube_notice_disagree">연동하지 않을게요</string>
+</resources>
