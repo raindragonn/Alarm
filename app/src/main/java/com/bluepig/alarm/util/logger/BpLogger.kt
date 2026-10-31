@@ -27,19 +27,28 @@ object BpLogger {
     private val _timeFormat
         get() = SimpleDateFormat("HH:mm:ss", Locale.getDefault())
 
+    // 재부팅 후 잠금 해제 전에는 Firebase가 초기화되지 않음 (C7). 로그만 건너뜀
+    private inline fun firebase(block: () -> Unit) {
+        try {
+            block()
+        } catch (e: IllegalStateException) {
+            Timber.w(e)
+        }
+    }
+
     private fun logEvent(event: Event, bundle: Bundle) {
-        _analytics.logEvent(event.name, bundle)
+        firebase { _analytics.logEvent(event.name, bundle) }
         Timber.d("[Event] ${event.name}: $bundle")
     }
 
     private fun logCustomKey(customKey: CustomKey, value: String) {
-        _crashlytics.setCustomKey(customKey.lowerCaseName, value)
+        firebase { _crashlytics.setCustomKey(customKey.lowerCaseName, value) }
         Timber.d("[CustomKey] ${customKey.lowerCaseName}: $value")
     }
 
     fun logException(t: Throwable) {
         Timber.w(t)
-        _crashlytics.recordException(t)
+        firebase { _crashlytics.recordException(t) }
     }
 
     fun logScreenView(screenName: String) {

@@ -12,7 +12,6 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.offline.DownloadService
 import com.bluepig.alarm.databinding.ActivityMainBinding
-import com.bluepig.alarm.notification.NotificationType
 import com.bluepig.alarm.service.MediaDownloadService
 import com.bluepig.alarm.util.PermissionHelper
 import com.bluepig.alarm.util.ads.AdsManager
@@ -40,13 +39,7 @@ class MainActivity : AppCompatActivity() {
 			insets
 		}
 		setContentView(_binding.root)
-		PermissionHelper.checkNotificationPermission(this) {
-			NotificationType.DOWNLOAD_NOTIFICATION.createChannel(this)
-		}
-		PermissionHelper.checkExactAlarmPermission(this, _binding.root) {
-			_vm.refresh()
-		}
-		PermissionHelper.checkSystemAlertPermission(this, _binding.root)
+		if (savedInstanceState == null) PermissionHelper.requestNotificationPermission(this)
 		adsManager.loadBottomNativeAd(lifecycle, _binding.adFrame)
 		lifecycleScope.launch {
 			repeatOnLifecycle(Lifecycle.State.CREATED) {

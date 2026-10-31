@@ -18,6 +18,11 @@ class MainViewModel @Inject constructor(
     private val _mediaDownloadManager: MediaDownloadManager,
     private val _refreshAlarms: RefreshAlarms,
 ) : ViewModel() {
+    init {
+        // 강제 종료되면 예약이 지워지므로 앱을 열 때마다 다시 예약 (C4)
+        viewModelScope.launch { _refreshAlarms() }
+    }
+
     fun startDownload() = viewModelScope.launch {
         _getAllAlarms.invoke()
             .stateIn(this)
@@ -25,10 +30,6 @@ class MainViewModel @Inject constructor(
                 startDownloadFiles(list)
                 removeDownloadFiles(list)
             }
-    }
-
-    fun refresh() = viewModelScope.launch {
-        _refreshAlarms.invoke()
     }
 
     private fun startDownloadFiles(list: List<Alarm>) {
