@@ -25,7 +25,8 @@ class BPAlarmManagerImpl @Inject constructor(
         val alarmId = alarm.id ?: return
         if (alarm.timeInMillis < CalendarHelper.now.timeInMillis) return
         val intent = getAlarmReceiverIntent(alarmId)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !_alarmManager.canScheduleExactAlarms()) {
+        // 31·32에서 권한을 거부한 경우만. 33+는 USE_EXACT_ALARM (기술 0025), 다시 허용하면 SystemEventReceiver가 재예약 (C3)
+        if (!canScheduleExactAlarms()) {
             BpLogger.logException(Exception("ExactAlarms Permission denied!"))
             return
         }
@@ -37,6 +38,9 @@ class BPAlarmManagerImpl @Inject constructor(
             intent
         )
     }
+
+    override fun canScheduleExactAlarms(): Boolean =
+        Build.VERSION.SDK_INT < Build.VERSION_CODES.S || _alarmManager.canScheduleExactAlarms()
 
     override fun cancelAlarm(alarm: Alarm) {
         val alarmId = alarm.id ?: return

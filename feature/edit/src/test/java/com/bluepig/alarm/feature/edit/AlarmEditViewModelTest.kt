@@ -7,6 +7,7 @@ import com.bluepig.alarm.domain.entity.alarm.media.RingtoneMedia
 import com.bluepig.alarm.domain.entity.alarm.testAlarm
 import com.bluepig.alarm.domain.fake.FakeAlarmRepository
 import com.bluepig.alarm.domain.fake.FakeBpAlarmManager
+import com.bluepig.alarm.domain.usecase.CanScheduleExactAlarms
 import com.bluepig.alarm.domain.usecase.GetAlarmById
 import com.bluepig.alarm.domain.usecase.GetCurrentTime
 import com.bluepig.alarm.domain.usecase.GetExpiredTime
@@ -47,6 +48,7 @@ class AlarmEditViewModelTest {
         GetExpiredTime(),
         SaveAlarm(repository, alarmManager),
         RemoveAlarm(repository, alarmManager),
+        CanScheduleExactAlarms(alarmManager),
     )
 
     // GetCurrentTime이 끝없이 돌아서 advanceUntilIdle 대신 runCurrent
@@ -146,5 +148,21 @@ class AlarmEditViewModelTest {
         assertEquals(AlarmEditEffect.Deleted, viewModel.effect.first())
         assertTrue(repository.getAllAlarms().isEmpty())
         assertEquals(listOf(1L), alarmManager.cancelled.map { it.id })
+    }
+
+    // C6: 31·32에서 권한이 꺼져 있으면 저장해도 예약이 안 됐음
+    @Test
+    fun `정확한 알람 권한이 없으면 저장하지 않고 안내`() = runTest {
+        clock.setNow("2026-10-28T09:00")
+        alarmManager.canScheduleExact = false
+        val repository = FakeAlarmRepository()
+        val viewModel = viewModel(repository)
+        editing(viewModel)
+
+        viewModel.onMediaSelected(ringtone)
+        viewModel.onSave()
+
+        assertEquals(AlarmEditEffect.ExactAlarmPermissionRequired, viewModel.effect.first())
+        assertTrue(repository.getAllAlarms().isEmpty())
     }
 }
