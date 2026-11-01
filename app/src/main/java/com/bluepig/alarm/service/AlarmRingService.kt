@@ -139,7 +139,8 @@ class AlarmRingService : LifecycleService() {
         if (_originalVolume == null) _originalVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC)
         setVolume(alarm.volume)
         if (alarm.memoTtsEnabled && alarm.memo.isNotBlank()) {
-            ttsPlayerManager.play(alarm.memo) { playSound(alarm) }
+            // 읽기 완료 콜백은 바인더 스레드라 메인으로 옮김 (ExoPlayer는 메인 스레드만). 서비스가 끝났으면 취소됨
+            ttsPlayerManager.play(alarm.memo) { lifecycleScope.launch { playSound(alarm) } }
         } else {
             playSound(alarm)
         }
