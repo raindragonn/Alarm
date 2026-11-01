@@ -13,9 +13,11 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.offline.DownloadService
 import com.bluepig.alarm.databinding.ActivityMainBinding
+import com.bluepig.alarm.designsystem.theme.AlarmTheme
 import com.bluepig.alarm.service.MediaDownloadService
 import com.bluepig.alarm.util.PermissionHelper
 import com.bluepig.alarm.util.ads.AdsManager
+import com.bluepig.alarm.util.ads.BottomNativeAdBar
 import com.bluepig.alarm.util.logger.BpLogger
 import com.bluepig.alarm.util.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -41,7 +43,7 @@ class MainActivity : AppCompatActivity() {
 		}
 		setContentView(_binding.root)
 		if (savedInstanceState == null) PermissionHelper.requestNotificationPermission(this)
-		adsManager.loadBottomNativeAd(lifecycle, _binding.adFrame)
+		_binding.adFrame.setContent { AlarmTheme { BottomNativeAdBar(adsManager) } }
 		lifecycleScope.launch {
 			repeatOnLifecycle(Lifecycle.State.CREATED) {
 				startDownloadService()

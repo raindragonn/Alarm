@@ -1,7 +1,7 @@
 package com.bluepig.alarm.util.ads
 
 import android.content.Context
-import android.view.ViewGroup
+import androidx.annotation.StringRes
 import androidx.activity.ComponentActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
@@ -10,11 +10,9 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.coroutineScope
 import androidx.lifecycle.lifecycleScope
 import com.bluepig.alarm.R
-import com.bluepig.alarm.databinding.MainBottomNativeLayoutBinding
 import com.bluepig.alarm.domain.entity.config.AdPlacement
 import com.bluepig.alarm.domain.usecase.IsAdEnabled
 import com.bluepig.alarm.domain.usecase.MarkInterstitialShown
-import com.bluepig.alarm.util.ext.inflater
 import com.bluepig.alarm.util.logger.BpLogger
 import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.AdListener
@@ -60,55 +58,26 @@ class AdsManager @Inject constructor(
         _lifecycle = lifecycle
     }
 
-    fun loadBottomNativeAd(
-        lifecycle: Lifecycle,
-        container: ViewGroup
-    ) = lifecycle.coroutineScope.launch {
-        if (!_isAdEnabled(AdPlacement.MAIN_BOTTOM_NATIVE)) return@launch
+    fun loadBottomNativeAd(lifecycle: Lifecycle, loadedListener: (NativeAd) -> Unit) =
+        loadNativeAd(lifecycle, AdPlacement.MAIN_BOTTOM_NATIVE, R.string.ads_main_bottom_native, loadedListener)
 
-        kotlin.runCatching {
-            setLifeCycle(lifecycle)
-            val adLoader =
-                AdLoader.Builder(
-                    _context,
-                    _context.getString(R.string.ads_main_bottom_native)
-                ).forNativeAd { ad: NativeAd ->
-                    _lifecycle?.apply {
-                        val lifecycleObserver = DestroyListener {
-                            ad.destroy()
-                        }
-                        addObserver(lifecycleObserver)
-                        _lifeCycleObserver = lifecycleObserver
-                    }
-                    applyBottomNativeAd(container, ad)
-                }.withAdListener(object : AdListener() {
-                    override fun onAdFailedToLoad(adError: LoadAdError) {
-                        // Handle the failure by logging, altering the UI, and so on.
-                    }
-                }).withNativeAdOptions(
-                    NativeAdOptions.Builder()
-                        // Methods in the NativeAdOptions.Builder class can be
-                        // used here to specify individual options settings.
-                        .build()
-                ).build()
-            adLoader.loadAd(_adRequest)
-        }.onFailure {
-            BpLogger.logException(it)
-        }
-    }
+    fun loadAlarmListNativeAd(lifecycle: Lifecycle, loadedListener: (NativeAd) -> Unit) =
+        loadNativeAd(lifecycle, AdPlacement.ALARM_LIST_NATIVE, R.string.ads_alarm_list_native, loadedListener)
 
-    fun loadAlarmListNativeAd(
+    private fun loadNativeAd(
         lifecycle: Lifecycle,
+        placement: AdPlacement,
+        @StringRes unitId: Int,
         loadedListener: (NativeAd) -> Unit
     ) = lifecycle.coroutineScope.launch {
-        if (!_isAdEnabled(AdPlacement.ALARM_LIST_NATIVE)) return@launch
+        if (!_isAdEnabled(placement)) return@launch
 
         kotlin.runCatching {
             setLifeCycle(lifecycle)
             val adLoader =
                 AdLoader.Builder(
                     _context,
-                    _context.getString(R.string.ads_alarm_list_native)
+                    _context.getString(unitId)
                 ).forNativeAd { ad: NativeAd ->
                     _lifecycle?.apply {
                         val lifecycleObserver = DestroyListener {
@@ -194,18 +163,6 @@ class AdsManager @Inject constructor(
         }.onFailure {
             onCloseOrFailed.invoke()
         }
-    }
-
-    private fun applyBottomNativeAd(container: ViewGroup, ad: NativeAd) {
-        val adview = MainBottomNativeLayoutBinding.inflate(container.inflater).apply {
-            adHeadline.text = ad.headline
-        }
-
-        adview.nativeAdView.callToActionView = adview.nativeAdView
-        adview.nativeAdView.headlineView = adview.adHeadline
-        adview.nativeAdView.setNativeAd(ad)
-        container.removeAllViews()
-        container.addView(adview.root)
     }
 }
 

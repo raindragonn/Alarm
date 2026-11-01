@@ -1,22 +1,25 @@
 package com.bluepig.alarm.util.ads
 
 import android.content.Context
-import android.graphics.Typeface
 import android.graphics.drawable.GradientDrawable
 import android.text.TextUtils
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
+import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.annotation.FontRes
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -30,13 +33,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.view.isVisible
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import coil.load
 import com.bluepig.alarm.R
@@ -65,6 +71,24 @@ fun ListNativeAdRow(adsManager: AdsManager, onReviewClick: () -> Unit, modifier:
             )
         }
         HorizontalDivider(color = colors.line)
+    }
+}
+
+/** 피그마 v2/BannerNav의 BottomNativeAd. 모든 화면 아래 가운데 한 줄 광고 (제품 0010), 광고가 없으면 영역 없음 */
+@Composable
+fun BottomNativeAdBar(adsManager: AdsManager) {
+    var ad by remember { mutableStateOf<NativeAd?>(null) }
+    val lifecycle = LocalLifecycleOwner.current.lifecycle
+    LaunchedEffect(lifecycle) { adsManager.loadBottomNativeAd(lifecycle) { ad = it } }
+    val current = ad ?: return
+    val colors = AlarmTheme.colors
+    Column(Modifier.background(colors.bar)) {
+        HorizontalDivider(color = colors.line)
+        AndroidView(
+            factory = { context -> bottomNativeAdView(context, colors) },
+            modifier = Modifier.fillMaxWidth(),
+            update = { it.bindBottom(current) },
+        )
     }
 }
 
@@ -106,21 +130,11 @@ private fun ReviewRow(onClick: () -> Unit) {
 }
 
 // AdMob은 광고 요소를 NativeAdView 안의 View로 등록해야 해서 ReviewRow와 같은 모양을 View로 만듦
-private fun nativeAdView(context: Context, colors: AlarmColors): NativeAdView {
-    fun dp(value: Int) = (value * context.resources.displayMetrics.density).toInt()
-    fun font(@FontRes id: Int): Typeface? = ResourcesCompat.getFont(context, id)
-    fun text(sizeSp: Float, @FontRes fontId: Int, color: Int) = TextView(context).apply {
-        setTextSize(TypedValue.COMPLEX_UNIT_SP, sizeSp)
-        typeface = font(fontId)
-        setTextColor(color)
-        maxLines = 1
-        ellipsize = TextUtils.TruncateAt.END
-    }
-
+private fun nativeAdView(context: Context, colors: AlarmColors): NativeAdView = with(context) {
     val icon = ImageView(context).apply { layoutParams = LinearLayout.LayoutParams(dp(48), dp(48)) }
-    val headline = text(14f, DesignSystemR.font.designsystem_pretendard_semibold, colors.text.toArgb())
-    val body = text(12f, DesignSystemR.font.designsystem_pretendard_regular, colors.sub.toArgb())
-    val action = text(12f, DesignSystemR.font.designsystem_pretendard_semibold, colors.text.toArgb()).apply {
+    val headline = adText(14f, SEMIBOLD, colors.text)
+    val body = adText(12f, REGULAR, colors.sub)
+    val action = adText(12f, SEMIBOLD, colors.text).apply {
         setPadding(dp(12), dp(7), dp(12), dp(7))
         background = GradientDrawable().apply {
             cornerRadius = dp(999).toFloat()
@@ -143,7 +157,7 @@ private fun nativeAdView(context: Context, colors: AlarmColors): NativeAdView {
         addView(texts)
         addView(action)
     }
-    return NativeAdView(context).apply {
+    NativeAdView(context).apply {
         addView(row)
         iconView = icon
         headlineView = headline
@@ -165,4 +179,76 @@ private fun NativeAdView.bind(ad: NativeAd) {
         uri?.let { load(it) }
     }
     setNativeAd(ad)
+}
+
+// 가운데 한 줄. 배지·구분선·빈 곳은 클릭되지 않게 제목·CTA만 광고 요소로 등록 (AdMob 배경 클릭 금지)
+private fun bottomNativeAdView(context: Context, colors: AlarmColors): NativeAdView = with(context) {
+    val badge = adText(12f, SEMIBOLD, colors.sub).apply {
+        setText(R.string.ad_badge)
+        setPadding(dp(8), dp(2), dp(8), dp(2))
+        background = GradientDrawable().apply {
+            cornerRadius = dp(999).toFloat()
+            setColor(colors.fill.toArgb())
+        }
+    }
+    // 제목이 길면 남은 폭만큼 줄어 말줄임
+    val headline = adText(13f, REGULAR, colors.text).apply {
+        layoutParams = LinearLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT, 1f).apply { marginStart = dp(8) }
+    }
+    val divider = View(context).apply {
+        layoutParams = LinearLayout.LayoutParams(dp(1), dp(12)).apply {
+            marginStart = dp(8)
+            marginEnd = dp(8)
+        }
+        setBackgroundColor(colors.dim.toArgb())
+    }
+    val action = adText(13f, REGULAR, colors.text).apply {
+        val chevron = ContextCompat.getDrawable(context, DesignSystemR.drawable.designsystem_ic_chevron)?.mutate()
+        chevron?.setBounds(0, 0, dp(14), dp(14))
+        chevron?.setTint(colors.text.toArgb())
+        setCompoundDrawables(null, null, chevron, null)
+        compoundDrawablePadding = dp(2)
+    }
+    val actionGroup = LinearLayout(context).apply {
+        gravity = Gravity.CENTER_VERTICAL
+        addView(divider)
+        addView(action)
+    }
+    val row = LinearLayout(context).apply {
+        gravity = Gravity.CENTER_VERTICAL
+        layoutParams = FrameLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT, Gravity.CENTER)
+        addView(badge)
+        addView(headline)
+        addView(actionGroup)
+    }
+    val bar = FrameLayout(context).apply {
+        minimumHeight = dp(40) // AdMob: 32dp 미만 광고 영역은 수익 제외
+        setPadding(dp(24), dp(8), dp(24), dp(8))
+        addView(row)
+    }
+    NativeAdView(context).apply {
+        addView(bar)
+        headlineView = headline
+        callToActionView = action
+    }
+}
+
+private fun NativeAdView.bindBottom(ad: NativeAd) {
+    (headlineView as TextView).text = ad.headline
+    (callToActionView as TextView).text = ad.callToAction
+    (callToActionView?.parent as View).isVisible = ad.callToAction != null
+    setNativeAd(ad)
+}
+
+private val SEMIBOLD = DesignSystemR.font.designsystem_pretendard_semibold
+private val REGULAR = DesignSystemR.font.designsystem_pretendard_regular
+
+private fun Context.dp(value: Int) = (value * resources.displayMetrics.density).toInt()
+
+private fun Context.adText(sizeSp: Float, @FontRes fontId: Int, color: Color) = TextView(this).apply {
+    setTextSize(TypedValue.COMPLEX_UNIT_SP, sizeSp)
+    typeface = ResourcesCompat.getFont(context, fontId)
+    setTextColor(color.toArgb())
+    maxLines = 1
+    ellipsize = TextUtils.TruncateAt.END
 }

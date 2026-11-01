@@ -35,6 +35,7 @@
     <string name="toast_error_not_select_alarm_media">알람음을 선택해주세요.</string>
 
     <string name="ad_headline">AD · %1$s</string>
+    <string name="ad_badge">광고</string>
     <string name="review_request_title">리뷰 쓰러 가기</string>
     <string name="review_request_body">앱이 마음에 드신다면 칭찬을, 불편한 점이나 건의사항이 있다면 남겨주세요</string>
 
