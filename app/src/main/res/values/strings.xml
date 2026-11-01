@@ -1,10 +1,10 @@
-<resources>
-    <string name="app_name_default">Media Alarm</string>
-    <string name="app_name_dev">Media Alarm_DEBUG</string>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- app/build.gradle.kts resValue("app_name")가 참조 (lint가 못 봄) -->
+    <string name="app_name_default" tools:ignore="UnusedResources">Media Alarm</string>
+    <string name="app_name_dev" tools:ignore="UnusedResources">Media Alarm_DEBUG</string>
     <string name="chennel_name_media_download">media download</string>
     <string name="chennel_description_media_download">Download media for playback without internet</string>
 
-    <string name="alarm_emoji">⏰</string>
 
     <string name="ok">check</string>
     <string name="cancel">cancellation</string>
