@@ -28,7 +28,7 @@ android {
         applicationId = "com.bluepig.alarm"
         // CI 배포는 -PversionCode로 덮어씀 (기술 0010)
         versionCode = providers.gradleProperty("versionCode").orNull?.toInt() ?: 10
-        versionName = "1.1.1"
+        versionName = "2.0.0"
     }
     signingConfigs {
         listOf("debug", "release").forEach { buildType ->
@@ -97,8 +97,6 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.lifecycle.service)
     implementation(libs.androidx.activity.compose)
-    implementation(libs.androidx.constraintlayout)
-    implementation(libs.androidx.recyclerview)
     implementation(libs.androidx.media3.exoplayer)
     implementation(libs.androidx.media3.exoplayer.ui)
 

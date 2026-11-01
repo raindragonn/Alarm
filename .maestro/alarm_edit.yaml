@@ -31,6 +31,30 @@ appId: com.bluepig.alarm.debug
 - assertVisible: ${output.memo}
 - tapOn: "미리보기 종료|(?i)end preview"
 - tapOn: "저장|Save"
+# 광고가 켜져 있으면 저장 뒤 전면 광고(1시간에 1번)가 뜸 → 닫으면 목록.
+# 닫기 버튼이 늦게 나오거나 뒤로 가기를 무시하는 광고가 있어 닫힐 때까지 둘 다 시도
+- extendedWaitUntil:
+    visible: "다음 알람까지|Next alarm in|테스트 광고|Test Ad"
+    timeout: 10000
+- repeat:
+    times: 5
+    while:
+      visible: "테스트 광고|Test Ad"
+    commands:
+      - runFlow:
+          when:
+            visible: "Close|닫기"
+          commands:
+            - tapOn: "Close|닫기"
+      - runFlow:
+          when:
+            visible: "테스트 광고|Test Ad"
+          commands:
+            - back
+      - extendedWaitUntil:
+          notVisible: "테스트 광고|Test Ad"
+          timeout: 4000
+          optional: true
 # 목록은 시각 순이라 기존 알람이 많으면 새 알람이 아래에 있음
 - scrollUntilVisible:
     element: ${output.memo}

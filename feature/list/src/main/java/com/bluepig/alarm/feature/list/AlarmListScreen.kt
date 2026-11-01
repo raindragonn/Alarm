@@ -110,11 +110,8 @@ internal fun AlarmListScreen(
     ) {
         when (uiState) {
             AlarmListUiState.Loading -> Unit
-            AlarmListUiState.Empty -> Column(Modifier.fillMaxSize()) {
-                EmptyState(onAddAlarm, Modifier.weight(1f))
-                HorizontalDivider(color = colors.line)
-                nativeAd(Modifier.fillMaxWidth())
-            }
+            // 알람이 없으면 목록 네이티브 없이 하단 한 줄 광고만 (제품 0015)
+            AlarmListUiState.Empty -> EmptyState(onAddAlarm, Modifier.fillMaxSize())
 
             is AlarmListUiState.Alarms -> {
                 LazyColumn(
