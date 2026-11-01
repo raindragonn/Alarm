@@ -5,7 +5,6 @@ data class AppConfig(
     val adsSwitch: Boolean,
     val adsInterstitialAlarmSaveSwitch: Boolean,
     val adsAlarmListNativeSwitch: Boolean,
-    val adsInterstitialMusicClickSwitch: Boolean,
     val adsMainBottomNativeSwitch: Boolean,
     val showOnlyYoutubeLink: Boolean,
     val showYoutubeSearch: Boolean,

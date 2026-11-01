@@ -14,30 +14,17 @@ import com.bluepig.alarm.designsystem.theme.AlarmTheme
 import com.bluepig.alarm.domain.entity.alarm.media.AlarmMedia
 import com.bluepig.alarm.domain.entity.alarm.media.MusicMedia
 import com.bluepig.alarm.domain.entity.alarm.media.TubeMedia
-import com.bluepig.alarm.domain.entity.config.AdPlacement
 import com.bluepig.alarm.feature.media.MediaSelectRoute
 import com.bluepig.alarm.feature.media.MediaTab
 import com.bluepig.alarm.ui.edit.AlarmEditFragment
 import com.bluepig.alarm.ui.main.MainActivity
-import com.bluepig.alarm.util.ads.AdsManager
 import com.bluepig.alarm.util.logger.BpLogger
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
-// 화면은 feature:media. 고르면 전면 광고(1시간 1번)를 거쳐 편집 화면에 돌려줌 (기술 0021).
+// 화면은 feature:media. 고르면 편집 화면에 돌려줌 (기술 0021). 전면 광고는 저장 때만 (제품 0011).
 // 유튜브 탭에서는 하단 광고를 숨김 (제품 0009)
 @AndroidEntryPoint
 class MediaSelectFragment : Fragment() {
-    @Inject
-    lateinit var adsManager: AdsManager
-
-    private var isSelecting = false
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        adsManager.loadInterstitial(lifecycle, AdPlacement.MEDIA_SELECT_INTERSTITIAL)
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
         ComposeView(requireContext()).apply {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
@@ -68,20 +55,9 @@ class MediaSelectFragment : Fragment() {
     }
 
     private fun select(media: AlarmMedia) {
-        if (isSelecting) return
-        isSelecting = true
-        adsManager.showInterstitial(
-            activity = requireActivity(),
-            placement = AdPlacement.MEDIA_SELECT_INTERSTITIAL,
-            onCloseOrFailed = {
-                BpLogger.logMediaSelect(media)
-                setFragmentResult(
-                    AlarmEditFragment.REQUEST_ALARM_MEDIA,
-                    bundleOf(AlarmEditFragment.KEY_ALARM_MEDIA to media),
-                )
-                findNavController().popBackStack(R.id.alarmEditFragment, false)
-            },
-        )
+        BpLogger.logMediaSelect(media)
+        setFragmentResult(AlarmEditFragment.REQUEST_ALARM_MEDIA, bundleOf(AlarmEditFragment.KEY_ALARM_MEDIA to media))
+        findNavController().popBackStack(R.id.alarmEditFragment, false)
     }
 
     private fun setBottomAdVisible(visible: Boolean) = (requireActivity() as MainActivity).setBottomAdVisible(visible)
