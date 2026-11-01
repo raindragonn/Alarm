@@ -29,7 +29,7 @@ class PreferencesLocalDataSourceTest {
         assertNull(dataSource.getSelectedAccountName())
         assertEquals(0L, dataSource.getLastInterstitialShowTime())
         assertEquals(
-            RemoteConfigPreferences(false, false, false, false, false, false, false),
+            RemoteConfigPreferences(false, false, false, false, false, false),
             dataSource.getRemoteConfig(),
         )
     }
@@ -42,7 +42,6 @@ class PreferencesLocalDataSourceTest {
             it[stringPreferencesKey("SELECTED_ACCOUNT_NAME_KEY")] = "user@example.com"
             it[booleanPreferencesKey("ADS_SWITCH")] = true
             it[booleanPreferencesKey("ADS_ALARM_LIST_NATIVE_SWITCH")] = false
-            it[booleanPreferencesKey("ADS_INTERSTITIAL_MUSIC_CLICK_SWITCH")] = true
             it[booleanPreferencesKey("ADS_MAIN_BOTTOM_NATIVE_SWITCH")] = false
             it[booleanPreferencesKey("SHOW_ONLY_YOUTUBE_LINK")] = true
             it[booleanPreferencesKey("SHOW_YOUTUBE_SEARCH")] = false
@@ -57,7 +56,6 @@ class PreferencesLocalDataSourceTest {
                 adsSwitch = true,
                 adsInterstitialAlarmSaveSwitch = false,
                 adsAlarmListNativeSwitch = false,
-                adsInterstitialMusicClickSwitch = true,
                 adsMainBottomNativeSwitch = false,
                 showOnlyYoutubeLink = true,
                 showYoutubeSearch = false,
@@ -69,7 +67,7 @@ class PreferencesLocalDataSourceTest {
     @Test
     fun `쓴 값을 다시 읽는다`() = runTest {
         val dataSource = PreferencesLocalDataSourceImpl(dataStore()) { true }
-        val config = RemoteConfigPreferences(true, false, true, false, true, false, true)
+        val config = RemoteConfigPreferences(true, false, true, true, false, true)
 
         dataSource.setSelectedAccountName("")
         dataSource.setLastInterstitialShowTime(42)

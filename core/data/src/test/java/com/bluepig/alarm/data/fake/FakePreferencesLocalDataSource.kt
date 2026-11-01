@@ -6,7 +6,7 @@ import com.bluepig.alarm.datastore.RemoteConfigPreferences
 class FakePreferencesLocalDataSource(
     var accountName: String? = null,
     var remoteConfig: RemoteConfigPreferences =
-        RemoteConfigPreferences(false, false, false, false, false, false, false),
+        RemoteConfigPreferences(false, false, false, false, false, false),
     var lastInterstitialShowTime: Long = 0,
     var scheduledTimeZoneId: String? = null,
 ) : PreferencesLocalDataSource {

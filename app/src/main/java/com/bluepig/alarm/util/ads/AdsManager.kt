@@ -103,9 +103,9 @@ class AdsManager @Inject constructor(
         }
     }
 
-    // 저장 후 전면 광고도 알람음 선택과 같은 광고 단위를 씀
-    fun loadInterstitial(lifecycle: Lifecycle, placement: AdPlacement): Job = lifecycle.coroutineScope.launch {
-        if (!_isAdEnabled(placement)) return@launch
+    // 알람 저장 후 전면 광고. 광고 단위 이름은 알람음 선택 전면 광고 때 것 그대로 (local.properties·CI 키)
+    fun loadInterstitial(lifecycle: Lifecycle): Job = lifecycle.coroutineScope.launch {
+        if (!_isAdEnabled(AdPlacement.ALARM_SAVE_INTERSTITIAL)) return@launch
 
         kotlin.runCatching {
             InterstitialAd.load(
@@ -116,7 +116,7 @@ class AdsManager @Inject constructor(
                     override fun onAdFailedToLoad(p0: LoadAdError) {
                         super.onAdFailedToLoad(p0)
                         if (lifecycle.currentState == Lifecycle.State.CREATED) {
-                            loadInterstitial(lifecycle, placement)
+                            loadInterstitial(lifecycle)
                         }
                     }
 
@@ -133,10 +133,9 @@ class AdsManager @Inject constructor(
 
     fun showInterstitial(
         activity: ComponentActivity,
-        placement: AdPlacement,
         onCloseOrFailed: () -> Unit
     ) = activity.lifecycleScope.launch {
-        if (!_isAdEnabled(placement)) {
+        if (!_isAdEnabled(AdPlacement.ALARM_SAVE_INTERSTITIAL)) {
             onCloseOrFailed.invoke()
             return@launch
         }

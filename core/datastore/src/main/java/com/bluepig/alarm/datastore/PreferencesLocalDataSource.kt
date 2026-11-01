@@ -18,7 +18,6 @@ data class RemoteConfigPreferences(
     val adsSwitch: Boolean,
     val adsInterstitialAlarmSaveSwitch: Boolean,
     val adsAlarmListNativeSwitch: Boolean,
-    val adsInterstitialMusicClickSwitch: Boolean,
     val adsMainBottomNativeSwitch: Boolean,
     val showOnlyYoutubeLink: Boolean,
     val showYoutubeSearch: Boolean,
@@ -56,7 +55,6 @@ internal class PreferencesLocalDataSourceImpl @Inject constructor(
             adsSwitch = it[ADS_SWITCH] ?: false,
             adsInterstitialAlarmSaveSwitch = it[ADS_INTERSTITIAL_ALARM_SAVE_SWITCH] ?: false,
             adsAlarmListNativeSwitch = it[ADS_ALARM_LIST_NATIVE_SWITCH] ?: false,
-            adsInterstitialMusicClickSwitch = it[ADS_INTERSTITIAL_MUSIC_CLICK_SWITCH] ?: false,
             adsMainBottomNativeSwitch = it[ADS_MAIN_BOTTOM_NATIVE_SWITCH] ?: false,
             showOnlyYoutubeLink = it[SHOW_ONLY_YOUTUBE_LINK] ?: false,
             showYoutubeSearch = it[SHOW_YOUTUBE_SEARCH] ?: false,
@@ -67,7 +65,6 @@ internal class PreferencesLocalDataSourceImpl @Inject constructor(
         it[ADS_SWITCH] = config.adsSwitch
         it[ADS_INTERSTITIAL_ALARM_SAVE_SWITCH] = config.adsInterstitialAlarmSaveSwitch
         it[ADS_ALARM_LIST_NATIVE_SWITCH] = config.adsAlarmListNativeSwitch
-        it[ADS_INTERSTITIAL_MUSIC_CLICK_SWITCH] = config.adsInterstitialMusicClickSwitch
         it[ADS_MAIN_BOTTOM_NATIVE_SWITCH] = config.adsMainBottomNativeSwitch
         it[SHOW_ONLY_YOUTUBE_LINK] = config.showOnlyYoutubeLink
         it[SHOW_YOUTUBE_SEARCH] = config.showYoutubeSearch
@@ -110,8 +107,6 @@ internal class PreferencesLocalDataSourceImpl @Inject constructor(
         val ADS_INTERSTITIAL_ALARM_SAVE_SWITCH =
             booleanPreferencesKey("ADS_INTERSTITIAL_ALARM_SAVE_SWITCH")
         val ADS_ALARM_LIST_NATIVE_SWITCH = booleanPreferencesKey("ADS_ALARM_LIST_NATIVE_SWITCH")
-        val ADS_INTERSTITIAL_MUSIC_CLICK_SWITCH =
-            booleanPreferencesKey("ADS_INTERSTITIAL_MUSIC_CLICK_SWITCH")
         val ADS_MAIN_BOTTOM_NATIVE_SWITCH = booleanPreferencesKey("ADS_MAIN_BOTTOM_NATIVE_SWITCH")
         val LAST_INTERSTITIAL_SHOW_TIME = longPreferencesKey("LAST_INTERSTITIAL_SHOW_TIME")
         val SHOW_ONLY_YOUTUBE_LINK = booleanPreferencesKey("SHOW_ONLY_YOUTUBE_LINK")

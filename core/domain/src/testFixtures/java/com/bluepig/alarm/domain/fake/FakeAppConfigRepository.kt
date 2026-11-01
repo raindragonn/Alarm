@@ -7,7 +7,6 @@ val allOnConfig = AppConfig(
     adsSwitch = true,
     adsInterstitialAlarmSaveSwitch = true,
     adsAlarmListNativeSwitch = true,
-    adsInterstitialMusicClickSwitch = true,
     adsMainBottomNativeSwitch = true,
     showOnlyYoutubeLink = true,
     showYoutubeSearch = true,
