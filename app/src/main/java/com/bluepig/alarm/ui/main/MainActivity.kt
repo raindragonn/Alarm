@@ -1,6 +1,7 @@
 package com.bluepig.alarm.ui.main
 
 import android.os.Bundle
+import androidx.annotation.OptIn
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -24,7 +25,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@UnstableApi
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 	private val _binding: ActivityMainBinding by viewBinding(ActivityMainBinding::inflate)
@@ -61,6 +61,7 @@ class MainActivity : AppCompatActivity() {
 		_binding.adFrame.isVisible = visible
 	}
 
+	@OptIn(UnstableApi::class)
 	private fun startDownloadService() {
 		kotlin.runCatching {
 			DownloadService.start(
