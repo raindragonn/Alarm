@@ -9,6 +9,12 @@ appId: com.bluepig.alarm.debug
 - extendedWaitUntil:
     visible: "알람 생성|Create alarm|알람 추가|Add alarm"
     timeout: 15000
+# 원격 설정이 광고를 켜면 테스트 기기에선 AdMob 네이티브 광고 검사 팝업이 하단 버튼을 가림
+- runFlow:
+    when:
+      visible: "Dismiss"
+    commands:
+      - tapOn: "Dismiss"
 # 알람이 없으면 FAB 대신 빈 화면의 "알람 추가" 버튼
 - tapOn: "알람 생성|Create alarm|알람 추가|Add alarm"
 - scrollUntilVisible:
@@ -27,10 +33,35 @@ appId: com.bluepig.alarm.debug
 - inputText: ${output.memo}
 - tapOn: "확인|OK"
 - assertVisible: ${output.memo}
+- runFlow:
+    when:
+      visible: "Dismiss"
+    commands:
+      - tapOn: "Dismiss"
 - tapOn: "미리보기|Preview"
 - assertVisible: ${output.memo}
 - tapOn: "미리보기 종료|(?i)end preview"
+- runFlow:
+    when:
+      visible: "Dismiss"
+    commands:
+      - tapOn: "Dismiss"
 - tapOn: "저장|Save"
+# 광고가 켜져 있으면 저장 뒤 전면 광고(1시간에 1번)가 뜸 → 뒤로 가기로 닫으면 목록.
+# 처음 몇 초는 뒤로 가기를 무시하는 광고가 있어 닫힐 때까지 반복
+- extendedWaitUntil:
+    visible: "다음 알람까지|Next alarm in|테스트 광고|Test Ad"
+    timeout: 10000
+- repeat:
+    times: 5
+    while:
+      visible: "테스트 광고|Test Ad"
+    commands:
+      - back
+      - extendedWaitUntil:
+          notVisible: "테스트 광고|Test Ad"
+          timeout: 4000
+          optional: true
 # 목록은 시각 순이라 기존 알람이 많으면 새 알람이 아래에 있음
 - scrollUntilVisible:
     element: ${output.memo}
