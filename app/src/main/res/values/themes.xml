@@ -9,7 +9,7 @@
 
         <item name="android:textColorPrimary">@color/point</item>
 
-        <item name="colorPrimary">@color/primary_600</item>
+        <item name="colorPrimary">@color/accent</item>
         <item name="colorPrimaryVariant">@color/primary_700</item>
         <item name="colorPrimaryDark">@color/primary_900</item>
         <item name="colorOnPrimary">@color/base</item>

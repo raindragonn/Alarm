@@ -2,6 +2,8 @@
 <resources>
     <color name="base">#FFFFFF</color>
     <color name="point">#000000</color>
+    <!-- 강조색 블루 (제품 0001). 테마 colorPrimary(최근 앱 머리 색 등)용 -->
+    <color name="accent">#2F54EB</color>
     <color name="surface">@color/base</color>
     <color name="background">@color/mono_800</color>
 

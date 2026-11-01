@@ -2,6 +2,7 @@
 <resources>
     <color name="base">#000000</color>
     <color name="point">#FFFFFF</color>
+    <color name="accent">#8FA8FF</color>
     <color name="surface">@color/mono_700</color>
     <color name="background">@color/mono_800</color>
 
