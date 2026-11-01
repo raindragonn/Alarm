@@ -15,7 +15,9 @@ import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.offline.DownloadService
 import com.bluepig.alarm.databinding.ActivityMainBinding
 import com.bluepig.alarm.designsystem.theme.AlarmTheme
+import com.bluepig.alarm.service.AlarmRinging
 import com.bluepig.alarm.service.MediaDownloadService
+import com.bluepig.alarm.ui.alarm.AlarmActivity
 import com.bluepig.alarm.util.PermissionHelper
 import com.bluepig.alarm.util.ads.AdsManager
 import com.bluepig.alarm.util.ads.BottomNativeAdBar
@@ -47,6 +49,16 @@ class MainActivity : AppCompatActivity() {
 		lifecycleScope.launch {
 			repeatOnLifecycle(Lifecycle.State.CREATED) {
 				startDownloadService()
+			}
+		}
+		// 알림 권한이 없으면 전체 화면 알림이 안 떠 끌 화면이 없음 → 앱을 열면 울림 화면으로
+		lifecycleScope.launch {
+			repeatOnLifecycle(Lifecycle.State.STARTED) {
+				AlarmRinging.alarmId.collect { id ->
+					if (id != null && id != AlarmRinging.PREVIEW_ID) {
+						startActivity(AlarmActivity.getOpenIntent(this@MainActivity, id))
+					}
+				}
 			}
 		}
 	}
