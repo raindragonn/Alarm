@@ -30,7 +30,6 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Base.Theme.Alarm"
-        tools:ignore="LockedOrientationActivity"
         tools:targetApi="31">
         <!-- 잠금 화면 위 별도 Activity (기술 0022). 재부팅 후 잠금 해제 전에도 뜸 (C7) -->
         <activity
@@ -45,7 +44,6 @@
         <activity
             android:name=".ui.main.MainActivity"
             android:exported="true"
-            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
