@@ -35,6 +35,7 @@
     <string name="toast_error_not_select_alarm_media">Please select an alarm sound.</string>
 
     <string name="ad_headline">AD · %1$s</string>
+    <string name="ad_badge">Ad</string>
     <string name="review_request_title">Go to write a review</string>
     <string name="review_request_body">If you like the app please leave a praise and if you have any inconveniences or suggestions please leave a comment.</string>
     <string name="channel_name_alarm_ring">Alarm</string>

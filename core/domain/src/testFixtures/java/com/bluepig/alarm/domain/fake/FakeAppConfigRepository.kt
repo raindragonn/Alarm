@@ -5,7 +5,7 @@ import com.bluepig.alarm.domain.repository.AppConfigRepository
 
 val allOnConfig = AppConfig(
     adsSwitch = true,
-    adsAlarmBannerSwitch = true,
+    adsInterstitialAlarmSaveSwitch = true,
     adsAlarmListNativeSwitch = true,
     adsInterstitialMusicClickSwitch = true,
     adsMainBottomNativeSwitch = true,

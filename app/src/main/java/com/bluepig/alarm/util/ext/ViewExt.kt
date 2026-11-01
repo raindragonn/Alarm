@@ -1,9 +1,7 @@
 package com.bluepig.alarm.util.ext
 
 import android.view.KeyEvent
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
@@ -15,10 +13,6 @@ import coil.size.Scale
 import coil.transform.RoundedCornersTransformation
 import com.bluepig.alarm.R
 import com.google.android.material.materialswitch.MaterialSwitch
-
-val ViewGroup.inflater: LayoutInflater
-    get() = LayoutInflater.from(context)
-
 
 fun View.hideKeyboard() {
     val imm = context.inputMethodManager

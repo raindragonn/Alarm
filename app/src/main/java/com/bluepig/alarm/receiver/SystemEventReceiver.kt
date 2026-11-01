@@ -5,10 +5,8 @@ import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import androidx.annotation.OptIn
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import androidx.media3.common.util.UnstableApi
 import com.bluepig.alarm.R
 import com.bluepig.alarm.domain.entity.alarm.Alarm
 import com.bluepig.alarm.domain.usecase.RefreshAlarms
@@ -47,7 +45,6 @@ class SystemEventReceiver : BroadcastReceiver() {
     }
 
     // 잠금 해제 전과 후 두 번 오므로 알람마다 같은 ID로 덮어씀
-    @OptIn(UnstableApi::class)
     private fun notifyMissed(context: Context, missed: List<Alarm>) {
         val manager = NotificationManagerCompat.from(context)
         if (!manager.areNotificationsEnabled()) return

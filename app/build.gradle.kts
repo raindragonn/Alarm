@@ -13,7 +13,6 @@ val adsKeys = listOf(
     "ADS_APP_ID",
     "ADS_MAIN_BOTTOM_NATIVE",
     "ADS_ALARM_LIST_NATIVE",
-    "ADS_ALARM_BANNER",
     "ADS_MEDIA_SELECT_INTERSTITIAL",
 )
 val secrets = localProperties(

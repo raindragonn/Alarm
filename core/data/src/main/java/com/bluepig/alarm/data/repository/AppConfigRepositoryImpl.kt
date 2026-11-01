@@ -13,7 +13,7 @@ internal class AppConfigRepositoryImpl @Inject constructor(
     override suspend fun getConfig(): AppConfig = _preferences.getRemoteConfig().let {
         AppConfig(
             adsSwitch = it.adsSwitch,
-            adsAlarmBannerSwitch = it.adsAlarmBannerSwitch,
+            adsInterstitialAlarmSaveSwitch = it.adsInterstitialAlarmSaveSwitch,
             adsAlarmListNativeSwitch = it.adsAlarmListNativeSwitch,
             adsInterstitialMusicClickSwitch = it.adsInterstitialMusicClickSwitch,
             adsMainBottomNativeSwitch = it.adsMainBottomNativeSwitch,
@@ -25,7 +25,7 @@ internal class AppConfigRepositoryImpl @Inject constructor(
     override suspend fun saveConfig(config: AppConfig) = _preferences.setRemoteConfig(
         RemoteConfigPreferences(
             adsSwitch = config.adsSwitch,
-            adsAlarmBannerSwitch = config.adsAlarmBannerSwitch,
+            adsInterstitialAlarmSaveSwitch = config.adsInterstitialAlarmSaveSwitch,
             adsAlarmListNativeSwitch = config.adsAlarmListNativeSwitch,
             adsInterstitialMusicClickSwitch = config.adsInterstitialMusicClickSwitch,
             adsMainBottomNativeSwitch = config.adsMainBottomNativeSwitch,

@@ -63,7 +63,6 @@ import com.bluepig.alarm.designsystem.R as DesignSystemR
 /**
  * 알람 울림·미리보기 화면 (제품 0004). 소리·진동은 울림 서비스가 냄 (기술 0026)
  * @param canPlayVideo 재부팅 후 잠금 해제 전에는 WebView를 못 써서 false (C7). 그땐 타일 + 기본 알람음
- * @param banner 밀어서 끄기 아래 배너 (제품 0006)
  */
 @Composable
 fun AlarmRingRoute(
@@ -72,7 +71,6 @@ fun AlarmRingRoute(
     onVideoPlaying: () -> Unit,
     onVideoFailed: () -> Unit,
     onNotFound: () -> Unit,
-    banner: @Composable (Modifier) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: AlarmRingViewModel = hiltViewModel(),
 ) {
@@ -83,7 +81,7 @@ fun AlarmRingRoute(
         is AlarmRingUiState.Ringing -> {
             // 울리는 중에는 뒤로 가기로 끄지 않음, 미리보기는 종료
             BackHandler { if (state.isPreview) onDismiss() }
-            AlarmRingScreen(state, canPlayVideo, onDismiss, onVideoPlaying, onVideoFailed, banner, modifier)
+            AlarmRingScreen(state, canPlayVideo, onDismiss, onVideoPlaying, onVideoFailed, modifier)
         }
     }
 }
@@ -96,7 +94,6 @@ internal fun AlarmRingScreen(
     onDismiss: () -> Unit,
     onVideoPlaying: () -> Unit,
     onVideoFailed: () -> Unit,
-    banner: @Composable (Modifier) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val colors = AlarmTheme.colors
@@ -133,12 +130,10 @@ internal fun AlarmRingScreen(
                     Spacer(Modifier.height(Space.s16))
                     Details(state.alarm)
                 }
-                // 미디어는 버튼·배너를 뺀 남은 높이를 씀
+                // 미디어는 버튼을 뺀 남은 높이를 씀
                 Column(Modifier.weight(1f), horizontalAlignment = Alignment.CenterHorizontally) {
                     Box(Modifier.weight(1f, fill = false)) { media() }
                     action()
-                    Spacer(Modifier.height(Space.s16))
-                    banner(Modifier.fillMaxWidth())
                 }
             }
         } else {
@@ -151,9 +146,7 @@ internal fun AlarmRingScreen(
                 Details(state.alarm)
                 Spacer(Modifier.weight(1f))
                 action()
-                Spacer(Modifier.height(Space.s16))
-                banner(Modifier.fillMaxWidth())
-                Spacer(Modifier.height(Space.s16))
+                Spacer(Modifier.height(Space.s32))
             }
         }
     }
