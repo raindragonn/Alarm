@@ -21,7 +21,8 @@ import javax.inject.Inject
 
 /**
  * 시스템 이벤트에 맞춰 알람을 다시 예약.
- * 재부팅(잠금 해제 전 포함, C7)·시각·시간대 변경(U1)·정확한 알람 권한 허용(C3)
+ * 재부팅(잠금 해제 전 포함, C7)·시각·시간대 변경(U1)·정확한 알람 권한 허용(C3)·앱 업데이트.
+ * 업데이트 직후 DB를 열어 이전 버전 DB를 옮겨 둠 (잠금 해제 전 부팅에선 못 옮겨 빈 DB, 기술 0017)
  */
 @AndroidEntryPoint
 class SystemEventReceiver : BroadcastReceiver() {
@@ -76,6 +77,7 @@ class SystemEventReceiver : BroadcastReceiver() {
             Intent.ACTION_TIME_CHANGED,
             Intent.ACTION_TIMEZONE_CHANGED,
             AlarmManager.ACTION_SCHEDULE_EXACT_ALARM_PERMISSION_STATE_CHANGED,
+            Intent.ACTION_MY_PACKAGE_REPLACED,
         )
     }
 }
