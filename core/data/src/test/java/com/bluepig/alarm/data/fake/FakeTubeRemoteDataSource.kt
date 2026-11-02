@@ -9,22 +9,15 @@ class FakeTubeRemoteDataSource(
     private val videos: Map<String, Video> = emptyMap(),
 ) : TubeRemoteDataSource {
     var error: Exception? = null
-    val accountNames = mutableListOf<String?>()
     val requestedVideoIds = mutableListOf<String>()
 
-    override suspend fun search(
-        accountName: String?,
-        query: String,
-        pageToken: String?
-    ): SearchListResponse {
+    override suspend fun search(query: String, pageToken: String?): SearchListResponse {
         error?.let { throw it }
-        accountNames += accountName
         return searchResponse
     }
 
-    override suspend fun getVideo(accountName: String?, videoId: String): Video? {
+    override suspend fun getVideo(videoId: String): Video? {
         error?.let { throw it }
-        accountNames += accountName
         requestedVideoIds += videoId
         return videos[videoId]
     }

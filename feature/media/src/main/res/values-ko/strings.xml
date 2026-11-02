@@ -25,8 +25,4 @@
     <string name="media_play">재생</string>
     <string name="media_pause">멈춤</string>
     <string name="media_select">선택</string>
-    <string name="media_youtube_notice_title">안전한 유튜브 연동</string>
-    <string name="media_youtube_notice_body">미디어 알람이 Google의 YouTube API로 영상을 검색할 수 있도록 로그인할까요?\n\n이 과정에서 개인정보는 수집하지 않아요.</string>
-    <string name="media_youtube_notice_agree">미디어 알람과 유튜브 연동</string>
-    <string name="media_youtube_notice_disagree">연동하지 않을게요</string>
 </resources>

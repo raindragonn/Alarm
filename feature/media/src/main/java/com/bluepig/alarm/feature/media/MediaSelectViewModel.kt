@@ -7,13 +7,10 @@ import com.bluepig.alarm.domain.entity.alarm.media.RingtoneMedia
 import com.bluepig.alarm.domain.entity.alarm.media.TubeMedia
 import com.bluepig.alarm.domain.entity.music.MusicInfo
 import com.bluepig.alarm.domain.result.NetworkUnavailableException
-import com.bluepig.alarm.domain.result.TubeAuthRequiredException
 import com.bluepig.alarm.domain.usecase.GetAppConfig
 import com.bluepig.alarm.domain.usecase.GetMusicMedia
 import com.bluepig.alarm.domain.usecase.GetRingtones
-import com.bluepig.alarm.domain.usecase.GetTubeAccount
 import com.bluepig.alarm.domain.usecase.GetTubeMediaList
-import com.bluepig.alarm.domain.usecase.SaveTubeAccount
 import com.bluepig.alarm.domain.usecase.SearchMusicInfo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
@@ -60,18 +57,11 @@ data class MediaSelectUiState(
     val youtube: SearchState<TubeMedia> = SearchState.Idle,
     val onlyYoutubeLink: Boolean = false,
     val preview: PreviewState? = null,
-    val showYoutubeNotice: Boolean = false,
 )
 
 sealed interface MediaSelectEffect {
     data class Selected(val media: AlarmMedia) : MediaSelectEffect
     data class Searched(val tab: MediaTab, val query: String) : MediaSelectEffect
-
-    /** 계정 선택 화면을 띄움 */
-    data object ChooseAccount : MediaSelectEffect
-
-    /** YouTube 재인증. [resolution]은 Android Intent (기술 0016) */
-    data class Reauthorize(val resolution: Any) : MediaSelectEffect
     data object PreviewFailed : MediaSelectEffect
 }
 
@@ -82,8 +72,6 @@ class MediaSelectViewModel @Inject constructor(
     private val _searchMusicInfo: SearchMusicInfo,
     private val _getMusicMedia: GetMusicMedia,
     private val _getTubeMediaList: GetTubeMediaList,
-    private val _getTubeAccount: GetTubeAccount,
-    private val _saveTubeAccount: SaveTubeAccount,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(MediaSelectUiState())
     val uiState: StateFlow<MediaSelectUiState> = _uiState.asStateFlow()
@@ -137,12 +125,12 @@ class MediaSelectViewModel @Inject constructor(
     fun onSearchYoutube(query: String) {
         if (query.isBlank()) return
         _youtubeQuery = query
-        viewModelScope.launch {
-            if (_getTubeAccount().isNullOrBlank()) {
-                _uiState.update { it.copy(showYoutubeNotice = true) }
-            } else {
-                searchYoutube()
-            }
+        _youtubeJob?.cancel()
+        _uiState.update { it.copy(youtube = SearchState.Loading) }
+        _youtubeJob = viewModelScope.launch {
+            _effect.send(MediaSelectEffect.Searched(MediaTab.YouTube, query))
+            val result = _getTubeMediaList(query)
+            _uiState.update { it.copy(youtube = result.toSearchState()) }
         }
     }
 
@@ -155,23 +143,6 @@ class MediaSelectViewModel @Inject constructor(
             _uiState.update { it.copy(youtube = SearchState.Results(items)) }
         }
     }
-
-    fun onYoutubeNoticeAgree() {
-        _uiState.update { it.copy(showYoutubeNotice = false) }
-        viewModelScope.launch { _effect.send(MediaSelectEffect.ChooseAccount) }
-    }
-
-    fun onYoutubeNoticeDismiss() = _uiState.update { it.copy(showYoutubeNotice = false) }
-
-    fun onAccountChosen(accountName: String) {
-        viewModelScope.launch {
-            _saveTubeAccount(accountName)
-            searchYoutube()
-        }
-    }
-
-    /** 재인증을 마치면 다시 검색. 취소하면 아무것도 하지 않음 (M3: 화면에 돌아올 때마다 다시 띄우지 않음) */
-    fun onReauthorized() = searchYoutube()
 
     fun onMusicClick(musicInfo: MusicInfo) {
         _previewJob?.cancel()
@@ -196,25 +167,6 @@ class MediaSelectViewModel @Inject constructor(
     fun onSelect() {
         val media = (_uiState.value.preview as? PreviewState.Ready)?.media ?: return
         viewModelScope.launch { _effect.send(MediaSelectEffect.Selected(media)) }
-    }
-
-    private fun searchYoutube() {
-        val query = _youtubeQuery.takeIf { it.isNotBlank() } ?: return
-        _youtubeJob?.cancel()
-        _uiState.update { it.copy(youtube = SearchState.Loading) }
-        _youtubeJob = viewModelScope.launch {
-            _effect.send(MediaSelectEffect.Searched(MediaTab.YouTube, query))
-            val result = _getTubeMediaList(query)
-            val auth = result.exceptionOrNull() as? TubeAuthRequiredException
-            if (auth != null) {
-                // 저장된 계정으로 다시 인증해야 함. 취소하면 다음 검색 때 연동 안내부터
-                _saveTubeAccount("")
-                _uiState.update { it.copy(youtube = SearchState.Idle) }
-                _effect.send(MediaSelectEffect.Reauthorize(auth.resolution))
-            } else {
-                _uiState.update { it.copy(youtube = result.toSearchState()) }
-            }
-        }
     }
 
     private fun <T> Result<List<T>>.toSearchState(): SearchState<T> = fold(

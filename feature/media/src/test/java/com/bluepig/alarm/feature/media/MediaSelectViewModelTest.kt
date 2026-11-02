@@ -9,21 +9,16 @@ import com.bluepig.alarm.domain.fake.FakeRingtoneRepository
 import com.bluepig.alarm.domain.fake.FakeTubeRepository
 import com.bluepig.alarm.domain.fake.allOnConfig
 import com.bluepig.alarm.domain.result.NetworkUnavailableException
-import com.bluepig.alarm.domain.result.TubeAuthRequiredException
 import com.bluepig.alarm.domain.usecase.GetAppConfig
 import com.bluepig.alarm.domain.usecase.GetMusicMedia
 import com.bluepig.alarm.domain.usecase.GetRingtones
-import com.bluepig.alarm.domain.usecase.GetTubeAccount
 import com.bluepig.alarm.domain.usecase.GetTubeMediaList
-import com.bluepig.alarm.domain.usecase.SaveTubeAccount
 import com.bluepig.alarm.domain.usecase.SearchMusicInfo
 import com.bluepig.alarm.domain.util.MainDispatcherRule
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import java.io.IOException
@@ -37,7 +32,7 @@ class MediaSelectViewModelTest {
 
     private fun viewModel(
         music: FakeMusicInfoRepository = FakeMusicInfoRepository(listOf(song)),
-        tube: FakeTubeRepository = FakeTubeRepository(searchResult = listOf(video), accountName = "me@gmail.com"),
+        tube: FakeTubeRepository = FakeTubeRepository(searchResult = listOf(video)),
         config: FakeAppConfigRepository = FakeAppConfigRepository(allOnConfig.copy(showOnlyYoutubeLink = false)),
     ) = MediaSelectViewModel(
         GetAppConfig(config),
@@ -45,8 +40,6 @@ class MediaSelectViewModelTest {
         SearchMusicInfo(music),
         GetMusicMedia(music),
         GetTubeMediaList(tube, config),
-        GetTubeAccount(tube),
-        SaveTubeAccount(tube),
     )
 
     @Test
@@ -92,38 +85,13 @@ class MediaSelectViewModelTest {
     }
 
     @Test
-    fun `계정이 없으면 유튜브 연동 안내, 동의하면 계정 선택 후 검색`() = runTest {
-        val tube = FakeTubeRepository(searchResult = listOf(video))
-        val viewModel = viewModel(tube = tube)
+    fun `유튜브는 연동 없이 바로 검색`() = runTest {
+        val viewModel = viewModel()
 
         viewModel.onSearchYoutube("아침")
         advanceUntilIdle()
-        assertTrue(viewModel.uiState.value.showYoutubeNotice)
 
-        viewModel.onYoutubeNoticeAgree()
-        assertEquals(MediaSelectEffect.ChooseAccount, viewModel.effect.first())
-        viewModel.onAccountChosen("me@gmail.com")
-        advanceUntilIdle()
-
-        assertFalse(viewModel.uiState.value.showYoutubeNotice)
-        assertEquals("me@gmail.com", tube.accountName)
         assertEquals(SearchState.Results(listOf(video)), viewModel.uiState.value.youtube)
-    }
-
-    // M3: 재인증을 상태로 두면 화면에 돌아올 때마다 다시 떴음
-    @Test
-    fun `재인증이 필요하면 한 번만 요청하고 계정을 지움`() = runTest {
-        val tube = FakeTubeRepository(accountName = "me@gmail.com", searchError = TubeAuthRequiredException("intent"))
-        val viewModel = viewModel(tube = tube)
-
-        viewModel.onSearchYoutube("아침")
-        advanceUntilIdle()
-
-        assertEquals(
-            MediaSelectEffect.Reauthorize("intent"),
-            viewModel.effect.first { it is MediaSelectEffect.Reauthorize },
-        )
-        assertEquals(SearchState.Idle, viewModel.uiState.value.youtube)
-        assertEquals("", tube.accountName)
+        assertEquals(MediaSelectEffect.Searched(MediaTab.YouTube, "아침"), viewModel.effect.first())
     }
 }
