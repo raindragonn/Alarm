@@ -258,7 +258,7 @@ class AlarmRingService : LifecycleService() {
         )
         val time = DateFormat.getTimeInstance(DateFormat.SHORT).format(Date())
         return NotificationCompat.Builder(this, NotificationType.ALARM_RING.channelId)
-            .setSmallIcon(R.drawable.ic_alarm)
+            .setSmallIcon(R.drawable.ic_notification)
             .setContentTitle(getString(R.string.notification_alarm_title, time))
             .setContentText(text)
             // 내용을 고칠 때 소리·헤드업을 다시 내지 않음
@@ -277,7 +277,7 @@ class AlarmRingService : LifecycleService() {
 
     private fun previewNotification(): Notification =
         NotificationCompat.Builder(this, NotificationType.ALARM_PREVIEW.channelId)
-            .setSmallIcon(R.drawable.ic_alarm)
+            .setSmallIcon(R.drawable.ic_notification)
             .setContentTitle(getString(R.string.notification_preview_title))
             .setOngoing(true)
             .addAction(0, getString(R.string.notification_alarm_dismiss), stopIntent(this))
