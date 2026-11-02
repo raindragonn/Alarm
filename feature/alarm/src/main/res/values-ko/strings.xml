@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="alarm_slide_to_stop">밀어서 알람 끄기</string>
+    <string name="alarm_preview_end">미리보기 종료</string>
+    <string name="alarm_preview_badge">미리보기</string>
+    <string name="alarm_type_song">노래</string>
+    <string name="alarm_type_ringtone">벨소리</string>
+    <string name="alarm_type_youtube">유튜브</string>
+</resources>

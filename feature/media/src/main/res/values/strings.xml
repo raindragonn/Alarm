@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="media_title">Alarm sound</string>
+    <string name="media_back">Back</string>
+    <string name="media_close">Close</string>
+    <string name="media_clear">Clear</string>
+    <string name="media_type_song">Song</string>
+    <string name="media_type_ringtone">Ringtone</string>
+    <string name="media_type_youtube">YouTube</string>
+    <string name="media_song_hint">Search by song or artist</string>
+    <string name="media_song_idle_title">Search for a song</string>
+    <string name="media_song_idle_body">Find it by title or artist</string>
+    <string name="media_youtube_hint">Search by video title or link</string>
+    <string name="media_youtube_link_hint">Paste a YouTube link</string>
+    <string name="media_youtube_idle_title">Search YouTube</string>
+    <string name="media_youtube_idle_body">Find a video by title or link</string>
+    <string name="media_youtube_link_idle_body">Paste a link shared from the YouTube app</string>
+    <string name="media_empty_title">No results</string>
+    <string name="media_empty_body">Try a different search</string>
+    <string name="media_error_network">Check your internet connection</string>
+    <string name="media_error_other">Couldn\'t search</string>
+    <string name="media_retry">Try again</string>
+    <string name="media_ringtone_failed">Couldn\'t load ringtones</string>
+    <string name="media_preview_failed">Couldn\'t load the alarm sound</string>
+    <string name="media_play">Play</string>
+    <string name="media_pause">Pause</string>
+    <string name="media_select">Select</string>
+    <string name="media_youtube_notice_title">Connect YouTube safely</string>
+    <string name="media_youtube_notice_body">Sign in so Media Alarm can search videos with Google\'s YouTube API?\n\nNo personal information is collected.</string>
+    <string name="media_youtube_notice_agree">Connect YouTube</string>
+    <string name="media_youtube_notice_disagree">Not now</string>
+</resources>

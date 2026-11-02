@@ -1,28 +1,32 @@
 package com.bluepig.alarm.ui.main
 
 import android.os.Bundle
+import androidx.annotation.OptIn
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.offline.DownloadService
 import com.bluepig.alarm.databinding.ActivityMainBinding
-import com.bluepig.alarm.notification.NotificationType
+import com.bluepig.alarm.designsystem.theme.AlarmTheme
+import com.bluepig.alarm.service.AlarmRinging
 import com.bluepig.alarm.service.MediaDownloadService
+import com.bluepig.alarm.ui.alarm.AlarmActivity
 import com.bluepig.alarm.util.PermissionHelper
 import com.bluepig.alarm.util.ads.AdsManager
+import com.bluepig.alarm.util.ads.BottomNativeAdBar
 import com.bluepig.alarm.util.logger.BpLogger
 import com.bluepig.alarm.util.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@UnstableApi
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 	private val _binding: ActivityMainBinding by viewBinding(ActivityMainBinding::inflate)
@@ -40,17 +44,21 @@ class MainActivity : AppCompatActivity() {
 			insets
 		}
 		setContentView(_binding.root)
-		PermissionHelper.checkNotificationPermission(this) {
-			NotificationType.DOWNLOAD_NOTIFICATION.createChannel(this)
-		}
-		PermissionHelper.checkExactAlarmPermission(this, _binding.root) {
-			_vm.refresh()
-		}
-		PermissionHelper.checkSystemAlertPermission(this, _binding.root)
-		adsManager.loadBottomNativeAd(lifecycle, _binding.adFrame)
+		if (savedInstanceState == null) PermissionHelper.requestNotificationPermission(this)
+		_binding.adFrame.setContent { AlarmTheme { BottomNativeAdBar(adsManager) } }
 		lifecycleScope.launch {
 			repeatOnLifecycle(Lifecycle.State.CREATED) {
 				startDownloadService()
+			}
+		}
+		// 알림 권한이 없으면 전체 화면 알림이 안 떠 끌 화면이 없음 → 앱을 열면 울림 화면으로
+		lifecycleScope.launch {
+			repeatOnLifecycle(Lifecycle.State.STARTED) {
+				AlarmRinging.alarmId.collect { id ->
+					if (id != null && id != AlarmRinging.PREVIEW_ID) {
+						startActivity(AlarmActivity.getOpenIntent(this@MainActivity, id))
+					}
+				}
 			}
 		}
 	}
@@ -60,6 +68,12 @@ class MainActivity : AppCompatActivity() {
 		BpLogger.logScreenView(MainActivity::class.java.simpleName)
 	}
 
+	/** 유튜브 검색 결과처럼 광고를 두면 안 되는 화면에서 하단 광고를 숨김 (제품 0009) */
+	fun setBottomAdVisible(visible: Boolean) {
+		_binding.adFrame.isVisible = visible
+	}
+
+	@OptIn(UnstableApi::class)
 	private fun startDownloadService() {
 		kotlin.runCatching {
 			DownloadService.start(

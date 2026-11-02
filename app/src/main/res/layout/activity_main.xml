@@ -16,9 +16,8 @@
         app:defaultNavHost="true"
         app:navGraph="@navigation/main_nav_graph" />
 
-    <FrameLayout
+    <androidx.compose.ui.platform.ComposeView
         android:id="@+id/ad_frame"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/surface" />
+        android:layout_height="wrap_content" />
 </LinearLayout>

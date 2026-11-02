@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="list_next_alarm_in">Next alarm in</string>
+    <string name="list_unit_day">d</string>
+    <string name="list_unit_hour">hr</string>
+    <string name="list_unit_minute">min</string>
+    <string name="list_when_today">Today %1$s</string>
+    <string name="list_when_tomorrow">Tomorrow (%1$s) %2$s</string>
+    <string name="list_when_date">%1$s %2$s</string>
+    <string name="list_all_off_title">All alarms are off</string>
+    <string name="list_all_off_body">Turn on an alarm to see the time left here</string>
+    <string name="list_empty_title">No alarms yet</string>
+    <string name="list_empty_body">Make your first alarm\nwith a song, ringtone or YouTube video</string>
+    <string name="list_add_alarm">Add alarm</string>
+    <string name="list_create_alarm">Create alarm</string>
+    <string name="list_once">Once</string>
+    <string name="list_save_failed">Couldn\'t save the alarm</string>
+</resources>

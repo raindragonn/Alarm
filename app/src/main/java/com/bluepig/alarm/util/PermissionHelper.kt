@@ -5,169 +5,49 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Build
 import android.provider.Settings
-import android.view.View
 import androidx.activity.ComponentActivity
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.StringRes
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
+import androidx.core.net.toUri
 import com.bluepig.alarm.R
-import com.bluepig.alarm.util.ext.alarmManager
-import com.google.android.material.snackbar.Snackbar
-import kotlinx.coroutines.launch
 
 object PermissionHelper {
 
-    fun checkNotificationPermission(activity: ComponentActivity, grantedAction: () -> Unit) {
-        activity.apply {
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) return
-            val requestPermissionLauncher =
-                registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
-                    if (isGranted) {
-                        grantedAction.invoke()
-                    } else {
-                        activity.showOkButtonDialog(
-                            R.string.alert_request_permission_title,
-                            R.string.alert_request_permission_text_post_notification,
-                        ) {
-                            openAppNotificationSettings(activity)
-                        }
-                    }
-                }
-
-            activity.lifecycleScope.launch {
-                repeatOnLifecycle(Lifecycle.State.RESUMED) {
-                    when {
-                        ContextCompat.checkSelfPermission(
-                            this@apply,
-                            Manifest.permission.POST_NOTIFICATIONS
-                        ) == PackageManager.PERMISSION_GRANTED -> {
-                            grantedAction.invoke()
-                        }
-
-                        ActivityCompat.shouldShowRequestPermissionRationale(
-                            this@apply, Manifest.permission.POST_NOTIFICATIONS
-                        ) -> {
-                            activity.showOkButtonDialog(
-                                R.string.alert_request_permission_title,
-                                R.string.alert_request_permission_text_post_notification,
-                            ) {
-                                openAppNotificationSettings(activity)
-                            }
-                        }
-
-                        else -> {
-                            requestPermissionLauncher.launch(
-                                Manifest.permission.POST_NOTIFICATIONS
-                            )
-                        }
-                    }
-                }
-            }
+    /**
+     * 알림 권한(33+). 울림 화면은 전체 화면 알림으로 뜨므로 필요 (기술 0026).
+     * onCreate에서 한 번만 물음 (U4: 화면을 다시 볼 때마다 대화상자가 반복·중첩됐음)
+     */
+    fun requestNotificationPermission(activity: ComponentActivity) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) return
+        val permission = Manifest.permission.POST_NOTIFICATIONS
+        if (ContextCompat.checkSelfPermission(activity, permission) == PackageManager.PERMISSION_GRANTED) return
+        val launcher = activity.registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
+            if (!granted) activity.showNotificationRationale()
         }
+        launcher.launch(permission)
     }
 
-    fun checkSystemAlertPermission(activity: ComponentActivity, anchorView: View) {
-        activity.apply {
-            if (Settings.canDrawOverlays(this)) return
-
-            activity.lifecycleScope.launch {
-                repeatOnLifecycle(Lifecycle.State.RESUMED) {
-                    if (!Settings.canDrawOverlays(activity)) {
-                        Snackbar.make(
-                            anchorView,
-                            R.string.alert_request_permission_text_system_alert_window,
-                            Snackbar.LENGTH_INDEFINITE
-                        ).apply {
-                            setAction(R.string.ok) {
-                                openSystemAlertWindow(activity)
-                            }
-                        }.show()
-                    }
-                }
-            }
-        }
-    }
-
-    fun checkExactAlarmPermission(
-        activity: ComponentActivity,
-        anchorView: View,
-        grantedAction: () -> Unit
-    ) {
-        activity.apply {
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S || alarmManager.canScheduleExactAlarms()) {
-                return
-            }
-
-            activity.lifecycleScope.launch {
-                repeatOnLifecycle(Lifecycle.State.RESUMED) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !alarmManager.canScheduleExactAlarms()) {
-                        Snackbar.make(
-                            anchorView,
-                            R.string.alert_request_permission_text_exact_alarm,
-                            Snackbar.LENGTH_INDEFINITE
-                        ).apply {
-                            setAction(R.string.ok) {
-                                openExactAlarmSetting(activity)
-                            }
-                        }.show()
-                    } else {
-                        grantedAction.invoke()
-                    }
-                }
-            }
-        }
-    }
-
-    private fun Context.showOkButtonDialog(
-        @StringRes title: Int,
-        @StringRes message: Int,
-        function: () -> Unit
-    ) {
-        runCatching {
-            AlertDialog.Builder(this)
-                .setTitle(getString(title))
-                .setMessage(getString(message))
-                .setPositiveButton(R.string.ok) { _, _ -> function() }
-                .setNegativeButton(R.string.cancel, null)
-                .show()
-        }.onFailure {
-            function()
-        }
-    }
-
-    private fun openAppNotificationSettings(context: Context) {
-        val intent =
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).apply {
-                    putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
-                }
-            } else {
-                Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-                    data = Uri.parse("package:${context.packageName}")
-                }
-            }
-        context.startActivity(intent)
-    }
-
-    private fun openSystemAlertWindow(context: Context) {
-        val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION).apply {
-            data = Uri.parse("package:${context.packageName}")
-        }
-        context.startActivity(intent)
-    }
-
-    private fun openExactAlarmSetting(context: Context) {
+    /** 정확한 알람 권한 설정 화면 (31·32만, 기술 0025) */
+    fun openExactAlarmSetting(context: Context) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) return
-        val intent = Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM).apply {
-            data = Uri.parse("package:${context.packageName}")
-        }
-        context.startActivity(intent)
+        context.startActivity(
+            Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM).setData("package:${context.packageName}".toUri()),
+        )
+    }
+
+    private fun Context.showNotificationRationale() {
+        AlertDialog.Builder(this)
+            .setTitle(R.string.alert_request_permission_title)
+            .setMessage(R.string.alert_request_permission_text_post_notification)
+            .setPositiveButton(R.string.ok) { _, _ ->
+                startActivity(
+                    Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
+                        .putExtra(Settings.EXTRA_APP_PACKAGE, packageName),
+                )
+            }
+            .setNegativeButton(R.string.cancel, null)
+            .show()
     }
 }

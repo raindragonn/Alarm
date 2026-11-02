@@ -1,4 +1,5 @@
 pluginManagement {
+    includeBuild("build-logic")
     repositories {
         google()
         mavenCentral()
@@ -15,5 +16,13 @@ dependencyResolutionManagement {
 
 rootProject.name = "Alarm"
 include(":app")
-include(":data")
-include(":domain")
+include(":core:domain")
+include(":core:data")
+include(":core:database")
+include(":core:network")
+include(":core:datastore")
+include(":core:designsystem")
+include(":feature:list")
+include(":feature:edit")
+include(":feature:media")
+include(":feature:alarm")

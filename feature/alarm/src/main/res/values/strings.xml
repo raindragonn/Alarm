@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="alarm_slide_to_stop">Slide to stop alarm</string>
+    <string name="alarm_preview_end">End preview</string>
+    <string name="alarm_preview_badge">Preview</string>
+    <string name="alarm_type_song">Song</string>
+    <string name="alarm_type_ringtone">Ringtone</string>
+    <string name="alarm_type_youtube">YouTube</string>
+</resources>
