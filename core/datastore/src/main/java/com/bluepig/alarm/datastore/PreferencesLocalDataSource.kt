@@ -24,8 +24,6 @@ data class RemoteConfigPreferences(
 )
 
 interface PreferencesLocalDataSource {
-    suspend fun getSelectedAccountName(): String?
-    suspend fun setSelectedAccountName(name: String)
     suspend fun getRemoteConfig(): RemoteConfigPreferences
     suspend fun setRemoteConfig(config: RemoteConfigPreferences)
     suspend fun getLastInterstitialShowTime(): Long
@@ -43,12 +41,6 @@ internal class PreferencesLocalDataSourceImpl @Inject constructor(
     private val _dataStore: DataStore<Preferences>,
     private val _credentialStorage: CredentialStorage,
 ) : PreferencesLocalDataSource {
-
-    override suspend fun getSelectedAccountName(): String? = read()[SELECTED_ACCOUNT_NAME_KEY]
-
-    override suspend fun setSelectedAccountName(name: String) = write {
-        it[SELECTED_ACCOUNT_NAME_KEY] = name
-    }
 
     override suspend fun getRemoteConfig(): RemoteConfigPreferences = read().let {
         RemoteConfigPreferences(
@@ -102,7 +94,6 @@ internal class PreferencesLocalDataSourceImpl @Inject constructor(
 
     // 키 이름은 SharedPreferences(APP_PREF)와 같아야 SharedPreferencesMigration으로 옮긴 값을 읽음
     private companion object {
-        val SELECTED_ACCOUNT_NAME_KEY = stringPreferencesKey("SELECTED_ACCOUNT_NAME_KEY")
         val ADS_SWITCH = booleanPreferencesKey("ADS_SWITCH")
         val ADS_INTERSTITIAL_ALARM_SAVE_SWITCH =
             booleanPreferencesKey("ADS_INTERSTITIAL_ALARM_SAVE_SWITCH")

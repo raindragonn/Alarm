@@ -14,7 +14,6 @@ import java.io.IOException
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 
-// UserRecoverableAuthIOException → TubeAuthRequiredException은 Android Intent가 필요해 기기에서 확인 (기술 0003)
 class DataErrorsTest {
     private fun mapped(error: Exception): Throwable =
         runCatching { mapDataErrors { throw error } }.exceptionOrNull()!!

@@ -23,10 +23,8 @@ androidx-hilt = "1.4.0"
 google-material = "1.10.0"
 google-hilt = "2.60.1"
 google-services = "4.5.0"
-google-playservices-auth = "22.0.0"
 google-playservices-ads = "25.5.0"
 google-youtube = "v3-rev20261019-2.9.2"
-google-api-client = "2.9.2"
 
 #firebase
 firebase-bom = "35.1.0"
@@ -55,10 +53,8 @@ compose-gradle-plugin = { group = "org.jetbrains.kotlin", name = "compose-compil
 google-material = { group = "com.google.android.material", name = "material", version.ref = "google-material" }
 google-hilt = { group = "com.google.dagger", name = "hilt-android", version.ref = "google-hilt" }
 google-hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "google-hilt" }
-google-playservices-auth = { group = "com.google.android.gms", name = "play-services-auth", version.ref = "google-playservices-auth" }
 google-playservices-ads = { group = "com.google.android.gms", name = "play-services-ads", version.ref = "google-playservices-ads" }
 google-youtube = { group = "com.google.apis", name = "google-api-services-youtube", version.ref = "google-youtube" }
-google-api-client = { group = "com.google.api-client", name = "google-api-client-android", version.ref = "google-api-client" }
 
 #firebase
 firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebase-bom" }

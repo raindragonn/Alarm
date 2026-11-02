@@ -25,8 +25,4 @@
     <string name="media_play">Play</string>
     <string name="media_pause">Pause</string>
     <string name="media_select">Select</string>
-    <string name="media_youtube_notice_title">Connect YouTube safely</string>
-    <string name="media_youtube_notice_body">Sign in so Media Alarm can search videos with Google\'s YouTube API?\n\nNo personal information is collected.</string>
-    <string name="media_youtube_notice_agree">Connect YouTube</string>
-    <string name="media_youtube_notice_disagree">Not now</string>
 </resources>

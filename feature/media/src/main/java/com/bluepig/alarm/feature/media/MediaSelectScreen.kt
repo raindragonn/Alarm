@@ -1,10 +1,5 @@
 package com.bluepig.alarm.feature.media
 
-import android.accounts.AccountManager
-import android.app.Activity
-import android.content.Intent
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -68,7 +63,6 @@ import com.bluepig.alarm.designsystem.theme.Radius
 import com.bluepig.alarm.designsystem.theme.Space
 import com.bluepig.alarm.domain.entity.alarm.media.AlarmMedia
 import com.bluepig.alarm.domain.entity.music.MusicInfo
-import com.google.android.gms.common.AccountPicker
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
 import com.bluepig.alarm.designsystem.R as DesignSystemR
@@ -91,12 +85,6 @@ fun MediaSelectRoute(
     LaunchedEffect(uiState.tab) { onTabChanged(uiState.tab) }
     val snackbarHostState = remember { SnackbarHostState() }
     val previewFailed = stringResource(R.string.media_preview_failed)
-    val accountLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-        it.data?.getStringExtra(AccountManager.KEY_ACCOUNT_NAME)?.let(viewModel::onAccountChosen)
-    }
-    val reauthLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-        if (it.resultCode == Activity.RESULT_OK) viewModel.onReauthorized()
-    }
     val lifecycleOwner = LocalLifecycleOwner.current
     LaunchedEffect(viewModel, lifecycleOwner) {
         lifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -104,8 +92,6 @@ fun MediaSelectRoute(
                 when (effect) {
                     is MediaSelectEffect.Selected -> onSelected(effect.media)
                     is MediaSelectEffect.Searched -> onSearched(effect.tab, effect.query)
-                    MediaSelectEffect.ChooseAccount -> accountLauncher.launch(chooseAccountIntent())
-                    is MediaSelectEffect.Reauthorize -> (effect.resolution as? Intent)?.let(reauthLauncher::launch)
                     MediaSelectEffect.PreviewFailed -> snackbarHostState.showSnackbar(previewFailed)
                 }
             }
@@ -127,18 +113,7 @@ fun MediaSelectRoute(
         snackbarHostState = snackbarHostState,
     )
     uiState.preview?.let { PreviewSheet(it, viewModel::onPreviewDismiss, viewModel::onSelect) }
-    if (uiState.showYoutubeNotice) {
-        YoutubeNoticeDialog(viewModel::onYoutubeNoticeAgree, viewModel::onYoutubeNoticeDismiss)
-    }
 }
-
-// GoogleAccountCredential.newChooseAccountIntent와 같은 값 (credential은 core:network에 있음)
-private fun chooseAccountIntent(): Intent = AccountPicker.newChooseAccountIntent(
-    AccountPicker.AccountChooserOptions.Builder()
-        .setAllowableAccountsTypes(listOf("com.google"))
-        .setAlwaysShowAccountPicker(true)
-        .build(),
-)
 
 internal class MediaActions(
     val onBack: () -> Unit,

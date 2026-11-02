@@ -2,8 +2,6 @@ package com.bluepig.alarm.data
 
 import com.bluepig.alarm.domain.result.DataSourceException
 import com.bluepig.alarm.domain.result.NetworkUnavailableException
-import com.bluepig.alarm.domain.result.TubeAuthRequiredException
-import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException
 import kotlinx.serialization.SerializationException
 import retrofit2.HttpException
 import java.io.IOException
@@ -16,8 +14,6 @@ import java.net.UnknownHostException
  */
 internal inline fun <T> mapDataErrors(block: () -> T): T = try {
     block()
-} catch (e: UserRecoverableAuthIOException) {
-    throw TubeAuthRequiredException(e.intent)
 } catch (e: SocketTimeoutException) {
     throw NetworkUnavailableException(e)
 } catch (e: UnknownHostException) {

@@ -4,11 +4,9 @@ import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.longPreferencesKey
-import androidx.datastore.preferences.core.stringPreferencesKey
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNull
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
@@ -26,7 +24,6 @@ class PreferencesLocalDataSourceTest {
     fun `저장된 값이 없으면 기본값`() = runTest {
         val dataSource = PreferencesLocalDataSourceImpl(dataStore()) { true }
 
-        assertNull(dataSource.getSelectedAccountName())
         assertEquals(0L, dataSource.getLastInterstitialShowTime())
         assertEquals(
             RemoteConfigPreferences(false, false, false, false, false, false),
@@ -39,7 +36,6 @@ class PreferencesLocalDataSourceTest {
     fun `이전 SharedPreferences 키 이름으로 저장된 값을 읽는다`() = runTest {
         val dataStore = dataStore()
         dataStore.edit {
-            it[stringPreferencesKey("SELECTED_ACCOUNT_NAME_KEY")] = "user@example.com"
             it[booleanPreferencesKey("ADS_SWITCH")] = true
             it[booleanPreferencesKey("ADS_ALARM_LIST_NATIVE_SWITCH")] = false
             it[booleanPreferencesKey("ADS_MAIN_BOTTOM_NATIVE_SWITCH")] = false
@@ -49,7 +45,6 @@ class PreferencesLocalDataSourceTest {
         }
         val dataSource = PreferencesLocalDataSourceImpl(dataStore) { true }
 
-        assertEquals("user@example.com", dataSource.getSelectedAccountName())
         assertEquals(1_793_000_000_000, dataSource.getLastInterstitialShowTime())
         assertEquals(
             RemoteConfigPreferences(
@@ -69,11 +64,9 @@ class PreferencesLocalDataSourceTest {
         val dataSource = PreferencesLocalDataSourceImpl(dataStore()) { true }
         val config = RemoteConfigPreferences(true, false, true, true, false, true)
 
-        dataSource.setSelectedAccountName("")
         dataSource.setLastInterstitialShowTime(42)
         dataSource.setRemoteConfig(config)
 
-        assertEquals("", dataSource.getSelectedAccountName())
         assertEquals(42L, dataSource.getLastInterstitialShowTime())
         assertEquals(config, dataSource.getRemoteConfig())
     }

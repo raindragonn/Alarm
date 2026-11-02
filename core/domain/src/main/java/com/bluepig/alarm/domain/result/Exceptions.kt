@@ -32,6 +32,3 @@ class NetworkUnavailableException(cause: Throwable) : DomainException(cause = ca
 
 /** 그 밖의 외부 데이터 오류 (HTTP 오류 응답, 응답 형식 오류 등) */
 class DataSourceException(cause: Throwable) : DomainException(cause = cause)
-
-/** YouTube 계정 재인증이 필요함. [resolution]은 화면이 실행할 Android Intent */
-class TubeAuthRequiredException(val resolution: Any) : DomainException()

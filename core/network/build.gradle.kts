@@ -17,6 +17,7 @@ val apiKeys = listOf(
     "SEARCH_API_OPTION4_VALUE",
     "PARSING_DEFAULT_SELECT",
     "PARSING_DEFAULT_ATTR",
+    "YOUTUBE_API_KEY",
 )
 val api = localProperties(apiKeys.map { "api.$it" })
 
@@ -53,8 +54,6 @@ dependencies {
     // 4shared 다운로드 페이지 User-Agent (Util.getUserAgent)
     implementation(libs.androidx.media3.common)
 
-    implementation(libs.google.playservices.auth)
-    implementation(libs.google.api.client)
     // TubeRemoteDataSource가 YouTube 모델을 그대로 돌려줌
     api(libs.google.youtube)
 

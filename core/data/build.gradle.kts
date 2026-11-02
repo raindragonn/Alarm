@@ -21,7 +21,6 @@ dependencies {
 
     // 외부 예외 → domain 예외 변환에 쓰는 타입 (기술 0016)
     implementation(libs.retrofit2)
-    implementation(libs.google.api.client)
 
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)
