@@ -63,13 +63,15 @@ import com.bluepig.alarm.designsystem.R as DesignSystemR
 /**
  * 알람 울림·미리보기 화면 (제품 0004). 소리·진동은 울림 서비스가 냄 (기술 0026)
  * @param canPlayVideo 재부팅 후 잠금 해제 전에는 WebView를 못 써서 false (C7). 그땐 타일 + 기본 알람음
+ * @param speakingMemo 메모를 읽는 동안은 영상을 재생하지 않음
  */
 @Composable
 fun AlarmRingRoute(
     canPlayVideo: Boolean,
+    speakingMemo: Boolean,
     onDismiss: () -> Unit,
     onVideoPlaying: () -> Unit,
-    onVideoFailed: () -> Unit,
+    onVideoStopped: () -> Unit,
     onNotFound: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: AlarmRingViewModel = hiltViewModel(),
@@ -81,7 +83,7 @@ fun AlarmRingRoute(
         is AlarmRingUiState.Ringing -> {
             // 울리는 중에는 뒤로 가기로 끄지 않음, 미리보기는 종료
             BackHandler { if (state.isPreview) onDismiss() }
-            AlarmRingScreen(state, canPlayVideo, onDismiss, onVideoPlaying, onVideoFailed, modifier)
+            AlarmRingScreen(state, canPlayVideo, speakingMemo, onDismiss, onVideoPlaying, onVideoStopped, modifier)
         }
     }
 }
@@ -91,9 +93,10 @@ fun AlarmRingRoute(
 internal fun AlarmRingScreen(
     state: AlarmRingUiState.Ringing,
     canPlayVideo: Boolean,
+    speakingMemo: Boolean,
     onDismiss: () -> Unit,
     onVideoPlaying: () -> Unit,
-    onVideoFailed: () -> Unit,
+    onVideoStopped: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val colors = AlarmTheme.colors
@@ -105,7 +108,7 @@ internal fun AlarmRingScreen(
             .semantics { testTagsAsResourceId = true },
     ) {
         val showVideo = canPlayVideo && state.alarm.media is TubeMedia
-        val media = @Composable { MediaSection(state.alarm, showVideo, onVideoPlaying, onVideoFailed) }
+        val media = @Composable { MediaSection(state.alarm, showVideo, !speakingMemo, onVideoPlaying, onVideoStopped) }
         val action = @Composable {
             if (state.isPreview) {
                 AlarmButton(
@@ -181,13 +184,20 @@ private fun Clock(state: AlarmRingUiState.Ringing, modifier: Modifier = Modifier
 }
 
 @Composable
-private fun MediaSection(alarm: Alarm, showVideo: Boolean, onVideoPlaying: () -> Unit, onVideoFailed: () -> Unit) {
+private fun MediaSection(
+    alarm: Alarm,
+    showVideo: Boolean,
+    playVideo: Boolean,
+    onVideoPlaying: () -> Unit,
+    onVideoStopped: () -> Unit,
+) {
     val media = alarm.media
     if (showVideo && media is TubeMedia) {
         YoutubeVideo(
             media.videoId,
+            playVideo,
             onVideoPlaying,
-            onVideoFailed,
+            onVideoStopped,
             // 가로 화면에서는 남은 높이에 맞춰 줄어듦 (세로는 너비를 채움)
             Modifier.padding(top = Space.s20, bottom = Space.s16).aspectRatio(16f / 9f, matchHeightConstraintsFirst = true),
         )

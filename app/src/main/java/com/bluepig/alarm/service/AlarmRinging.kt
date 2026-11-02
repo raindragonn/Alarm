@@ -11,7 +11,16 @@ object AlarmRinging {
     private val _alarmId = MutableStateFlow<Long?>(null)
     val alarmId: StateFlow<Long?> = _alarmId.asStateFlow()
 
+    private val _speakingMemo = MutableStateFlow(false)
+
+    /** 메모를 읽는 중. 울림 화면은 다 읽은 뒤 영상을 재생 */
+    val speakingMemo: StateFlow<Boolean> = _speakingMemo.asStateFlow()
+
     internal fun set(id: Long?) {
         _alarmId.value = id
+    }
+
+    internal fun setSpeakingMemo(speaking: Boolean) {
+        _speakingMemo.value = speaking
     }
 }

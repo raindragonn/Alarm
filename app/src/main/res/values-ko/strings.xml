@@ -46,6 +46,7 @@
     <string name="channel_description_alarm_missed">휴대폰이 꺼져 있는 동안 지나간 알람</string>
     <string name="notification_alarm_title">알람 %1$s</string>
     <string name="notification_alarm_dismiss">끄기</string>
+    <string name="notification_alarm_video">영상은 울림 화면에서 재생돼요</string>
     <string name="notification_preview_title">알람 미리보기 중</string>
     <string name="notification_missed_title">놓친 알람</string>
     <string name="notification_missed_text">휴대폰이 꺼져 있는 동안 %1$s 알람이 지나갔어요</string>

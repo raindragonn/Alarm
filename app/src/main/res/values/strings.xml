@@ -46,6 +46,7 @@
     <string name="channel_description_alarm_missed">Alarms that passed while the phone was off</string>
     <string name="notification_alarm_title">Alarm %1$s</string>
     <string name="notification_alarm_dismiss">Dismiss</string>
+    <string name="notification_alarm_video">The video plays on the alarm screen</string>
     <string name="notification_preview_title">Previewing alarm</string>
     <string name="notification_missed_title">Missed alarm</string>
     <string name="notification_missed_text">%1$s alarm passed while the phone was off</string>

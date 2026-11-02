@@ -89,6 +89,7 @@ class AlarmRingService : LifecycleService() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         super.onStartCommand(intent, flags, startId)
+        val ringing = AlarmRinging.alarmId.value != null
         when (intent?.action) {
             ACTION_RING -> {
                 val alarmId = intent.getLongExtra(EXTRA_ALARM_ID, -1)
@@ -103,14 +104,15 @@ class AlarmRingService : LifecycleService() {
                 if (alarm == null) stop() else start(alarm, AlarmRinging.PREVIEW_ID)
             }
 
-            // 유튜브 영상이 울림 화면에서 재생되면 기본 알람음을 멈추고, 실패하면 다시 (C5)
-            ACTION_VIDEO_PLAYING -> {
+            // 유튜브 영상이 울림 화면에서 재생되면 기본 알람음을 멈추고, 멈추거나 실패하면 다시 (C5, 제품 0016).
+            // 끈 뒤에 늦게 온 영상 상태(화면이 닫히며 멈춤)로 서비스가 새로 떴으면 else로 소리 없이 끝냄
+            ACTION_VIDEO_PLAYING if ringing -> {
                 playerManager.pause()
                 _playingDefault = false
                 _tone?.release()
                 _tone = null
             }
-            ACTION_VIDEO_FAILED -> playDefault()
+            ACTION_VIDEO_STOPPED if ringing -> playDefault()
             else -> stop()
         }
         return START_NOT_STICKY
@@ -129,6 +131,12 @@ class AlarmRingService : LifecycleService() {
             saveAlarm(alarm.getActiveCheckedAlarm())
             BpLogger.logAlarmFired(alarm)
             _firedAlarm = alarm
+            if (alarm.media is TubeMedia) {
+                // 영상이 화면에 없으면 기본 알람음이 나는 이유 (제품 0016).
+                // 갱신하면 전체 화면이 다시 열리지만 singleTask라 같은 화면
+                val text = getString(R.string.notification_alarm_video)
+                startInForeground(RING_NOTIFICATION_ID + alarmId.toInt(), ringNotification(alarmId, text))
+            }
             start(alarm, alarmId)
         }
     }
@@ -139,8 +147,14 @@ class AlarmRingService : LifecycleService() {
         if (_originalVolume == null) _originalVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC)
         setVolume(alarm.volume)
         if (alarm.memoTtsEnabled && alarm.memo.isNotBlank()) {
+            AlarmRinging.setSpeakingMemo(true)
             // 읽기 완료 콜백은 바인더 스레드라 메인으로 옮김 (ExoPlayer는 메인 스레드만). 서비스가 끝났으면 취소됨
-            ttsPlayerManager.play(alarm.memo) { lifecycleScope.launch { playSound(alarm) } }
+            ttsPlayerManager.play(alarm.memo) {
+                lifecycleScope.launch {
+                    AlarmRinging.setSpeakingMemo(false)
+                    playSound(alarm)
+                }
+            }
         } else {
             playSound(alarm)
         }
@@ -214,6 +228,7 @@ class AlarmRingService : LifecycleService() {
         _wakeLock?.takeIf { it.isHeld }?.release()
         _wakeLock = null
         AlarmRinging.set(null)
+        AlarmRinging.setSpeakingMemo(false)
     }
 
     private fun acquireWakeLock() {
@@ -234,7 +249,7 @@ class AlarmRingService : LifecycleService() {
         _notificationId = id
     }
 
-    private fun ringNotification(alarmId: Long): Notification {
+    private fun ringNotification(alarmId: Long, text: String? = null): Notification {
         val screen = PendingIntent.getActivity(
             this,
             alarmId.toInt(),
@@ -245,6 +260,9 @@ class AlarmRingService : LifecycleService() {
         return NotificationCompat.Builder(this, NotificationType.ALARM_RING.channelId)
             .setSmallIcon(R.drawable.ic_alarm)
             .setContentTitle(getString(R.string.notification_alarm_title, time))
+            .setContentText(text)
+            // 내용을 고칠 때 소리·헤드업을 다시 내지 않음
+            .setOnlyAlertOnce(true)
             .setCategory(NotificationCompat.CATEGORY_ALARM)
             .setPriority(NotificationCompat.PRIORITY_MAX)
             // 다른 알림과 자동으로 묶이면 경고(전체 화면)가 생략될 수 있어 따로 둠
@@ -270,7 +288,7 @@ class AlarmRingService : LifecycleService() {
         private const val ACTION_PREVIEW = "com.bluepig.alarm.action.PREVIEW"
         private const val ACTION_STOP = "com.bluepig.alarm.action.STOP"
         private const val ACTION_VIDEO_PLAYING = "com.bluepig.alarm.action.VIDEO_PLAYING"
-        private const val ACTION_VIDEO_FAILED = "com.bluepig.alarm.action.VIDEO_FAILED"
+        private const val ACTION_VIDEO_STOPPED = "com.bluepig.alarm.action.VIDEO_STOPPED"
         private const val EXTRA_ALARM_ID = "EXTRA_ALARM_ID"
         private const val EXTRA_ALARM = "EXTRA_ALARM"
         private const val RING_NOTIFICATION_ID = 1_000_000
@@ -294,7 +312,7 @@ class AlarmRingService : LifecycleService() {
 
         fun videoPlaying(context: Context) = context.startService(command(context, ACTION_VIDEO_PLAYING))
 
-        fun videoFailed(context: Context) = context.startService(command(context, ACTION_VIDEO_FAILED))
+        fun videoStopped(context: Context) = context.startService(command(context, ACTION_VIDEO_STOPPED))
 
         private fun command(context: Context, action: String) =
             Intent(context, AlarmRingService::class.java).setAction(action)
