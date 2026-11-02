@@ -58,7 +58,7 @@ class SystemEventReceiver : BroadcastReceiver() {
         missed.forEach { alarm ->
             val time = DateFormat.getTimeInstance(DateFormat.SHORT).format(Date(alarm.timeInMillis))
             val notification = NotificationCompat.Builder(context, NotificationType.ALARM_MISSED.channelId)
-                .setSmallIcon(R.drawable.ic_alarm)
+                .setSmallIcon(R.drawable.ic_notification)
                 .setContentTitle(context.getString(R.string.notification_missed_title))
                 .setContentText(context.getString(R.string.notification_missed_text, time))
                 .setContentIntent(open)

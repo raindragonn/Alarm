@@ -7,8 +7,10 @@ import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.runtime.getValue
 import androidx.core.content.IntentCompat
 import androidx.core.os.UserManagerCompat
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import com.bluepig.alarm.designsystem.theme.AlarmTheme
 import com.bluepig.alarm.domain.entity.alarm.Alarm
@@ -45,12 +47,14 @@ class AlarmActivity : ComponentActivity() {
         }
 
         setContent {
+            val speakingMemo by AlarmRinging.speakingMemo.collectAsStateWithLifecycle()
             AlarmTheme {
                 AlarmRingRoute(
                     canPlayVideo = UserManagerCompat.isUserUnlocked(this),
+                    speakingMemo = speakingMemo,
                     onDismiss = ::dismiss,
                     onVideoPlaying = { AlarmRingService.videoPlaying(this) },
-                    onVideoFailed = { AlarmRingService.videoFailed(this) },
+                    onVideoStopped = { AlarmRingService.videoStopped(this) },
                     onNotFound = ::dismiss,
                 )
             }

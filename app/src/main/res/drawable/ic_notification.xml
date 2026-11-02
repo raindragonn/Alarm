@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 알림 작은 아이콘: 앱 아이콘 모양(108dp 중 가운데 약 61dp)을 24dp 안 20dp 정도로 키움 -->
+<inset xmlns:android="http://schemas.android.com/apk/res/android"
+    android:drawable="@drawable/ic_launcher_foreground"
+    android:inset="-17dp" />
