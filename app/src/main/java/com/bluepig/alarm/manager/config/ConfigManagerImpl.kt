@@ -2,18 +2,14 @@ package com.bluepig.alarm.manager.config
 
 import com.bluepig.alarm.BuildConfig
 import com.bluepig.alarm.R
-import com.bluepig.alarm.domain.entity.config.AppConfig
-import com.bluepig.alarm.domain.usecase.SaveAppConfig
-import com.google.firebase.Firebase
-import com.google.firebase.remoteconfig.remoteConfig
-import com.google.firebase.remoteconfig.remoteConfigSettings
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
+import com.bluepig.alarm.data.preference.AppPreferences
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.remoteconfig.ktx.remoteConfig
+import com.google.firebase.remoteconfig.ktx.remoteConfigSettings
 import javax.inject.Inject
 
 class ConfigManagerImpl @Inject constructor(
-    private val _saveAppConfig: SaveAppConfig,
-    private val _appScope: CoroutineScope,
+    private val _appPreferences: AppPreferences,
 ) : ConfigManager {
     private val _remoteConfig by lazy {
         Firebase.remoteConfig
@@ -31,17 +27,38 @@ class ConfigManagerImpl @Inject constructor(
         _remoteConfig
             .fetchAndActivate()
             .addOnCompleteListener { _ ->
-                val config = readConfig()
-                _appScope.launch { _saveAppConfig(config) }
+                updatePref()
             }
     }
 
-    private fun readConfig() = AppConfig(
-        adsSwitch = _remoteConfig.getBoolean("ads_switch"),
-        adsAlarmListNativeSwitch = _remoteConfig.getBoolean("ads_alarm_list_native_switch"),
-        adsInterstitialAlarmSaveSwitch = _remoteConfig.getBoolean("ads_interstitial_alarm_save_switch"),
-        adsMainBottomNativeSwitch = _remoteConfig.getBoolean("ads_main_bottom_native_switch"),
-        showOnlyYoutubeLink = _remoteConfig.getBoolean("show_only_youtube_link"),
-        showYoutubeSearch = _remoteConfig.getBoolean("show_youtube_search"),
-    )
+    private fun updatePref() {
+        _remoteConfig.getBoolean("ads_switch")
+            .let {
+                _appPreferences.adsSwitch = it
+            }
+        _remoteConfig.getBoolean("ads_alarm_banner_switch")
+            .let {
+                _appPreferences.adsAlarmBannerSwitch = it
+            }
+        _remoteConfig.getBoolean("ads_alarm_list_native_switch")
+            .let {
+                _appPreferences.adsAlarmListNativeSwitch = it
+            }
+        _remoteConfig.getBoolean("ads_interstitial_music_click_switch")
+            .let {
+                _appPreferences.adsInterstitialMusicClickSwitch = it
+            }
+        _remoteConfig.getBoolean("ads_main_bottom_native_switch")
+            .let {
+                _appPreferences.adsMainBottomNativeSwitch = it
+            }
+        _remoteConfig.getBoolean("show_only_youtube_link")
+            .let {
+                _appPreferences.showOnlyYoutubeLink = it
+            }
+        _remoteConfig.getBoolean("show_youtube_search")
+            .let {
+                _appPreferences.showYoutubeSearch = it
+            }
+    }
 }

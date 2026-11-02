@@ -5,11 +5,15 @@
         <value>false</value>
     </entry>
     <entry>
-        <key>ads_interstitial_alarm_save_switch</key>
+        <key>ads_alarm_banner_switch</key>
         <value>true</value>
     </entry>
     <entry>
         <key>ads_alarm_list_native_switch</key>
+        <value>true</value>
+    </entry>
+    <entry>
+        <key>ads_interstitial_music_click_switch</key>
         <value>true</value>
     </entry>
     <entry>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.media3.ui.DefaultTimeBar xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/exo_progress"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:bar_height="@dimen/base_spacing_1"
+    app:buffered_color="@color/primary_500"
+    app:played_color="@color/primary_700"
+    app:scrubber_color="@color/primary_700"
+    app:scrubber_disabled_size="@dimen/base_spacing_1"
+    app:scrubber_dragged_size="@dimen/base_spacing_1"
+    app:scrubber_enabled_size="@dimen/base_spacing_1"
+    app:unplayed_color="@color/primary_100">
+
+</androidx.media3.ui.DefaultTimeBar>

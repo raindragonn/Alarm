@@ -1,44 +1,50 @@
-plugins {
-    id("alarm.android.application")
-    id("alarm.android.compose")
-    id("alarm.hilt")
+import com.bluepig.alarm.AppConfiguration
 
+@Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
+plugins {
+    alias(libs.plugins.com.android.application)
+    alias(libs.plugins.kotlin.android)
+
+    alias(libs.plugins.google.hilt)
+    alias(libs.plugins.google.ksp)
     alias(libs.plugins.google.services)
     alias(libs.plugins.firebase.crashlytics)
 
     alias(libs.plugins.androidx.navigation.safeargs)
+    kotlin("kapt")
 }
 
-val adsKeys = listOf(
-    "ADS_APP_ID",
-    "ADS_MAIN_BOTTOM_NATIVE",
-    "ADS_ALARM_LIST_NATIVE",
-    "ADS_MEDIA_SELECT_INTERSTITIAL",
-)
-val secrets = localProperties(
-    listOf("debug", "release").flatMap { buildType ->
-        (listOf("KEY_ALIAS", "KEY_PASSWORD", "STORE_PASSWORD") + adsKeys).map { "$buildType.$it" }
-    }
-)
+val debugJson =
+    groovy.json.JsonSlurper()
+        .parseText(file("../key.stores/debug.keys").readText()) as Map<String, String>
+val releaseJson = groovy.json.JsonSlurper()
+    .parseText(file("../key.stores/release.keys").readText()) as Map<String, String>
 
 android {
     namespace = "com.bluepig.alarm"
+    compileSdk = AppConfiguration.compileSdk
 
     defaultConfig {
         applicationId = "com.bluepig.alarm"
-        // CI 배포는 -PversionCode로 덮어씀 (기술 0010)
-        versionCode = providers.gradleProperty("versionCode").orNull?.toInt() ?: 10
-        versionName = "2.0.0"
+        minSdk = AppConfiguration.minSdk
+        targetSdk = AppConfiguration.compileSdk
+        versionCode = AppConfiguration.versionCode
+        versionName = AppConfiguration.versionName
+
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
     signingConfigs {
-        listOf("debug", "release").forEach { buildType ->
-            maybeCreate(buildType).apply {
-                keyAlias = secrets.getValue("$buildType.KEY_ALIAS")
-                keyPassword = secrets.getValue("$buildType.KEY_PASSWORD")
-                storeFile = rootProject.file("key.stores/$buildType.jks").takeIf { it.exists() }
-                    ?: throw GradleException("key.stores/$buildType.jks 파일이 없습니다")
-                storePassword = secrets.getValue("$buildType.STORE_PASSWORD")
-            }
+        getByName("debug") {
+            keyAlias = debugJson["KEY_ALIAS"]
+            keyPassword = debugJson["KEY_PASSWORD"]
+            storeFile = file("../key.stores/debug.jks")
+            storePassword = debugJson["STORE_PASSWORD"]
+        }
+        create("release") {
+            keyAlias = releaseJson["KEY_ALIAS"]
+            keyPassword = releaseJson["KEY_PASSWORD"]
+            storeFile = file("../key.stores/release.jks")
+            storePassword = releaseJson["STORE_PASSWORD"]
         }
     }
 
@@ -53,7 +59,15 @@ android {
                 "proguard-rules.pro"
             )
             resValue("string", "app_name", "@string/app_name_default")
-            adsKeys.forEach { resValue("string", it.lowercase(), secrets.getValue("release.$it")) }
+            resValue("string", "ads_app_id", releaseJson["ADS_APP_ID"]!!)
+            resValue("string", "ads_main_bottom_native", releaseJson["ADS_MAIN_BOTTOM_NATIVE"]!!)
+            resValue("string", "ads_alarm_list_native", releaseJson["ADS_ALARM_LIST_NATIVE"]!!)
+            resValue("string", "ads_alarm_banner", releaseJson["ADS_ALARM_BANNER"]!!)
+            resValue(
+                "string",
+                "ads_media_select_interstitial",
+                releaseJson["ADS_MEDIA_SELECT_INTERSTITIAL"]!!
+            )
         }
         debug {
             signingConfig = signingConfigs["debug"]
@@ -62,29 +76,45 @@ android {
             applicationIdSuffix = ".debug"
 
             resValue("string", "app_name", "@string/app_name_dev")
-            adsKeys.forEach { resValue("string", it.lowercase(), secrets.getValue("debug.$it")) }
+            resValue("string", "ads_app_id", debugJson["ADS_APP_ID"]!!)
+            resValue("string", "ads_main_bottom_native", debugJson["ADS_MAIN_BOTTOM_NATIVE"]!!)
+            resValue("string", "ads_alarm_list_native", debugJson["ADS_ALARM_LIST_NATIVE"]!!)
+            resValue("string", "ads_alarm_banner", debugJson["ADS_ALARM_BANNER"]!!)
+            resValue(
+                "string",
+                "ads_media_select_interstitial",
+                debugJson["ADS_MEDIA_SELECT_INTERSTITIAL"]!!
+            )
         }
+    }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = "1.8"
     }
     buildFeatures {
         viewBinding = true
         buildConfig = true
-        resValues = true
+    }
+
+    /**
+     *  Hilt Allow references to generated code
+     */
+    kapt {
+        correctErrorTypes = true
     }
     packaging {
-        // google-api-client 2.x가 끌어오는 google-auth-library jar끼리 겹침
-        resources.excludes += listOf("META-INF/DEPENDENCIES", "META-INF/INDEX.LIST")
+        resources.excludes.add(
+            "META-INF/DEPENDENCIES"
+        )
     }
 }
 
 dependencies {
-    // core:data는 DI 바인딩용 (화면은 domain만 씀)
-    implementation(project(":core:data"))
-    implementation(project(":core:domain"))
-    implementation(project(":core:designsystem"))
-    implementation(project(":feature:list"))
-    implementation(project(":feature:edit"))
-    implementation(project(":feature:media"))
-    implementation(project(":feature:alarm"))
+    implementation(project(":data"))
+    implementation(project(":domain"))
 
     implementation(libs.kotlinx.serialization.json)
 
@@ -94,27 +124,31 @@ dependencies {
     implementation(libs.androidx.navigation.ui.ktx)
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
-    implementation(libs.androidx.lifecycle.runtime.compose)
-    implementation(libs.androidx.lifecycle.service)
-    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.media3.exoplayer)
     implementation(libs.androidx.media3.exoplayer.ui)
 
     implementation(libs.google.material)
+    implementation(libs.google.hilt)
+    kapt(libs.google.hilt.compiler)
 
     implementation(platform(libs.firebase.bom))
-    implementation(libs.firebase.analytics)
-    implementation(libs.firebase.crashlytics)
-    implementation(libs.firebase.config)
+    implementation(libs.firebase.analytics.ktx)
+    implementation(libs.firebase.crashlytics.ktx)
+    implementation(libs.firebase.config.ktx)
 
     implementation(libs.coil)
     implementation(libs.timber)
     implementation(libs.youtube.player.core)
     implementation(libs.youtube.player.ui)
 
+    implementation(libs.google.playservices.auth)
     implementation(libs.google.playservices.ads)
+    implementation(libs.google.api.client)
 
     testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.test.ext.junit)
+    androidTestImplementation(libs.espresso.core)
 
     debugImplementation(libs.leak.canary)
 }

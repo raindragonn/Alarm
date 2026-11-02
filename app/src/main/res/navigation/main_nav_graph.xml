@@ -8,7 +8,8 @@
     <fragment
         android:id="@+id/alarmListFragment"
         android:name="com.bluepig.alarm.ui.list.AlarmListFragment"
-        android:label="fragment_alarm_list">
+        android:label="fragment_alarm_list"
+        tools:layout="@layout/fragment_alarm_list">
 
         <action
             android:id="@+id/action_alarmListFragment_to_alarmEditFragment"
@@ -18,13 +19,13 @@
     <fragment
         android:id="@+id/alarmEditFragment"
         android:name="com.bluepig.alarm.ui.edit.AlarmEditFragment"
-        android:label="fragment_alarm_edit">
+        android:label="fragment_alarm_edit"
+        tools:layout="@layout/fragment_alarm_edit">
 
-        <!-- 새 알람은 -1 -->
         <argument
-            android:name="alarmId"
-            android:defaultValue="-1L"
-            app:argType="long" />
+            android:name="alarm"
+            app:argType="com.bluepig.alarm.domain.entity.alarm.Alarm"
+            app:nullable="true" />
 
         <action
             android:id="@+id/action_alarmEditFragment_to_alarmListFragment"
@@ -39,8 +40,26 @@
             app:popUpToInclusive="false" />
     </fragment>
 
+    <dialog
+        android:id="@+id/MediaSelectBottomSheetDialogFragment"
+        android:name="com.bluepig.alarm.ui.media.select.MediaSelectBottomSheetDialogFragment"
+        android:label="MediaSelectBottomSheetDialogFragment"
+        tools:layout="@layout/fragment_media_select">
+
+        <argument
+            android:name="musicInfo"
+            app:argType="com.bluepig.alarm.domain.entity.music.MusicInfo"
+            app:nullable="true" />
+
+        <argument
+            android:name="alarmMedia"
+            app:argType="com.bluepig.alarm.domain.entity.alarm.media.AlarmMedia"
+            app:nullable="true" />
+    </dialog>
+
     <fragment
         android:id="@+id/mediaSelectFragment"
         android:name="com.bluepig.alarm.ui.media.MediaSelectFragment"
-        android:label="fragment_media_select" />
+        android:label="fragment_media_select"
+        tools:layout="@layout/fragment_media_select" />
 </navigation>

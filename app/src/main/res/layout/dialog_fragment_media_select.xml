@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/shape_top_rounded_background"
+    android:padding="@dimen/base_spacing_2"
+    tools:context=".ui.media.select.MediaSelectBottomSheetDialogFragment">
+
+
+    <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
+        android:id="@+id/yp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:enableAutomaticInitialization="false"
+        app:layout_constraintDimensionRatio="16:9"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btn_close"
+        tools:visibility="visible" />
+
+    <ProgressBar
+        android:id="@+id/pb_loading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminateTint="@color/primary_900"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btn_close" />
+
+    <ImageButton
+        android:id="@+id/btn_close"
+        style="@style/Alarm.Base.ImageButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/base_spacing_1"
+        android:src="@drawable/ic_close"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/iv_thumbnail"
+        android:layout_width="@dimen/base_spacing_7"
+        android:layout_height="@dimen/base_spacing_7"
+        android:layout_marginTop="@dimen/base_spacing_1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/yp"
+        tools:src="@drawable/ic_image_place_holder" />
+
+    <TextView
+        android:id="@+id/tv_title"
+        style="@style/TextAppearance.Alarm.Body1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/base_spacing_2"
+        android:ellipsize="end"
+        android:maxLines="3"
+        app:layout_constraintBottom_toBottomOf="@id/barrier"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/iv_thumbnail"
+        app:layout_constraintTop_toTopOf="@id/iv_thumbnail"
+        app:layout_constraintVertical_bias="0"
+        app:layout_goneMarginStart="0dp"
+        app:layout_goneMarginTop="@dimen/base_spacing_1"
+        tools:text="@tools:sample/lorem/random" />
+
+    <androidx.media3.ui.PlayerControlView
+        android:id="@+id/player_view"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:controller_layout_id="@layout/player_progressbar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/barrier"
+        app:show_timeout="0" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:barrierMargin="@dimen/base_spacing_2"
+        app:constraint_referenced_ids="tv_title, iv_thumbnail" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_play"
+        style="@style/Alarm.Base.TextButton.Primary"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/base_spacing_2"
+        android:layout_marginEnd="@dimen/base_spacing_1"
+        android:text="@string/play"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/btn_select"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/player_view" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_select"
+        style="@style/Alarm.Base.TextButton.Primary"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/choice"
+        android:layout_marginTop="@dimen/base_spacing_2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/btn_play"
+        app:layout_constraintTop_toBottomOf="@id/player_view" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
