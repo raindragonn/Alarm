@@ -15,6 +15,7 @@ val allOnConfig = AppConfig(
 class FakeAppConfigRepository(
     var config: AppConfig = allOnConfig,
     var lastInterstitialShowTime: Long = 0,
+    var overlayNoticeDismissed: Boolean = false,
 ) : AppConfigRepository {
     override suspend fun getConfig() = config
     override suspend fun saveConfig(config: AppConfig) {
@@ -24,5 +25,10 @@ class FakeAppConfigRepository(
     override suspend fun getLastInterstitialShowTime() = lastInterstitialShowTime
     override suspend fun setLastInterstitialShowTime(timeInMillis: Long) {
         lastInterstitialShowTime = timeInMillis
+    }
+
+    override suspend fun isOverlayNoticeDismissed() = overlayNoticeDismissed
+    override suspend fun dismissOverlayNotice() {
+        overlayNoticeDismissed = true
     }
 }

@@ -36,4 +36,7 @@
     <string name="edit_exact_alarm_title">Allow alarms to ring on time</string>
     <string name="edit_exact_alarm_body">Turn on \'Alarms &amp; reminders\' for Media Alarm in settings, then save again.</string>
     <string name="edit_exact_alarm_open">Open settings</string>
+    <string name="edit_overlay_title">While you\'re using your phone, the default alarm sound plays instead of the video</string>
+    <string name="edit_overlay_body">Allow \'Display over other apps\' so the video opens as soon as the alarm rings.</string>
+    <string name="edit_overlay_allow">Allow</string>
 </resources>

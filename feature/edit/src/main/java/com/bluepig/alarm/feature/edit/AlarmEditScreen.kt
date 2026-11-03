@@ -46,6 +46,7 @@ import com.bluepig.alarm.designsystem.component.AlarmSnackbarHost
 import com.bluepig.alarm.designsystem.component.ButtonStyle
 import com.bluepig.alarm.designsystem.component.MediaTile
 import com.bluepig.alarm.designsystem.component.MediaTileType
+import com.bluepig.alarm.designsystem.component.NoticeCard
 import com.bluepig.alarm.designsystem.component.TopBar
 import com.bluepig.alarm.designsystem.theme.AlarmTheme
 import com.bluepig.alarm.designsystem.theme.Space
@@ -63,6 +64,7 @@ import com.bluepig.alarm.designsystem.R as DesignSystemR
 
 /**
  * @param selectedMedia 알람음 설정 화면에서 고른 결과. 바뀔 때마다 편집 중인 알람에 넣음
+ * @param canDrawOverlays 다른 앱 위에 표시 권한. 없으면 유튜브 알람음 아래 안내 (제품 0017)
  */
 @Composable
 fun AlarmEditRoute(
@@ -73,6 +75,8 @@ fun AlarmEditRoute(
     onSaved: (alarm: Alarm, isNew: Boolean) -> Unit,
     onDeleted: () -> Unit,
     onOpenExactAlarmSetting: () -> Unit,
+    canDrawOverlays: Boolean,
+    onOpenOverlaySetting: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: AlarmEditViewModel = hiltViewModel(),
 ) {
@@ -113,7 +117,9 @@ fun AlarmEditRoute(
             onDelete = viewModel::onDelete,
             onPreview = viewModel::onPreview,
             onSave = viewModel::onSave,
+            onOpenOverlaySetting = onOpenOverlaySetting,
         ),
+        canDrawOverlays = canDrawOverlays,
         snackbarHostState = snackbarHostState,
         modifier = modifier,
     )
@@ -141,6 +147,7 @@ internal class EditActions(
     val onDelete: () -> Unit,
     val onPreview: () -> Unit,
     val onSave: () -> Unit,
+    val onOpenOverlaySetting: () -> Unit,
 )
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -149,6 +156,7 @@ internal fun AlarmEditScreen(
     uiState: AlarmEditUiState,
     actions: EditActions,
     modifier: Modifier = Modifier,
+    canDrawOverlays: Boolean = true,
     snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
 ) {
     val colors = AlarmTheme.colors
@@ -174,7 +182,7 @@ internal fun AlarmEditScreen(
                     .weight(1f)
                     .verticalScroll(rememberScrollState()),
             ) {
-                EditContent(editing, actions)
+                EditContent(editing, actions, canDrawOverlays)
             }
             Row(
                 Modifier
@@ -197,7 +205,7 @@ internal fun AlarmEditScreen(
 }
 
 @Composable
-private fun EditContent(state: AlarmEditUiState.Editing, actions: EditActions) {
+private fun EditContent(state: AlarmEditUiState.Editing, actions: EditActions, canDrawOverlays: Boolean) {
     val colors = AlarmTheme.colors
     val typography = AlarmTheme.typography
     val draft = state.draft
@@ -226,6 +234,16 @@ private fun EditContent(state: AlarmEditUiState.Editing, actions: EditActions) {
         SettingsGroup { RepeatSection(draft.repeatWeek, actions.onDayToggle) }
         SettingsGroup {
             MediaPicker(draft.media, actions.onSelectMedia)
+            // 권한이 없으면 사용 중인 기기에선 영상 대신 기본 알람음 (제품 0016·0017)
+            if (draft.media is TubeMedia && !canDrawOverlays) {
+                NoticeCard(
+                    title = stringResource(R.string.edit_overlay_title),
+                    body = stringResource(R.string.edit_overlay_body),
+                    actionLabel = stringResource(R.string.edit_overlay_allow),
+                    onAction = actions.onOpenOverlaySetting,
+                    modifier = Modifier.padding(start = Space.s16, end = Space.s16, bottom = Space.s8),
+                )
+            }
             Column(
                 Modifier.padding(horizontal = Space.s24, vertical = 14.dp),
                 verticalArrangement = Arrangement.spacedBy(Space.s12),

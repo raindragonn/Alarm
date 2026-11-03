@@ -4,9 +4,12 @@ import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.longPreferencesKey
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
@@ -29,6 +32,19 @@ class PreferencesLocalDataSourceTest {
             RemoteConfigPreferences(false, false, false, false, false, false),
             dataSource.getRemoteConfig(),
         )
+        assertFalse(dataSource.isOverlayNoticeDismissed())
+    }
+
+    // 업데이트해도 닫은 안내가 다시 뜨지 않게 키 이름을 고정
+    @Test
+    fun `안내 카드를 닫으면 OVERLAY_NOTICE_DISMISSED 키에 남는다`() = runTest {
+        val dataStore = dataStore()
+        val dataSource = PreferencesLocalDataSourceImpl(dataStore) { true }
+
+        dataSource.dismissOverlayNotice()
+
+        assertEquals(true, dataStore.data.first()[booleanPreferencesKey("OVERLAY_NOTICE_DISMISSED")])
+        assertTrue(dataSource.isOverlayNoticeDismissed())
     }
 
     // SharedPreferencesMigration은 SharedPreferences 키 이름을 그대로 DataStore 키로 옮긴다

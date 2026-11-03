@@ -15,4 +15,10 @@
     <string name="list_create_alarm">알람 생성</string>
     <string name="list_once">한 번만</string>
     <string name="list_save_failed">알람을 저장하지 못했어요</string>
+    <string name="list_overlay_youtube_title">유튜브 알람이 영상으로 울리려면</string>
+    <string name="list_overlay_youtube_body">휴대폰을 쓰는 중에 울리면 영상 대신 기본 알람음이 나요. \'다른 앱 위에 표시\'를 허용해 주세요.</string>
+    <string name="list_overlay_title">알람 화면을 바로 띄우려면</string>
+    <string name="list_overlay_body">휴대폰을 쓰는 중에 울리면 지금은 알림으로만 떠요. \'다른 앱 위에 표시\'를 허용하면 알람 화면이 바로 떠요.</string>
+    <string name="list_overlay_allow">허용하기</string>
+    <string name="list_overlay_dismiss">닫기</string>
 </resources>

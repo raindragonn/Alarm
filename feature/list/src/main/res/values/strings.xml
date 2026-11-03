@@ -15,4 +15,10 @@
     <string name="list_create_alarm">Create alarm</string>
     <string name="list_once">Once</string>
     <string name="list_save_failed">Couldn\'t save the alarm</string>
+    <string name="list_overlay_youtube_title">To ring with your YouTube video</string>
+    <string name="list_overlay_youtube_body">If an alarm rings while you\'re using your phone, the default alarm sound plays instead of the video. Allow \'Display over other apps\'.</string>
+    <string name="list_overlay_title">To open the alarm screen right away</string>
+    <string name="list_overlay_body">If an alarm rings while you\'re using your phone, it only shows as a notification. Allow \'Display over other apps\' to open the alarm screen right away.</string>
+    <string name="list_overlay_allow">Allow</string>
+    <string name="list_overlay_dismiss">Close</string>
 </resources>

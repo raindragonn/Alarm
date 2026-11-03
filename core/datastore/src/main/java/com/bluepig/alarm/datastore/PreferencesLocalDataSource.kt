@@ -30,6 +30,8 @@ interface PreferencesLocalDataSource {
     suspend fun setLastInterstitialShowTime(timeInMillis: Long)
     suspend fun getScheduledTimeZoneId(): String?
     suspend fun setScheduledTimeZoneId(id: String)
+    suspend fun isOverlayNoticeDismissed(): Boolean
+    suspend fun dismissOverlayNotice()
 }
 
 /** 재부팅 후 첫 잠금 해제 전(Direct Boot)에는 credential storage의 파일을 열 수 없음 (C7) */
@@ -75,6 +77,12 @@ internal class PreferencesLocalDataSourceImpl @Inject constructor(
         it[SCHEDULED_TIME_ZONE_ID] = id
     }
 
+    override suspend fun isOverlayNoticeDismissed(): Boolean = read()[OVERLAY_NOTICE_DISMISSED] ?: false
+
+    override suspend fun dismissOverlayNotice() = write {
+        it[OVERLAY_NOTICE_DISMISSED] = true
+    }
+
     // 파일을 못 읽거나 잠금 해제 전이면 기본값 (SharedPreferences와 같게)
     private suspend fun read(): Preferences {
         if (!_credentialStorage.isAvailable()) return emptyPreferences()
@@ -103,5 +111,6 @@ internal class PreferencesLocalDataSourceImpl @Inject constructor(
         val SHOW_ONLY_YOUTUBE_LINK = booleanPreferencesKey("SHOW_ONLY_YOUTUBE_LINK")
         val SHOW_YOUTUBE_SEARCH = booleanPreferencesKey("SHOW_YOUTUBE_SEARCH")
         val SCHEDULED_TIME_ZONE_ID = stringPreferencesKey("SCHEDULED_TIME_ZONE_ID")
+        val OVERLAY_NOTICE_DISMISSED = booleanPreferencesKey("OVERLAY_NOTICE_DISMISSED")
     }
 }
