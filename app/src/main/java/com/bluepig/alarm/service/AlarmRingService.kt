@@ -14,6 +14,7 @@ import android.os.VibrationAttributes
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.os.VibratorManager
+import android.provider.Settings
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.app.ServiceCompat
@@ -95,6 +96,8 @@ class AlarmRingService : LifecycleService() {
                 val alarmId = intent.getLongExtra(EXTRA_ALARM_ID, -1)
                 // 울리는 중에 다른 알람이 오면 새 알림으로 올려야 전체 화면이 다시 뜸
                 startInForeground(RING_NOTIFICATION_ID + alarmId.toInt(), ringNotification(alarmId))
+                // 사용 중인 기기에선 전체 화면 알림이 헤드업으로만 떠서, 권한이 있으면 직접 띄움 (기술 0031)
+                if (Settings.canDrawOverlays(this)) startActivity(AlarmActivity.getOpenIntent(this, alarmId))
                 ring(alarmId)
             }
 
@@ -270,7 +273,10 @@ class AlarmRingService : LifecycleService() {
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
             .setOngoing(true)
             .setContentIntent(screen)
-            .setFullScreenIntent(screen, true)
+            .apply {
+                // 권한이 있으면 울림 화면을 직접 띄우므로, 사용 중인 기기에서 화면을 가리는 고정 헤드업 없이 (기술 0031)
+                if (Settings.canDrawOverlays(this@AlarmRingService)) setSilent(true) else setFullScreenIntent(screen, true)
+            }
             .addAction(0, getString(R.string.notification_alarm_dismiss), stopIntent(this))
             .build()
     }
