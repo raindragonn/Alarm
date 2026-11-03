@@ -9,8 +9,15 @@ import android.os.Build
 import android.provider.Settings
 import androidx.activity.ComponentActivity
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
+import androidx.lifecycle.compose.LifecycleResumeEffect
 import com.bluepig.alarm.R
 
 object PermissionHelper {
@@ -37,6 +44,13 @@ object PermissionHelper {
         )
     }
 
+    /** 다른 앱 위에 표시 권한 설정 화면 (기술 0031) */
+    fun openOverlaySetting(context: Context) {
+        context.startActivity(
+            Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION).setData("package:${context.packageName}".toUri()),
+        )
+    }
+
     private fun Context.showNotificationRationale() {
         AlertDialog.Builder(this)
             .setTitle(R.string.alert_request_permission_title)
@@ -50,4 +64,16 @@ object PermissionHelper {
             .setNegativeButton(R.string.cancel, null)
             .show()
     }
+}
+
+/** 다른 앱 위에 표시 권한. 설정에서 바꾸고 돌아오면 다시 읽음 */
+@Composable
+fun rememberCanDrawOverlays(): Boolean {
+    val context = LocalContext.current
+    var granted by remember { mutableStateOf(Settings.canDrawOverlays(context)) }
+    LifecycleResumeEffect(Unit) {
+        granted = Settings.canDrawOverlays(context)
+        onPauseOrDispose {}
+    }
+    return granted
 }

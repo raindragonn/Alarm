@@ -20,6 +20,7 @@ import com.bluepig.alarm.feature.edit.AlarmEditRoute
 import com.bluepig.alarm.ui.alarm.AlarmActivity
 import com.bluepig.alarm.util.PermissionHelper
 import com.bluepig.alarm.util.ads.AdsManager
+import com.bluepig.alarm.util.rememberCanDrawOverlays
 import com.bluepig.alarm.util.logger.BpLogger
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -71,6 +72,8 @@ class AlarmEditFragment : Fragment() {
                             )
                         },
                         onOpenExactAlarmSetting = { PermissionHelper.openExactAlarmSetting(requireContext()) },
+                        canDrawOverlays = rememberCanDrawOverlays(),
+                        onOpenOverlaySetting = { PermissionHelper.openOverlaySetting(requireContext()) },
                         onDeleted = {
                             BpLogger.logAlarmDelete()
                             findNavController().popBackStack()

@@ -46,11 +46,13 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import com.bluepig.alarm.designsystem.component.AlarmButton
 import com.bluepig.alarm.designsystem.component.AlarmSnackbarHost
+import com.bluepig.alarm.designsystem.component.NoticeCard
 import com.bluepig.alarm.designsystem.theme.AlarmTheme
 import com.bluepig.alarm.designsystem.theme.Space
 import com.bluepig.alarm.domain.entity.alarm.Alarm
 import com.bluepig.alarm.designsystem.R as DesignSystemR
 
+/** @param canDrawOverlays 다른 앱 위에 표시 권한. 없으면 요약 아래 안내 카드 (제품 0017) */
 @Composable
 fun AlarmListRoute(
     onAddAlarm: () -> Unit,
@@ -58,6 +60,8 @@ fun AlarmListRoute(
     onAlarmSaved: (Alarm) -> Unit,
     onAlarmsLoaded: (List<Alarm>) -> Unit,
     nativeAd: @Composable (Modifier) -> Unit,
+    canDrawOverlays: Boolean,
+    onOpenOverlaySetting: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: AlarmListViewModel = hiltViewModel(),
 ) {
@@ -84,6 +88,9 @@ fun AlarmListRoute(
         onAlarmClick = onAlarmClick,
         onActiveChange = viewModel::onActiveChange,
         nativeAd = nativeAd,
+        canDrawOverlays = canDrawOverlays,
+        onOpenOverlaySetting = onOpenOverlaySetting,
+        onDismissOverlayNotice = viewModel::onDismissOverlayNotice,
         snackbarHostState = snackbarHostState,
         modifier = modifier,
     )
@@ -98,6 +105,9 @@ internal fun AlarmListScreen(
     onActiveChange: (Alarm, Boolean) -> Unit,
     nativeAd: @Composable (Modifier) -> Unit,
     modifier: Modifier = Modifier,
+    canDrawOverlays: Boolean = true,
+    onOpenOverlaySetting: () -> Unit = {},
+    onDismissOverlayNotice: () -> Unit = {},
     snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
 ) {
     val colors = AlarmTheme.colors
@@ -122,6 +132,9 @@ internal fun AlarmListScreen(
                 ) {
                     item(key = "summary", contentType = "summary") {
                         ListSummary(uiState.next)
+                        uiState.overlayNotice?.takeUnless { canDrawOverlays }?.let {
+                            OverlayNoticeCard(it, onOpenOverlaySetting, onDismissOverlayNotice)
+                        }
                         HorizontalDivider(color = colors.line)
                     }
                     item(key = "ad", contentType = "ad") { nativeAd(Modifier.fillMaxWidth()) }
@@ -182,6 +195,20 @@ private fun AddFab(onClick: () -> Unit, modifier: Modifier = Modifier) {
             )
         }
     }
+}
+
+@Composable
+private fun OverlayNoticeCard(notice: OverlayNotice, onAllow: () -> Unit, onDismiss: () -> Unit) {
+    val youtube = notice == OverlayNotice.YouTube
+    NoticeCard(
+        title = stringResource(if (youtube) R.string.list_overlay_youtube_title else R.string.list_overlay_title),
+        body = stringResource(if (youtube) R.string.list_overlay_youtube_body else R.string.list_overlay_body),
+        actionLabel = stringResource(R.string.list_overlay_allow),
+        onAction = onAllow,
+        modifier = Modifier.padding(start = Space.s16, end = Space.s16, bottom = Space.s16),
+        dismissLabel = if (youtube) null else stringResource(R.string.list_overlay_dismiss),
+        onDismiss = onDismiss,
+    )
 }
 
 @Composable

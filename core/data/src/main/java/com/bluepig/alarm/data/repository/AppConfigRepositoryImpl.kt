@@ -37,4 +37,8 @@ internal class AppConfigRepositoryImpl @Inject constructor(
 
     override suspend fun setLastInterstitialShowTime(timeInMillis: Long) =
         _preferences.setLastInterstitialShowTime(timeInMillis)
+
+    override suspend fun isOverlayNoticeDismissed(): Boolean = _preferences.isOverlayNoticeDismissed()
+
+    override suspend fun dismissOverlayNotice() = _preferences.dismissOverlayNotice()
 }

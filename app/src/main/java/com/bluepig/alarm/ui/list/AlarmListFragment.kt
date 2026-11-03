@@ -12,10 +12,12 @@ import androidx.navigation.fragment.findNavController
 import com.bluepig.alarm.R
 import com.bluepig.alarm.designsystem.theme.AlarmTheme
 import com.bluepig.alarm.feature.list.AlarmListRoute
+import com.bluepig.alarm.util.PermissionHelper
 import com.bluepig.alarm.util.ads.AdsManager
 import com.bluepig.alarm.util.ads.ListNativeAdRow
 import com.bluepig.alarm.util.ext.showErrorToast
 import com.bluepig.alarm.util.logger.BpLogger
+import com.bluepig.alarm.util.rememberCanDrawOverlays
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -36,6 +38,8 @@ class AlarmListFragment : Fragment() {
                         onAlarmSaved = { BpLogger.logAlarmSave(it, false, requireContext()) },
                         onAlarmsLoaded = BpLogger::logAlarmTotalCount,
                         nativeAd = { ListNativeAdRow(adsManager, ::openStore, it) },
+                        canDrawOverlays = rememberCanDrawOverlays(),
+                        onOpenOverlaySetting = { PermissionHelper.openOverlaySetting(requireContext()) },
                     )
                 }
             }

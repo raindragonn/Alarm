@@ -35,11 +35,11 @@ private val sampleAlarms = listOf(
 )
 
 @Composable
-private fun PreviewScreen(state: AlarmListUiState) {
+private fun PreviewScreen(state: AlarmListUiState, canDrawOverlays: Boolean = true) {
     AlarmTheme {
         AlarmListScreen(state, {}, {}, { _, _ -> }, nativeAd = { modifier ->
             Box(modifier.height(77.dp), contentAlignment = Alignment.Center) { Text("native ad") }
-        })
+        }, canDrawOverlays = canDrawOverlays)
     }
 }
 
@@ -48,6 +48,22 @@ private fun PreviewScreen(state: AlarmListUiState) {
 @Composable
 private fun AlarmsPreview() =
     PreviewScreen(AlarmListUiState.Alarms(sampleAlarms, NextAlarmUi(System.currentTimeMillis(), 7 * 60 + 30)))
+
+// 다른 앱 위에 표시 권한이 없을 때 (제품 0017)
+@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+private fun OverlayYoutubePreview() = PreviewScreen(
+    AlarmListUiState.Alarms(sampleAlarms, NextAlarmUi(System.currentTimeMillis(), 7 * 60 + 30), OverlayNotice.YouTube),
+    canDrawOverlays = false,
+)
+
+@Preview
+@Composable
+private fun OverlayGeneralPreview() = PreviewScreen(
+    AlarmListUiState.Alarms(sampleAlarms, NextAlarmUi(System.currentTimeMillis(), 7 * 60 + 30), OverlayNotice.General),
+    canDrawOverlays = false,
+)
 
 @Preview
 @Composable
